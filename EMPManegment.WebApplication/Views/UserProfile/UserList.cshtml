@@ -9,8 +9,8 @@
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">User List</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">User List</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">User</a></li>
@@ -25,145 +25,116 @@
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h4 class="card-title mb-0 flex-grow-1 text-info">User List</h4>
-                    <div class="flex-shrink-0">
-                        <form class="position-relative">
-                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create User" && (a.Add == true)))
-                            {
-                                <div class="d-flex flex-wrap gap-2">
-                                    <a href="/UserProfile/CreateUser" class="btn btn-block btn-info btn-md"><i class="ri-add-circle-line align-bottom me-1"></i>User</a>
-                                </div>
-                            }
-                        </form>
+                <div class="row align-items-center">
+                    <div class="col-12 col-md-6 col-lg-4 mb-2 mb-md-0">
+                        <input type="text"
+                               class="form-control"
+                               id="txtUserSearch"
+                               placeholder="Search..."
+                               aria-label="Search User" />
                     </div>
+
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create User" && (a.Add == true)))
+                    {
+                        <div class="col-12 col-md-6 col-lg-8 text-md-end mt-2 mt-md-0">
+                            <a class="btn button-bg-teal btn-md" href="/UserProfile/CreateUser"><i class="ri-add-fill me-1 align-bottom"></i>User</a>
+                        </div>
+                    }
                 </div>
             </div>
             <div class="card-body">
-                <div id="example_wrapper" class="dataTables_wrapper dt-bootstrap5">
-                    <div class="col-sm-12">
-                        <table id="UserTableData" class="table table-bordered dt-responsive nowrap table-striped align-middle" aria-describedby="example_info">
-                            <thead class="btn-info text-center">
-                                <tr>
-                                    <th>UserID</th>
-                                    <th>Department</th>
-                                    <th>Role</th>
-                                    <th>User Name</th>
-                                    <th>Active</th>
-                                    <th>Gender</th>
-                                    <th>BirthDate</th>
-                                    <th>Email</th>
-                                    <th>Mobile.NO</th>
-                                    <th>Address</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                </lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">
-                                    We've searched more than 150+ invoices We did not find any
-                                    invoices for you search.
-                                </p>
+                <div id="UserTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
+            </div>
+            <div class="modal fade empmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 class="text-info modal-title" id="myLargeModalLabel">User Edit</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="fv-row mb-8">
+                                <div class="row">
+                                    <div class="fv-row mb-6">
+                                        <label class="from-label">Department</label>
+                                        <select id="ddlDepartmenrnt" class="form-control bg-transparent">
+                                            <option>--Select Department--</option>
+                                        </select>
+                                        <input type="hidden" id="deptid" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fv-row mb-6">
+                                <input type="hidden" id="Userid" class="form-control bg-transparent" readonly />
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">First Name</label>
+                                        <input type="text" class="form-control" id="FirstName">
+                                        <span id="txtFirstName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Last Name</label>
+                                        <input type="text" class="form-control" id="LastName">
+                                        <span id="txtLastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="fv-row mb-3">
+                                        <label class="form-label">DateOfBirth</label>
+                                        <input type="datetime-local" class="form-control" id="Dob">
+                                        <span id="txtDob" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="fv-row mb-3">
+                                        <label class="from-label">Gender</label>
+                                        <select id="Gender" class="form-control bg-transparent">
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                        <input type="hidden" id="Gender" value="" />
+                                        <span class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="Email">
+                                        <span id="txtEmail" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label class="form-label">PhoneNumber</label>
+                                        <input type="number" class="form-control" id="PhoneNo">
+                                        <span id="txtphno" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="fv-row mb-6">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" id="Address" style="height: 75px;">
+                                <span id="txtAddress" class="text-danger"></span>
+                            </div>
+                            <div class="modal-footer m-3">
+                                <button type="button" class="btn btn-danger btn-default m-1" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success m-1" onclick="UpdateUserDetails()" id="btnUpdate">Update</button>
                             </div>
                         </div>
-                    </div>
-                    <div class="modal fade empmodal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
-                        <div class="modal-dialog modal-lg">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h3 class="text-info modal-title" id="myLargeModalLabel">User Edit</h3>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="fv-row mb-8">
-                                        <div class="row">
-                                            <div class="fv-row mb-6">
-                                                <label class="from-label">Department</label>
-                                                <select id="ddlDepartmenrnt" class="form-control bg-transparent">
-                                                    <option>--Select Department--</option>
-                                                </select>
-                                                <input type="hidden" id="deptid" value="" />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fv-row mb-6">
-                                        <input type="hidden" id="Userid" class="form-control bg-transparent" readonly />
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">First Name</label>
-                                                <input type="text" class="form-control" id="FirstName">
-                                                <span id="txtFirstName" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Last Name</label>
-                                                <input type="text" class="form-control" id="LastName">
-                                                <span id="txtLastName" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="fv-row mb-3">
-                                                <label class="form-label">DateOfBirth</label>
-                                                <input type="datetime-local" class="form-control" id="Dob">
-                                                <span id="txtDob" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="fv-row mb-3">
-                                                <label class="from-label">Gender</label>
-                                                <select id="Gender" class="form-control bg-transparent">
-                                                    <option value="Male">Male</option>
-                                                    <option value="Female">Female</option>
-                                                    <option value="Other">Other</option>
-                                                </select>
-                                                <input type="hidden" id="Gender" value="" />
-                                                <span class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">Email</label>
-                                                <input type="email" class="form-control" id="Email">
-                                                <span id="txtEmail" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div class="mb-3">
-                                                <label class="form-label">PhoneNumber</label>
-                                                <input type="number" class="form-control" id="PhoneNo">
-                                                <span id="txtphno" class="text-danger"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="fv-row mb-6">
-                                        <label class="form-label">Address</label>
-                                        <input type="text" class="form-control" id="Address" style="height: 75px;">
-                                        <span id="txtAddress" class="text-danger"></span>
-                                    </div>
-                                    <div class="modal-footer m-3">
-                                        <button type="button" class="btn btn-danger btn-default m-1" data-bs-dismiss="modal">Close</button>
-                                        <button type="submit" class="btn btn-success m-1" onclick="UpdateUserDetails()" id="btnUpdate">Update</button>
-                                    </div>
-                                </div>
 
-                            </div><!-- /.modal-content -->
-                        </div><!-- /.modal-dialog -->
-                    </div><!-- /.modal -->
-                </div>
-            </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
         </div>
     </div>
 </div>

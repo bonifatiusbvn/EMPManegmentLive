@@ -1,37 +1,39 @@
 ﻿using Azure;
 using Azure.Core;
 using EMPManagment.API;
+using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Interface.UserList;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Net;
 using System.Linq.Dynamic.Core;
+using System.Net;
 using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using EMPManegment.EntityModels.ViewModels.UserModels;
-using EMPManegment.EntityModels.ViewModels.ProductMaster;
-using Microsoft.Extensions.Configuration;
-using EMPManegment.EntityModels.Common;
-using System.Security.Cryptography;
-using EMPManegment.EntityModels.ViewModels.TaskModels;
-using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
-using EMPManegment.EntityModels.ViewModels.ProjectModels;
-using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
-using EMPManagment.Web.Models.API;
 #nullable disable
 
 namespace EMPManegment.Repository.UserListRepository
@@ -48,131 +50,61 @@ namespace EMPManegment.Repository.UserListRepository
 
         }
 
-
-        public async Task<jsonData> GetUsersList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<EmpDetailsView>> GetUsersList(AGGridRequestModel UserRequest)
         {
             try
             {
-                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var filterConditions = string.Join(" AND ", UserRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = UserRequest.SortModel?.FirstOrDefault()?.ColId ?? "UserName";
+                string sortDirection = UserRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
 
-                var dataSet = DbHelper.GetDataSet("spGetUsersList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
-
-                var userList = ConvertDataSetToUserList(dataSet);
-
-                if (!string.IsNullOrEmpty(dataTable.searchValue.ToLower()))
+                var parameters = new List<SqlParameter>
                 {
-                    userList = userList.Where(e =>
-                        e.UserName.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
-                        e.FullName.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
-                        e.DepartmentName.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
-                        e.CityName.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
-                        e.PhoneNumber.Contains(dataTable.searchValue.ToLower(), StringComparison.OrdinalIgnoreCase) ||
-                        e.DateOfBirth.ToString().Contains(dataTable.searchValue)).ToList();
-                }
-
-                IQueryable<UserDataTblModel> queryableUserDetails = userList.AsQueryable();
-
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
-                {
-                    switch (dataTable.sortColumn)
-                    {
-                        case "UserName":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.UserName) : queryableUserDetails.OrderByDescending(e => e.UserName);
-                            break;
-                        case "DepartmentName":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.DepartmentName) : queryableUserDetails.OrderByDescending(e => e.DepartmentName);
-                            break;
-                        case "RoleName":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.RoleName) : queryableUserDetails.OrderByDescending(e => e.RoleName);
-                            break;
-                        case "Address":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.Address) : queryableUserDetails.OrderByDescending(e => e.Address);
-                            break;
-                        case "PhoneNumber":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.PhoneNumber) : queryableUserDetails.OrderByDescending(e => e.PhoneNumber);
-                            break;
-                        case "DateOfBirth":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.DateOfBirth) : queryableUserDetails.OrderByDescending(e => e.DateOfBirth);
-                            break;
-                        case "FirstName":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.FirstName) : queryableUserDetails.OrderByDescending(e => e.FirstName);
-                            break;
-                        case "Gender":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.Gender) : queryableUserDetails.OrderByDescending(e => e.Gender);
-                            break;
-                        case "Email":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.Email) : queryableUserDetails.OrderByDescending(e => e.Email);
-                            break;
-                        case "IsActive":
-                            queryableUserDetails = dataTable.sortColumnDir == "asc" ? queryableUserDetails.OrderBy(e => e.IsActive) : queryableUserDetails.OrderByDescending(e => e.IsActive);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    queryableUserDetails = queryableUserDetails.OrderBy("UserName d");
-                }
-
-                var totalRecord = queryableUserDetails.Count();
-                var filteredData = queryableUserDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
-
-                var jsonData = new jsonData
-                {
-                    draw = dataTable.draw,
-                    recordsFiltered = totalRecord,
-                    recordsTotal = totalRecord,
-                    data = filteredData
+                new SqlParameter("@SearchValue", (object)UserRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", UserRequest.PageSize),
+                new SqlParameter("@Skip", UserRequest.StartRow),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
-                return jsonData;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
+                var dataSet = DbHelper.GetDataSet("spGetUsersList", CommandType.StoredProcedure, parameters.ToArray(), _configuration.GetConnectionString("EMPDbconn"));
 
-        private List<UserDataTblModel> ConvertDataSetToUserList(DataSet dataSet)
-        {
-            var userDetails = new List<UserDataTblModel>();
-            try
-            {
-
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                var UserList = dataSet.Tables[0].AsEnumerable().Select(row => new EmpDetailsView
                 {
-                    var userData = new UserDataTblModel
-                    {
-                        Id = Guid.Parse(row["Id"].ToString()),
-                        IsActive = (bool)row["IsActive"],
-                        UserName = row["UserName"].ToString(),
-                        FirstName = row["FirstName"].ToString(),
-                        LastName = row["LastName"].ToString(),
-                        Image = row["Image"].ToString(),
-                        Gender = row["Gender"].ToString(),
-                        Email = row["Email"].ToString(),
-                        PhoneNumber = row["PhoneNumber"].ToString(),
-                        Address = row["Address"].ToString(),
-                        CityName = row["CityName"].ToString(),
-                        StateName = row["StateName"].ToString(),
-                        CountryName = row["CountryName"].ToString(),
-                        DepartmentName = row["DepartmentName"].ToString(),
-                        RoleId = Guid.Parse(row["RoleId"].ToString()),
-                        RoleName = row["RoleName"].ToString(),
-                        FullName = row["FullName"].ToString(),
-                        DateOfBirth = Convert.ToDateTime(row["DateOfBirth"]),
+                    Id = row["Id"] != DBNull.Value ? Guid.Parse(row["Id"].ToString()) : Guid.Empty,
+                    IsActive = row["IsActive"] != DBNull.Value && Convert.ToBoolean(row["IsActive"]),
+                    UserName = row["UserName"]?.ToString(),
+                    FirstName = row["FirstName"]?.ToString(),
+                    LastName = row["LastName"]?.ToString(),
+                    Image = row["Image"]?.ToString(),
+                    Gender = row["Gender"]?.ToString(),
+                    DateOfBirth = Convert.ToDateTime(row["DateOfBirth"]),
+                    Email = row["Email"]?.ToString(),
+                    PhoneNumber = row["PhoneNumber"]?.ToString(),
+                    Address = row["Address"]?.ToString(),
+                    CityName = row["CityName"]?.ToString(),
+                    StateName = row["StateName"]?.ToString(),
+                    CountryName = row["CountryName"]?.ToString(),
+                    DepartmentName = row["DepartmentName"]?.ToString(),
+                    RoleId = row["RoleId"] != DBNull.Value ? Guid.Parse(row["RoleId"].ToString()) : Guid.Empty,
+                    RoleName = row["RoleName"]?.ToString(),
+                }).ToList();
 
-                    };
-                    userDetails.Add(userData);
-                }
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<EmpDetailsView>
+                {
+                    Data = UserList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
-
-            return userDetails;
         }
 
         public async Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId, Guid UpdatedBy)

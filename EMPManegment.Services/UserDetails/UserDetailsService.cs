@@ -1,6 +1,7 @@
 ﻿using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -22,10 +23,9 @@ namespace EMPManegment.Services.UserList
         {
             UserList = userList;
         }
-
-        public async Task<jsonData> GetUsersList(DataTableRequstModel GetUserlist)
+        public async Task<AGGridResponseModel<EmpDetailsView>> GetUsersList(AGGridRequestModel UserRequest)
         {
-            return await UserList.GetUsersList(GetUserlist);
+            return await UserList.GetUsersList(UserRequest);
         }
 
         public Task<UserResponceModel> ActiveDeactiveUsers(Guid UserId, Guid UpdatedBy)
@@ -135,6 +135,7 @@ namespace EMPManegment.Services.UserList
         {
             return await UserList.ActiveDeactiveRole(roleId);
         }
+
     }
 }
 

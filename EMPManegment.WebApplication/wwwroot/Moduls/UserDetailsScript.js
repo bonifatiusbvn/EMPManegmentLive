@@ -1,9 +1,161 @@
 ﻿$(document).ready(function () {
     GetUserAttendanceInTime();
     UserBirsthDayWish();
-    GetAllUserData();
     clearSelectedBox();
     GetUserRoleList();
+});
+
+let UserGridOptions = [];
+
+$(document).ready(function () {
+
+    UserGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
+            {
+                headerName: "User Id",
+                field: "userName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
+                    return '<div><a href="/UserProfile/UserInfo/?Id=' + params.data.id + '" class="fw-medium" style="color: #16989A !important;"><strong>' + params.data.userName + '</strong></a></div>';
+                }
+            },
+            {
+                headerName: "Department Name",
+                field: "departmentName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
+                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + params.data.departmentName + '</div></div>';
+                }
+            },
+            { headerName: "Role", field: "roleName", sortable: true, filter: true },
+            {
+                headerName: "User Name",
+                field: "firstName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
+                    var colorClasses = [
+                        { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
+                        { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
+                        { bgClass: 'bg-success-subtle', textClass: 'text-success' },
+                        { bgClass: 'bg-info-subtle', textClass: 'text-info' },
+                        { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
+                        { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
+                        { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
+                    ];
+                    var profileImageHtml;
+                    if (params.data.image && params.data.image.trim() !== '') {
+                        profileImageHtml = '<img src="/' + params.data.image + '" style="height: 40px; width: 40px; border-radius: 50%;">';
+                    } else {
+                        var initials = (params.data.firstName ? params.data.firstName[0] : '') + (params.data.lastName ? params.data.lastName[0] : '');
+                        var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
+                        profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
+                            '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass + ' rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
+                    }
+
+                    return '<div class="d-flex align-items-center">' +
+                        profileImageHtml +
+                        '<div class="flex-grow-1 tasks_name ml-2" style="color: #16989A !important;margin-left: 10px">' + params.data.firstName + ' ' + params.data.lastName + '</div>' +
+                        '</div>';
+                }
+            },
+            {
+                headerName: "Active", field: "isActive", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
+                    if (params.data.isActive) {
+                        return '<span class="badge bg-success text-uppercase">Active</span>';
+                    } else {
+                        return '<span class="badge bg-danger text-uppercase">Deactive</span>';
+                    }
+                }
+            },
+            { headerName: "Gender", field: "gender", sortable: true, filter: true },
+            {
+                headerName: "Date Of Birth", field: "dateOfBirth", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
+                    return getCommonDateformat(params.data.dateOfBirth);
+                }
+            },
+            { headerName: "Email", field: "email", sortable: true, filter: true },
+            { headerName: "Phone No", field: "phoneNumber", sortable: true, filter: true },
+            { headerName: "Address", field: "address", sortable: true, filter: true },
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            UserGridOptions.api = params.api;
+            UserGridOptions.columnApi = params.columnApi;
+            UserGridOptions.api.sizeColumnsToFit();
+        },
+
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: UserGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    SearchValue: $('#txtUserSearch').val(),
+                };
+
+                $.ajax({
+                    url: '/UserProfile/GetUserList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const myGridElement = document.querySelector('#UserTable');
+    agGrid.createGrid(myGridElement, UserGridOptions);
+
+    $('#txtUserSearch').on('change keyup', function () {
+        UserGridOptions.api.onFilterChanged();
+    });
 });
 
 $(document).ready(function () {
@@ -47,97 +199,7 @@ $(document).ready(function () {
         $("#frmuserDetails").validate();
     });
 });
-function GetAllUserData() {
-    var colorClasses = [
-        { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
-        { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
-        { bgClass: 'bg-success-subtle', textClass: 'text-success' },
-        { bgClass: 'bg-info-subtle', textClass: 'text-info' },
-        { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
-        { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
-        { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
-    ];
 
-    $('#UserTableData').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        ajax: {
-            type: "POST",
-            url: '/UserProfile/GetUserList',
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": "userName", "name": "UserName",
-                "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/UserProfile/UserInfo/?Id=' + full.id + '" class="fw-medium link-primary">' + full.userName + '</a></h5>';
-                }
-            },
-            {
-                "data": "departmentId", "name": "DepartmentName",
-                "render": function (data, type, full) {
-                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + full.departmentName + '</div></div>';
-                }
-            },
-            { "data": "roleName", "name": "RoleName" },
-            {
-                "data": "firstName", "name": "FirstName",
-                "render": function (data, type, full) {
-                    var profileImageHtml;
-                    if (full.image && full.image.trim() !== '') {
-                        profileImageHtml = '<img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
-                            'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
-                    } else {
-                        var initials = (full.firstName ? full.firstName[0] : '') + (full.lastName ? full.lastName[0] : '');
-                        var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
-                        profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
-                            '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass + ' rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
-                    }
-
-                    return '<div class="d-flex align-items-center">' +
-                        profileImageHtml +
-                        '<div class="flex-grow-1 tasks_name ml-2">' + full.firstName + ' ' + full.lastName + '</div>' +
-                        '</div>';
-                }
-            },
-            {
-                "data": "isActive", "name": "IsActive",
-                "render": function (data, type, full) {
-                    if (full.isActive) {
-                        return '<span class="badge bg-success text-uppercase">Active</span>';
-                    } else {
-                        return '<span class="badge bg-danger text-uppercase">Deactive</span>';
-                    }
-                }
-            },
-            { "data": "gender", "name": "Gender" },
-            {
-                "data": "dateOfBirth", "name": "DateOfBirth", "type": "date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            { "data": "email", "name": "Email" },
-            { "data": "phoneNumber", "name": "PhoneNumber" },
-            { "data": "address", "name": "Address" }
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            defaultContent: "",
-            targets: "_all",
-            width: 'auto'
-        }]
-    });
-}
 function GetUserRoleList(itemId, selectedRoleId) {
     $.ajax({
         url: '/UserProfile/RolewisePermissionListAction',
@@ -758,6 +820,38 @@ function GetAllDepartmentList() {
         }
     });
 }
+$(document).ready(function () {
+    $('#drpCuDepartment').select2({
+        placeholder: 'Select Department',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        minimumResultsForSearch: Infinity,
+        ajax: {
+            url: '/Authentication/GetDepartment',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.departments
+                    }))
+                };
+            }
+        }
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    });
+
+    $('#drpCuGender').select2({
+        placeholder: 'Select Gender',
+        width: '100%',
+        minimumResultsForSearch: Infinity,
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    });
+});
 
 function UADBackbtn() {
     clearsearchtextbox();

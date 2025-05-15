@@ -7,15 +7,42 @@
     ViewData["Title"] = "RolewisePermission";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    .create-user-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    #imagePreview img {
+        max-width: 220px;
+        height: auto;
+        border-radius: 10px;
+        margin-top: 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+
+    @@media (max-width: 768px) {
+        .create-user-container {
+            padding: 15px;
+        }
+
+        .user-save-button {
+            width: 100%;
+            margin-top: 15px;
+        }
+    }
+</style>
 
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">User List</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">Create User</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">User</a></li>
-                    <li class="breadcrumb-item active">User List</li>
+                    <li class="breadcrumb-item active">Create User</li>
                 </ol>
             </div>
         </div>
@@ -24,116 +51,149 @@
 
 <!-- auth page content -->
 
-<div class="row">
-    <div class="auth-page-wrapper py-3 d-flex justify-content-center align-items-center min-vh-100">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-header">
-                    <h5 class="card-title mb-0">Create User</h5>
+<div class="create-user-container">
+
+    <!-- User Form -->
+    <form id="CreateUserForm" method="post" enctype="multipart/form-data">
+        <div class="card fm-card">
+            <div class="card-header fm-card-header">
+                User Details
+            </div>
+
+            <div class="card-body">
+                <div class="row">
+
+                    <div class="col-md-6 mb-3">
+                        <label for="EmpId" class="form-label">Employee Id</label>
+                        <input type="text" readonly id="EmpId" autocomplete="off" class="form-control" value="@ViewBag.EmpId" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="drpCuDepartment" class="form-label required-field">Department </label>
+                        <select class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
+                                id="drpCuDepartment"
+                                name="drpCuDepartment">
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="txtCuFirstname" class="form-label required-field">First Name</label>
+                        <input type="text" placeholder="First Name" name="txtCuFirstname" class="form-control" id="txtCuFirstname" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="txtCuLastname" class="form-label required-field">Last Name</label>
+                        <input type="text" placeholder="Last Name" name="txtCuLastname" class="form-control" id="txtCuLastname" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="drpCuGender" class="form-label required-field">Gender </label>
+                        <select class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
+                                id="drpCuGender"
+                                name="drpCuGender">
+                            <option value="">--Select Gender--</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="txtCuDOB" class="form-label required-field">Date of Birth</label>
+                        <input type="date" placeholder="DOB" name="txtCuDOB" class="form-control" id="txtCuDOB" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="txtCuEmail" class="form-label required-field">Email</label>
+                        <input type="email" placeholder="Email" name="txtCuEmail" class="form-control" id="txtCuEmail" />
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="textCuPhoneNumber" class="form-label required-field">Contact Number</label>
+                        <input type="number" placeholder="Contact No" name="textCuPhoneNumber" class="form-control" id="textCuPhoneNumber" />
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label for="drpCuCountry" class="form-label required-field">Country</label>
+                        <select id="drpCuCountry" class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
+                                onchange="fn_getUserState('drpCuState',null,this)" required>
+                            <option selected value="">--Select Country--</option>
+                        </select>
+                    </div>
+
+                    <!-- State -->
+                    <div class="col-md-4 mb-3">
+                        <label for="drpCuState" class="form-label required-field">State</label>
+                        <select id="drpCuState" class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
+                                onchange="fn_getUsercitiesbystateId('drpCuCity', null, this)" required>
+                            <option value="">--Select State--</option>
+                        </select>
+                    </div>
+
+                    <!-- City -->
+                    <div class="col-md-4 mb-3">
+                        <label for="drpCuCity" class="form-label required-field">City</label>
+                        <select id="drpCuCity" class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal" required>
+                            <option value="">--Select City--</option>
+                        </select>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label for="textCuAddress" class="form-label required-field">Address</label>
+                        <textarea class="form-control" rows="3" placeholder="Address" id="textCuAddress" name="textCuAddress" required></textarea>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="passwordinput" class="form-label required-field">Password</label>
+                        <div class="position-relative auth-pass-inputgroup">
+                            <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter Password" id="passwordinput" name="passwordinput" aria-describedby="passwordInput" required>
+                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle" style="color:#16989A;"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 mb-3">
+                        <label for="confirmpasswordinput" class="form-label required-field">Confirm Password</label>
+                        <div class="position-relative auth-pass-inputgroup mb-3">
+                            <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Confirm Password" id="confirmpasswordinput" name="confirmpasswordinput" required>
+                            <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="confirm-password-input"><i class="ri-eye-fill align-middle" style="color:#16989A;"></i></button>
+                        </div>
+                    </div>
+
+                    <!-- Logo Upload -->
+                    <div class="col-12 mb-3">
+                        <label class="form-label">Image</label>
+                        <div class="dropzone-area" id="dropzone">
+                            <label for="filecuImage" class="dz-message">
+                                <div class="dz-icon">
+                                    <i class="ri-upload-cloud-2-fill"></i>
+                                </div>
+                                <div class="dz-text">
+                                    <h5>Click to upload or drop an image here</h5>
+                                    <p>(Only image files are accepted)</p>
+                                </div>
+                            </label>
+                            <input type="file" accept="image/*" class="form-control d-none" id="filecuImage" />
+                            <div id="imagePreview" class="mt-3 text-center"></div>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="card-body">
-                    <form id="CreateUserForm" method="post" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-6">
-                                <label for="EmpId">Employee ID</label>
-                                <input type="text" readonly id="EmpId" autocomplete="off" class="form-control" value="@ViewBag.EmpId" />
-                            </div>
-                            <div class="col-6">
-                                <label for="drpCuDepartment">Department <span class="text-danger">*</span></label>
-                                <select id="drpCuDepartment" class="form-control form-select" name="drpCuDepartment">
-                                    <option selected value="">--Select Department--</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-6">
-                                <label for="txtCuFirstname">First Name <span class="text-danger">*</span></label>
-                                <input type="text" placeholder="First Name" name="txtCuFirstname" class="form-control" id="txtCuFirstname" />
-                            </div>
-                            <div class="col-6">
-                                <label for="txtCuLastname">Last Name <span class="text-danger">*</span></label>
-                                <input type="text" placeholder="Last Name" name="txtCuLastname" class="form-control" id="txtCuLastname" />
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-6">
-                                <label for="drpCuGender">Gender <span class="text-danger">*</span></label>
-                                <select id="drpCuGender" class="form-control form-select" name="drpCuGender">
-                                    <option value="">--Select Gender--</option>
-                                    <option value="Male">Male</option>
-                                    <option value="Female">Female</option>
-                                    <option value="Other">Other</option>
-                                </select>
-                            </div>
-                            <div class="col-6">
-                                <div class="fv-row mb-4">
-                                    <label for="txtCuDOB">Date of Birth <span class="text-danger">*</span></label>
-                                    <input type="date" placeholder="DOB" id="txtCuDOB" name="txtCuDOB" max="@DateTime.Now.ToString("yyyy-MM-dd")" autocomplete="off" class="form-control bg-transparent" />
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <label for="txtCuEmail">Email <span class="text-danger">*</span></label>
-                                <input type="email" placeholder="Email" id="txtCuEmail" name="txtCuEmail" autocomplete="off" class="form-control bg-transparent" />
-                            </div>
-                            <div class="col-6">
-                                <label for="textCuPhoneNumber">Mobile Number <span class="text-danger">*</span></label>
-                                <input type="number" placeholder="Mobile Number" id="textCuPhoneNumber" name="textCuPhoneNumber" autocomplete="off" class="form-control bg-transparent" />
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-4">
-                                <label for="drpCuCountry">Country <span class="text-danger">*</span></label>
-                                <select id="drpCuCountry" name="drpCuCountry" class="form-control form-select bg-transparent valid" onchange="fn_getUserState('drpCuState',null,this)">
-                                    <option selected value="">--Select Country--</option>
-                                </select>
-                            </div>
-                            <div class="col-4">
-                                <label for="drpCuState">State <span class="text-danger">*</span></label>
-                                <select id="drpCuState" name="drpCuState" class="form-control form-select bg-transparent valid" onchange="fn_getUsercitiesbystateId('drpCuCity', null, this)">
-                                    <option selected value="">--Select State--</option>
-                                </select>
-                            </div>
-                            <div class="col-4">
-                                <label for="drpCuCity">City <span class="text-danger">*</span></label>
-                                <select id="drpCuCity" name="drpCuCity" class="form-control form-select bg-transparent valid">
-                                    <option selected value="">--Select City--</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="row mt-3">
-                            <label for="textCuAddress">Address <span class="text-danger">*</span></label>
-                            <textarea type="text" class="form-control bg-transparent" rows="3" placeholder="Address" id="textCuAddress" name="textCuAddress"></textarea>
-                        </div>
-                        <div class="row mt-3">
-                            <div class="col-6">
-                                <label class="form-label" for="passwordinput">Password <span class="text-danger">*</span></label>
-                                <div class="position-relative auth-pass-inputgroup">
-                                    <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Enter Password" id="passwordinput" name="passwordinput" aria-describedby="passwordInput" required>
-                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="password-addon"><i class="ri-eye-fill align-middle"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <label class="form-label" for="confirmpasswordinput">Confirm Password <span class="text-danger">*</span></label>
-                                <div class="position-relative auth-pass-inputgroup mb-3">
-                                    <input type="password" class="form-control pe-5 password-input" onpaste="return false" placeholder="Confirm Password" id="confirmpasswordinput" name="confirmpasswordinput" required>
-                                    <button class="btn btn-link position-absolute end-0 top-0 text-decoration-none text-muted password-addon" type="button" id="confirm-password-input"><i class="ri-eye-fill align-middle"></i></button>
-                                </div>
-                            </div>
-                            <div class="col-12">
-                                <label class="fs-6 fw-semibold form-label mt-1" for="filecuImage">Upload Image</label>
-                                <input type="file" asp-for="Image" autocomplete="off" class="form-control bg-transparent" id="filecuImage" />
-                            </div>
-                        </div>
-                        <div class="row mt-3 d-flex justify-content-end">
-                            <button class="btn btn-success btn-lg" type="button" style="width: 160px;height: 50px;" onclick="CreateUser()">
-                                Submit
-                            </button>
-                        </div>
-                    </form>
+
+                <!-- Form Actions -->
+                <div class="text-end mt-4">
+                    <button type="button" class="btn button-bg-teal"
+                            onclick="CreateUser()">
+                        <i class="ri-save-line me-1"></i> Save
+                    </button>
                 </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 <script type="text/javascript">
     var forms = Array.from(document.querySelectorAll("form .auth-pass-inputgroup"));
@@ -169,6 +229,26 @@
         var today = new Date().toISOString().split('T')[0];
         document.getElementById("txtCuDOB").value = today;
     });
+
+        document.getElementById('filecuImage').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        preview.innerHTML = ''; // Clear any previous image
+
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = "Selected Image";
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.innerHTML = '<p class="text-danger">Please select a valid image file.</p>';
+        }
+    });
+
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/userdetailsscript.js" asp-append-version="true"></script>
