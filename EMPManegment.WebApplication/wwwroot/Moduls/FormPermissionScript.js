@@ -30,7 +30,6 @@ $(document).ready(function () {
 
     $('#ddlRoleWiseFormPermission').select2({
         placeholder: 'Select Role',
-        height: '100px',
         allowClear: true,
         ajax: {
             url: '/UserProfile/RolewisePermissionListAction',
@@ -43,14 +42,9 @@ $(document).ready(function () {
                         text: item.role
                     }))
                 };
-            },
+            }
         }
-    });
-
-    $('#ddlRoleWiseFormPermission').on('select2:select', function (e) {
-        var selectedValue = e.params.data.id;
-        EditRoleWiseFormDetails(selectedValue);
-    });
+    })
 
     function EditRoleWiseFormDetails(roleId) {
         var RoleId = roleId
