@@ -208,7 +208,7 @@
 /* Header Styles */
 .content-header h1.fm-header {
     font-weight: 600;
-    color: #16989A !important !important;
+    color: #16989A !important;
     font-family: sans-serif;
 }
 
@@ -216,7 +216,7 @@
     font-weight: 600;
     font-family: sans-serif;
     font-size: 21px;
-    color: #16989A !important !important;
+    color: #16989A !important;
 }
 
 /* Table Text Styles */
