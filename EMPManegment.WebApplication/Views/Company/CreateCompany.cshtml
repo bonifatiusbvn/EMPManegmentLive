@@ -12,17 +12,27 @@
                    : string.Empty;
 }
 <style>
-    .create-company-container { 
+    .create-company-container {
         max-width: 1200px;
         margin: 0 auto;
         padding: 20px;
     }
 
-    .logo-preview {
-        max-width: 100px;
-        max-height: 100px;
-        border-radius: 4px;
+    #imagePreview img {
+        max-width: 220px;
+        height: auto;
+        border-radius: 10px;
+        margin-top: 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
+
+    .logo-preview {
+        max-width: 220px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
 
     .required-field::after {
         content: " *";
@@ -101,7 +111,8 @@
                     <!-- Country -->
                     <div class="col-md-3 mb-3">
                         <label for="CompanyCountry" class="form-label required-field">Country</label>
-                        <select id="CompanyCountry" class="form-control form-select"
+                        <select id="CompanyCountry" class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
                                 onchange="fn_getCompanyState('CompanyState',null,this)" required>
                             @if (Model.CountryName != null)
                             {
@@ -117,7 +128,8 @@
                     <!-- State -->
                     <div class="col-md-3 mb-3">
                         <label for="CompanyState" class="form-label required-field">State</label>
-                        <select id="CompanyState" class="form-control form-select"
+                        <select id="CompanyState" class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
                                 onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)" required>
                             @if (Model.StateName != null)
                             {
@@ -133,7 +145,8 @@
                     <!-- City -->
                     <div class="col-md-3 mb-3">
                         <label for="CompanyCity" class="form-label required-field">City</label>
-                        <select id="CompanyCity" class="form-control form-select" required>
+                        <select id="CompanyCity" class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal" required>
                             @if (Model.CityName != null)
                             {
                                 <option value="@Model.City">@Model.CityName</option>
@@ -163,6 +176,35 @@
                     <div class="col-12 mb-3">
                         <label class="form-label">Company Logo</label>
                         <div class="dropzone-area" id="dropzone">
+                            <label for="fileUpload" class="dz-message">
+                                <div class="dz-icon">
+                                    <i class="ri-upload-cloud-2-fill"></i>
+                                </div>
+                                <div class="dz-text">
+                                    <h5>Click to upload or drop an image here</h5>
+                                    <p>(Only image files are accepted)</p>
+                                </div>
+                            </label>
+                            <input type="file" accept="image/*" class="form-control d-none" id="fileUpload" name="CompanyLogo" />
+
+                            <!-- Logo Preview on Load -->
+                            <div id="imagePreview" class="mt-3 text-center">
+                                @if (!string.IsNullOrEmpty(Model.CompanyLogo))
+                                {
+                                    <div class="d-inline-block position-relative">
+                                        <img src="~/Content/Image/@Model.CompanyLogo" alt="Company Logo" class="logo-preview" id="existingLogo" />
+                                        <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-logo" onclick="removeExistingLogo()">×</button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="IsLogoRemoved" id="IsLogoRemoved" value="false" />
+
+                    @*                     <div class="col-12 mb-3">
+                        <label class="form-label">Company Logo</label>
+                        <div class="dropzone-area" id="dropzone">
                             <div class="dz-message">
                                 <i class="ri-upload-cloud-2-fill display-4 text-teal"></i>
                                 <h5 class="mt-3">Drop files here or click to upload</h5>
@@ -180,21 +222,21 @@
                                 </div>
                             }
                         </div>
-                    </div>
+                    </div> *@
                 </div>
 
                 <!-- Form Actions -->
                 <div class="text-end mt-4">
                     @if (Model.Id == null || Model.Id == Guid.Empty)
                     {
-                        <button type="button" class="btn button-bg-teal"
+                        <button type="button" class="btn button-teal"
                                 onclick="AddCompanyDetails()" id="SubmitCompanyDetails">
                             <i class="ri-save-line me-1"></i> Submit
                         </button>
                     }
                     else
                     {
-                        <button type="button" class="btn button-bg-teal"
+                        <button type="button" class="btn button-teal"
                                 onclick="UpdateCompanyDetails('@Model.Id')" id="updateCompanybtn">
                             <i class="ri-edit-line me-1"></i> Update
                         </button>
@@ -228,6 +270,31 @@
     document.getElementById('dropzone').addEventListener('click', function () {
         document.getElementById('fileUpload').click();
     });
+
+        document.getElementById('fileUpload').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        preview.innerHTML = ''; // Clear any previous image/logo
+
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = "Selected Image";
+                img.className = "logo-preview";
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.innerHTML = '<p class="text-danger">Please select a valid image file.</p>';
+        }
+    });
+
+    function removeExistingLogo() {
+        document.getElementById('imagePreview').innerHTML = '<p class="text-muted">Logo removed. You can upload a new one.</p>';
+        document.getElementById('IsLogoRemoved').value = 'true'; // signal to remove on server
+    }
 
 </script>
 

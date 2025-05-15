@@ -112,12 +112,12 @@ $(document).ready(function () {
                 let buttons = '';
                 if (canEdit) {
                     buttons += `
-                         <li class="list-inline-item"><a class="text-info" href="EditCompanyDetails?CompanyId=${params.data.id}"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
+                         <li class="list-inline-item"><a href="EditCompanyDetails?CompanyId=${params.data.id}"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
                 }
 
                 if (canDelete) {
                     buttons += `
-                    <a class="btn text-danger btndeletedoc" onclick="deleteCompany('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                    <a class="btn text-danger" onclick="deleteCompany('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
                 }
                 return buttons;
             }

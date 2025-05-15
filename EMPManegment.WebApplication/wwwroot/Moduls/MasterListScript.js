@@ -126,9 +126,6 @@ function GetCountry() {
                 $('#ddlCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
             });
             $.each(result, function (i, data) {
-                $('#CompanyCountry').append('<option value="' + data.id + '">' + data.countryName + '</option>');
-            });
-            $.each(result, function (i, data) {
                 $('#projectCountry').append('<option value=' + data.id + '>' + data.countryName + '</option>')
             });
         }
@@ -136,47 +133,8 @@ function GetCountry() {
 }
 
 
-function fn_getCompanyState(drpCompanystate, countryId, that) {
-    var cid = countryId;
-    if (cid == undefined || cid == null) {
-        var cid = $(that).val();
-    }
 
 
-    $('#' + drpCompanystate).empty();
-    $('#' + drpCompanystate).append('<Option >--Select State--</Option>');
-    $.ajax({
-        url: '/Authentication/GetState?StateId=' + cid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpCompanystate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-            });
-        }
-    });
-}
-
-function fn_getCompanycitiesbystateId(drpCompanycity, stateid, that) {
-
-    var sid = stateid;
-    if (sid == undefined || sid == null) {
-        var sid = $(that).val();
-    }
-
-
-    $('#' + drpCompanycity).empty();
-    $('#' + drpCompanycity).append('<Option >--Select City--</Option>');
-    $.ajax({
-        url: '/Authentication/GetCity?CityId=' + sid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpCompanycity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-            });
-        }
-    });
-}
 function fn_getProjectState(drpProjectstate, countryId, that) {
     var cid = countryId;
     if (cid == undefined || cid == null) {
@@ -220,7 +178,7 @@ function fn_getProjectcitiesbystateId(drpProjectcity, stateid, that) {
 }
 
 $(document).ready(function () {
-    $('#drpCuCountry,#VendorCountry').select2({
+    $('#drpCuCountry,#VendorCountry,#CompanyCountry').select2({
         placeholder: 'Select Contry',
         width: '100%',
         dropdownAutoWidth: true,
@@ -240,13 +198,13 @@ $(document).ready(function () {
         }
     });
 
-    $('#drpCuState,#VendorState').select2({
+    $('#drpCuState,#VendorState,#CompanyState').select2({
         placeholder: 'Select State',
         width: '100%',
         allowClear: true
     });
 
-    $('#drpCuCity,#VendorCity').select2({
+    $('#drpCuCity,#VendorCity,#CompanyCity').select2({
         placeholder: 'Select City',
         width: '100%',
         allowClear: true
@@ -330,6 +288,41 @@ function fn_getVendorcitiesbystateId(drpVendorcity, stateid, that) {
     var sid = stateid ?? $(that).val();
 
     let $cityDropdown = $('#' + drpVendorcity);
+    $cityDropdown.empty().append('<option value="">--Select City--</option>');
+
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $cityDropdown.append('<option value="' + data.id + '">' + data.cityName + '</option>');
+            });
+
+            $cityDropdown.trigger('change');
+        }
+    });
+}
+function fn_getCompanyState(drpCompanystate, countryId, that) {
+    var cid = countryId ?? $(that).val();
+
+    let $stateDropdown = $('#' + drpCompanystate);
+    $stateDropdown.empty().append('<option value="">--Select State--</option>');
+
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $stateDropdown.append('<option value="' + data.id + '">' + data.stateName + '</option>');
+            });
+
+            $stateDropdown.trigger('change');
+        }
+    });
+}
+function fn_getCompanycitiesbystateId(drpCompanycity, stateid, that) {
+
+    var sid = stateid ?? $(that).val();
+
+    let $cityDropdown = $('#' + drpCompanycity);
     $cityDropdown.empty().append('<option value="">--Select City--</option>');
 
     $.ajax({
