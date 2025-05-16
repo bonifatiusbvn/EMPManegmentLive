@@ -23,6 +23,21 @@
         margin-left: 200px;
     }
 
+    #imagePreview img {
+        max-width: 150px;
+        height: auto;
+        border-radius: 10px;
+        margin-top: 15px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo-preview {
+        max-width: 150px;
+        height: auto;
+        border-radius: 10px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
     @@media only screen and (max-width: 768px) {
         .auth-bg-cover {
             width: 330px;
@@ -69,8 +84,8 @@
 
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Create Project</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">Create Project</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Projects</a></li>
@@ -81,21 +96,24 @@
     </div>
 </div>
 <!-- end page title -->
-<div class="container col-lg-12">
+<div class="fm-container col-lg-12">
     <div class="auth-page-wrapper  py-3 d-flex justify-content-center align-items-center min-vh-100">
         <div class="row Projectform-container">
             <div class="col-lg-8">
                 <form id="formprojectdetails">
-                    <div class="card">
+                    <div class="card fm-card">
+                        <div class="card-header fm-card-header">
+                            Project Details
+                        </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label class="form-label" for="projectTitle">Project Title <span class="text-danger">*</span></label>
+                                <label class="form-label required-field" for="projectTitle">Project Title</label>
                                 <input type="text" class="form-control" id="projectTitle" placeholder="Enter project title" name="projectTitle" value="@Model.ProjectTitle">
                                 <input type="hidden" id="textprojectId" value="@Model.ProjectId">
                                 <input type="hidden" id="textProjectUserId" value="@_userSession.UserId">
                             </div>
                             <div class="mb-3">
-                                <label class="form-label" for="projectDescription">Project Description <span class="text-danger">*</span></label>
+                                <label class="form-label required-field" for="projectDescription">Project Description</label>
                                 @if (Model.ProjectDescription != null)
                                 {
                                     <textarea class="form-control " id="projectDescription" rows="3" placeholder="Enter description" name="projectDescription">@Model.ProjectDescription</textarea>
@@ -108,10 +126,11 @@
                             <div class="row">
                                 <div class="col-lg-4">
                                     <div class="mb-3 mb-lg-0">
-                                        <label for="projectPriority" class="form-label">Priority <span class="text-danger">*</span></label>
+                                        <label for="projectPriority" class="form-label required-field">Priority</label>
                                         @if (Model.ProjectPriority != null)
                                         {
-                                            <select class="form-control form-select valid" data-choices data-choices-search-false id="projectPriority" name="projectPriority">
+                                            <select class="form-control select2 select2-teal"
+                                                    data-dropdown-css-class="select2-teal" id="projectPriority" name="projectPriority">
                                                 <option value="@Model.ProjectPriority">@Model.ProjectPriority</option>
                                                 @if (Model.ProjectPriority == "Low")
                                                 {
@@ -133,8 +152,9 @@
                                         }
                                         else
                                         {
-                                            <select class="form-control form-select valid" data-choices data-choices-search-false id="projectPriority" name="projectPriority">
-                                                <option value="" selected disabled>---Select Project Priority---</option>
+                                            <select class="form-control select2 select2-teal"
+                                                    data-dropdown-css-class="select2-teal" id="projectPriority" name="projectPriority">
+                                                <option value="" selected>---Select Project Priority---</option>
                                                 <option value="High">High</option>
                                                 <option value="Medium">Medium</option>
                                                 <option value="Low">Low</option>
@@ -144,10 +164,11 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div class="mb-3 mb-lg-0">
-                                        <label for="projectStatus" class="form-label">Status <span class="text-danger">*</span></label>
+                                        <label for="projectStatus" class="form-label required-field">Status</label>
                                         @if (Model.ProjectStatus != null)
                                         {
-                                            <select class="form-control form-select valid" data-choices data-choices-search-false id="projectStatus" name="projectStatus">
+                                            <select class="form-control select2 select2-teal"
+                                                    data-dropdown-css-class="select2-teal" id="projectStatus" name="projectStatus">
                                                 <option value="@Model.ProjectStatus">@Model.ProjectStatus</option>
                                                 @if (Model.ProjectStatus != "Inprogress")
                                                 {
@@ -161,7 +182,8 @@
                                         }
                                         else
                                         {
-                                            <select class="form-control form-select valid" data-choices data-choices-search-false id="projectStatus" name="projectStatus">
+                                            <select class="form-control select2 select2-teal"
+                                                    data-dropdown-css-class="select2-teal" id="projectStatus" name="projectStatus">
                                                 <option value="" selected disabled>---Select Project Status---</option>
                                                 <option value="Inprogress">Inprogress</option>
                                                 <option value="Completed">Completed</option>
@@ -171,7 +193,7 @@
                                 </div>
                                 <div class="col-lg-4">
                                     <div>
-                                        <label for="projectdeadline" class="form-label">Deadline <span class="text-danger">*</span></label>
+                                        <label for="projectdeadline" class="form-label  required-field">Deadline </label>
                                         @{
                                             DateTime deadlineDate = Model.ProjectDeadline != DateTime.MinValue ? Model.ProjectDeadline : DateTime.Now;
                                             string formattedDeadlineDate = deadlineDate.ToString("yyyy-MM-dd");
@@ -191,10 +213,10 @@
                         <!-- end card body -->
                     </div>
                     <!-- end card -->
-                    <div class="card">
+                    <div class="card fm-card">
                         <div class="card-body">
                             <div class="col-12 mb-3">
-                                <label class="form-label">BuildingName <span class="text-danger">*</span></label> <br />
+                                <label class="form-label  required-field">BuildingName</label> <br />
                                 @if (Model.BuildingName != null)
                                 {
                                     <textarea type="text" class="form-control" rows="3" placeholder="BuildingName" id="txtBuildingName" name="txtBuildingName">@Model.BuildingName</textarea>
@@ -206,42 +228,46 @@
                             </div>
                             <div class="row">
                                 <div class="col-6 mb-3">
-                                    <label class="form-label">Area <span class="text-danger">*</span></label>
+                                    <label class="form-label  required-field">Area </label>
                                     <input type="text" class="form-control" placeholder="Area" id="txtProjectArea" name="txtProjectArea" value="@Model.Area">
                                 </div>
                                 <div class="col-6 mb-3">
-                                    <label class="form-label">Pincode <span class="text-danger">*</span></label>
+                                    <label class="form-label  required-field">Pincode </label>
                                     <input type="number" class="form-control" placeholder="Pincode" id="txtProjectPincode" name="txtProjectPincode" value="@Model.PinCode">
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-4 mb-3">
-                                    <label class="form-label">Country <span class="text-danger">*</span></label>
+                                    <label class="form-label  required-field">Country </label>
                                     @if (Model.Country != null)
                                     {
-                                        <select id="projectCountry" name="projectCountry" class="form-control form-select valid" onchange="fn_getProjectState('ProjectState',null,this)">
+                                        <select id="projectCountry" name="projectCountry" class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal" onchange="fn_getProjectState('ProjectState',null,this)">
                                             <option value="@Model.Country">@Model.CountryName</option>
                                         </select>
                                     }
                                     else
                                     {
-                                        <select id="projectCountry" name="projectCountry" class="form-control form-select valid" onchange="fn_getProjectState('ProjectState',null,this)">
+                                        <select id="projectCountry" name="projectCountry" class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal" onchange="fn_getProjectState('ProjectState',null,this)">
                                             <option selected value="">--Select Country--</option>
                                         </select>
                                     }
                                     <input type="hidden" id="txtprojectCountry" value="" />
                                 </div>
                                 <div class="col-4 mb-3">
-                                    <label class="form-label">State <span class="text-danger">*</span></label>
+                                    <label class="form-label  required-field">State</label>
                                     @if (Model.State != null)
                                     {
-                                        <select id="ProjectState" name="ProjectState" class="form-control form-select valid" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
+                                        <select id="ProjectState" name="ProjectState" class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
                                             <option value="@Model.State">@Model.StateName</option>
                                         </select>
                                     }
                                     else
                                     {
-                                        <select id="ProjectState" name="ProjectState" class="form-control form-select valid" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
+                                        <select id="ProjectState" name="ProjectState" class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
                                             <option value="">--Select State--</option>
                                         </select>
                                     }
@@ -251,19 +277,48 @@
                                     <label class="form-label">City <span class="text-danger">*</span></label>
                                     @if (Model.City != null)
                                     {
-                                        <select id="ProjectCity" name="ProjectCity" class="form-control form-select valid">
+                                        <select id="ProjectCity" name="ProjectCity" class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal">
                                             <option value="@Model.City">@Model.CityName</option>
                                         </select>
                                     }
                                     else
                                     {
-                                        <select id="ProjectCity" name="ProjectCity" class="form-control form-select valid">
+                                        <select id="ProjectCity" name="ProjectCity" class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal">
                                             <option value="">--Select City--</option>
                                         </select>
                                     }
                                     <input type="hidden" id="txtProjectCity" value="" />
                                 </div>
-                                <div class="mb-3">
+                                <!-- Logo Upload -->
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">Thumbnail Image</label>
+                                    <div class="dropzone-area" id="dropzone">
+                                        <label for="fileUpload" class="dz-message">
+                                            <div class="dz-icon">
+                                                <i class="ri-upload-cloud-2-fill"></i>
+                                            </div>
+                                            <div class="dz-text">
+                                                <h5>Click to upload or drop an image here</h5>
+                                                <p>(Only image files are accepted)</p>
+                                            </div>
+                                        </label>
+                                        <input type="file" accept="image/*" class="form-control d-none" id="fileUpload" name="projectImage" />
+
+                                        <!-- Logo Preview on Load -->
+                                        <div id="imagePreview" class="mt-3 text-center">
+                                            @if (!string.IsNullOrEmpty(Model.ProjectImage))
+                                            {
+                                                <div class="d-inline-block position-relative">
+                                                    <img src="~/Content/Projects/@Model.ProjectImage" alt="Project Logo" class="logo-preview" id="existingLogo" />
+                                                    <button type="button" class="btn btn-sm btn-danger position-absolute top-0 end-0 remove-logo" onclick="removeExistingLogo()">×</button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                               @*  <div class="mb-3">
                                     <label class="form-label" for="project-thumbnail-img">Thumbnail Image</label>
                                     <input class="form-control mb-3" id="projectImage" type="file" accept="image/png, image/gif, image/jpeg">
                                     @if (Model.ProjectImage != null)
@@ -291,7 +346,7 @@
                                             </div>
                                         </div>
                                     }
-                                </div>
+                                </div> *@
                             </div>
                         </div>
                     </div>
@@ -302,9 +357,9 @@
             <!-- end col -->
             <div class="col-lg-4">
                 <form id="frmprojectdetails">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Project Details</h5>
+                    <div class="card fm-card">
+                        <div class="card-header fm-card-header">
+                            Other Details
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
@@ -312,11 +367,11 @@
                                 <input type="text" class="form-control material_blue" id="projectname" name="projectname" value="@ViewBag.ProjectName" readonly />
                             </div>
                             <div class="mb-3">
-                                <label for="projectType" class="form-label">Project Type <span class="text-danger">*</span></label>
+                                <label for="projectType" class="form-label  required-field">Project Type</label>
                                 <input type="text" class="form-control material_blue" id="projectType" name="projectType" placeholder="Enter Project Type" value="@Model.ProjectType" />
                             </div>
                             <div class="mb-3">
-                                <label for="projectStartDate" class="form-label">Project Start Date <span class="text-danger">*</span></label>
+                                <label for="projectStartDate" class="form-label  required-field">Project Start Date </label>
                                 @{
                                     DateTime startDate = Model.ProjectStartDate != DateTime.MinValue ? Model.ProjectStartDate : DateTime.Now;
                                     string formattedStartDate = startDate.ToString("yyyy-MM-dd");
@@ -350,14 +405,14 @@
                         <!-- end card body -->
                     </div>
                     <!-- end card -->
-                    <div class="card">
-                        <div class="card-header align-items-center d-flex border-bottom-dashed">
-                            <h5 class="card-title mb-0">Members</h5>
-                            <button type="button" class="btn btn-block btn-warning Add_Members" data-bs-toggle="modal" data-bs-target="#ProjectHeadModal" onclick="ProjectHeadMemberList()"><i class="ri-share-line me-1 align-bottom"></i> Select Head</button>
+                    <div class="card fm-card">
+                        <div class="card-header align-items-center d-flex border-bottom-dashed fm-card-header">
+                            Members
+                            <button type="button" class="btn btn-block Add_Members" style="background-color: #96d17d;" data-bs-toggle="modal" data-bs-target="#ProjectHeadModal" onclick="ProjectHeadMemberList()"><i class="ri-share-line me-1 align-bottom"></i> Select Head</button>
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="projectHead" class="form-label">Project Head <span class="text-danger">*</span></label>
+                                <label for="projectHead" class="form-label  required-field">Project Head </label>
                                 <input type="text" class="form-control material_blue" id="projectHead" name="projectHead" placeholder="Enter Project Head" value="@Model.ProjectHead" />
                             </div>
                         </div>
@@ -367,9 +422,9 @@
                 </form>
                 <div class="modal fade" id="ProjectHeadModal" tabindex="-1" aria-labelledby="ProjectHeadModalLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content border-0">
-                            <div class="modal-header p-3 ps-4 bg-primary-subtle">
-                                <h5 class="modal-title" id="ProjectHeadModalLabel">Members</h5>
+                        <div class="modal-content border-0  fm-form">
+                            <div class="modal-header p-3 ps-4 bg-teal">
+                                <h5 class="modal-title" id="ProjectHeadModalLabel" style="color:white">Members</h5>
                                 <button type="button" class="btn-close" id="closebtn" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body p-4">
@@ -399,8 +454,10 @@
                 }
                 else
                 {
-                    <button type="button" class="btn button-teal btn-lg" onclick="btnCreateProjectDetail()" id="projectDetails" value="Validate" style="width: 160px;height: 50px;">Create</button>
-                }
+                    <button type="button" class="btn button-teal"
+                            onclick="btnCreateProjectDetail()" id="projectDetails">
+                        <i class="ri-save-line me-1"></i> Create
+                    </button>                }
             </div>
         </div>
     </div>
@@ -414,6 +471,31 @@
         document.getElementById("projectStartDate").value = today;
         document.getElementById("projectEndDate").value = today;
     });
+
+            document.getElementById('fileUpload').addEventListener('change', function (e) {
+        const file = e.target.files[0];
+        const preview = document.getElementById('imagePreview');
+        preview.innerHTML = ''; // Clear any previous image/logo
+
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                img.alt = "Selected Image";
+                img.className = "logo-preview";
+                preview.appendChild(img);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            preview.innerHTML = '<p class="text-danger">Please select a valid image file.</p>';
+        }
+    });
+
+    function removeExistingLogo() {
+        document.getElementById('imagePreview').innerHTML = '<p class="text-muted">Logo removed. You can upload a new one.</p>';
+        document.getElementById('IsLogoRemoved').value = 'true'; // signal to remove on server
+    }
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/projectdetailsscript.js" asp-append-version="true"></script>
