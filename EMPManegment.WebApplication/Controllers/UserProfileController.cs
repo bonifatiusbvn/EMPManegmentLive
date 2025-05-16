@@ -43,6 +43,7 @@ using System.Security.Claims;
 using System.Security.Claims;
 using System.Text.Json;
 using X.PagedList;
+using X.PagedList.Extensions;
 using X.PagedList.Mvc;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;

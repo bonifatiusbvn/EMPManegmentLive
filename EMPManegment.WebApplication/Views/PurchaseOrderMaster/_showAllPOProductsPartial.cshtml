@@ -39,14 +39,14 @@
     </div>
 </div>
 
-
 @Html.PagedListPager((IPagedList)Model, page => Url.Action("GetAllPOProductList", new
     {
-        page = page,
-        searchfor = @Context.Request.Query["searchfor"]
+        page,
+        searchfor = Context.Request.Query["searchfor"].ToString(),
+        searchby = Context.Request.Query["searchby"].ToString()
     }),
-                        new X.PagedList.Web.Common.PagedListRenderOptions
-                    {
-                        LiElementClasses = new string[] { "page-item" },
-                        PageClasses = new string[] { "page-link" }
-                    })
+        new PagedListRenderOptions
+    {
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" }
+    })

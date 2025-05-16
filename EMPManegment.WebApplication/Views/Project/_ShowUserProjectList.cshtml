@@ -185,18 +185,18 @@
                 }
             </div>
 
-@Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowUserProjectList", new
-{
-     page = page,
-     searchfor = @Context.Request.Query["searchfor"],
-     searchby = @Context.Request.Query["searchby"]
-    }),
-     new X.PagedList.Web.Common.PagedListRenderOptions
-    {
-      LiElementClasses = new string[] { "page-item" },
-      PageClasses = new string[] { "page-link" }
-    })
-</div>
+            @Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowUserProjectList", new
+                {
+                    page,
+                    searchfor = Context.Request.Query["searchfor"].ToString(),
+                    searchby = Context.Request.Query["searchby"].ToString()
+                }),
+                     new PagedListRenderOptions
+            {
+                LiElementClasses = new[] { "page-item" },
+                PageClasses = new[] { "page-link" }
+            })
+        </div>
     </div>
 </div>
 
