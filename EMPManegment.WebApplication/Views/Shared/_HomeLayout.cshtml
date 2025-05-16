@@ -161,7 +161,7 @@
             <ul class="navbar-nav ml-auto">
                 <div class="dropdown notifications-menu" id="notificationDropdown">
                     <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false" style="margin-right:15px; margin-top:9px;">
-                        <i class='bx bx-bell fs-22'></i>
+                        <i class='bx bx-bell fs-22' style="margin-left: -5px;"></i>
                         <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger" id="CountunreadNotification"><span class="visually-hidden">unread messages</span></span>
                     </button>
                     <div class="dropdown-menu dropdown-menu-lg dropdown-menu-end p-0" aria-labelledby="page-header-notifications-dropdown">
@@ -294,364 +294,116 @@
                 <img src="~/assets/images/bonifatiusicon.ico" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
                 <span class="brand-text font-weight-light">Bonifatius ERP</span>
             </a>
+            @{
+                var iconMap = new Dictionary<string, string>
+            {
+            { "Projects", "fa-regular fa-file-lines" },
+            { "Product Master", "fa-solid fa-cart-shopping" },
+            { "Expense", "fa-solid fa-coins" },
+            { "InvoicesManual", "fa-solid fa-newspaper" },
+            { "User", "fa-solid fa-user" },
+            { "Authentication", "fa-solid fa-key" },
+            { "Vendor", "fa-solid fa-truck" },
+            { "Company", "fa-solid fa-building" },
+            { "Payment Transaction", "fa-regular fa-credit-card" },
+            { "Purchase Request", "fa-solid fa-bag-shopping" },
+            { "Purchase Order", "fa-regular fa-clipboard" },
+            { "Invoices", "fa-solid fa-newspaper" },
+            { "Tasks", "fas fa-tasks" }
+            };
+
+                var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+                var currentAction = ViewContext.RouteData.Values["action"]?.ToString();
+
+                var additionalMenu = new List<(string GroupName, string FormName, string Controller, string Action)>
+            {
+            ("User", "Create User", "UserProfile", "CreateUser"),
+            ("Projects", "Create Project", "Project", "CreateProject"),
+            ("Projects", "GetProjectDetails", "Project", "ProjectDetails"),
+            ("Product Master", "Create Product", "ProductMaster", "CreateProduct"),
+            ("Product Master", "Product Details", "ProductMaster", "ProductDetails"),
+            ("Purchase Request", "Create Purchase Request", "PurchaseRequest", "CreatePurchaseRequest"),
+            ("Purchase Order", "Create Purchase Order", "PurchaseOrderMaster", "CreatePurchaseOrder"),
+            ("Payment Transaction", "Show Payment Details", "PurchaseOrderMaster", "PaymentDetails"),
+            ("Purchase Order", "ShowProductDetails", "PurchaseOrderMaster", "PurchaseOrderDetails"),
+            ("Invoices", "Create Invoice", "Invoice", "CreateInvoice"),
+            ("Invoices", "VendorInvoiceListView", "Invoice", "PayVendors"),
+            ("Invoices", "DisplayInvoiceDetails", "Invoice", "DisplayInvoiceDetails"),
+            ("Invoices", "ShowInvoiceDetailsByOrderId", "Invoice", "ShowInvoiceDetailsByOrderId"),
+            ("Invoices", "GetAllTransactionByVendorId", "Invoice", "VendorAllTransaction"),
+            ("Invoices", "InvoiceDetails", "Invoice", "InvoiceDetails"),
+            ("Tasks", "Create Task", "Task", "AddTaskDetails"),
+            ("Expense", "GetPayExpense", "ExpenseMaster", "PayExpense"),
+            ("Expense", "ApprovedExpense", "ExpenseMaster", "ApprovedExpense"),
+            ("Purchase Request", "PurchaseRequestDetails", "PurchaseRequest", "PurchaseRequestDetails"),
+            ("InvoicesManual", "CreateInvoiceManual", "ManualInvoice", "CreateInvoiceManual"),
+            ("InvoicesManual", "ManualInvoiceDetails", "ManualInvoice", "ManualInvoiceDetails"),
+
+            };
+
+                var currentPage = additionalMenu.FirstOrDefault(p =>
+                p.Controller == currentController && p.Action == currentAction);
+            }
 
             <div class="sidebar">
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+
                         @foreach (var group in UserSession.FormPermisionData.Select(a => a.GroupName).Distinct())
                         {
-                            var groupData = UserSession.FormPermisionData.Where(e => e.GroupName == group && e.isActive == true).ToList();
-                            var hasViewPermission = groupData.Any(e => e.isViewAllow == true);
+                            var groupData = UserSession.FormPermisionData
+                            .Where(e => e.GroupName == group && e.isActive && e.isViewAllow)
+                            .ToList();
 
-                            @if (group == "Dashboard" && groupData.Count > 0)
+                            if (group == "Dashboard")
                             {
-                                @foreach (var item in groupData)
+                                foreach (var item in groupData)
                                 {
+                                    var isActive = item.Controller == currentController && item.Action == currentAction;
                                     <li class="nav-item">
-                                        <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
+                                        <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link @(isActive ? "active" : "")">
                                             <i class="nav-icon fas fa-tachometer-alt icon"></i>
-                                            <p class="text">
-                                                Dashboard
-                                            </p>
+                                            <p class="text">Dashboard</p>
                                         </a>
                                     </li>
                                 }
                             }
-                            else if (group == "Projects" && hasViewPermission)
+                            else if (groupData.Any() && iconMap.ContainsKey(group))
                             {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-regular fa-file-lines icon"></i>
-                                        <p class="text">
-                                            Projects
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
+                                var isCurrentPageInGroup = groupData.Any(e => e.Controller == currentController && e.Action == currentAction);
+                                var shouldAddCurrentPage = currentPage.FormName != null && currentPage.GroupName == group && !isCurrentPageInGroup;
 
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Product Master" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-cart-shopping icon"></i>
+                                var isActiveGroup = isCurrentPageInGroup || shouldAddCurrentPage;
+
+                                <li class="nav-item @(isActiveGroup ? "menu-open" : "")">
+                                    <a href="#" class="nav-link @(isActiveGroup ? "active" : "")">
+                                        <i class="@iconMap[group] icon"></i>
                                         <p class="text">
-                                            Product Master
+                                            @group
                                             <i class="right fas fa-angle-left"></i>
                                         </p>
                                     </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
+                                    <ul class="nav nav-treeview">
                                         @foreach (var item in groupData)
                                         {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
+                                            var isActive = item.Controller == currentController && item.Action == currentAction;
+                                            <li class="nav-item">
+                                                <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link @(isActive ? "active" : "")">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>@item.FormName</p>
+                                                </a>
+                                            </li>
                                         }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Expense" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-coins icon"></i>
-                                        <p class="text">
-                                            Expense
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
+
+                                        @* Add current page to end of group if not already present *@
+                                        @if (shouldAddCurrentPage)
                                         {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "InvoicesManual" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-newspaper icon"></i>
-                                        <p class="text">
-                                            InvoicesManual
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "User" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-user icon"></i>
-                                        <p class="text">
-                                            User
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Authentication" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-key icon"></i>
-                                        <p class="text">
-                                            Authentication
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Vendor" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-truck icon"></i>
-                                        <p class="text">
-                                            Vendor
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Company" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-building icon"></i>
-                                        <p class="text">
-                                            Company
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Payment Transaction" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-regular fa-credit-card icon"></i>
-                                        <p class="text">
-                                            Payment Transaction
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Purchase Request" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-bag-shopping icon"></i>
-                                        <p class="text">
-                                            Purchase Request
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p> @item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Purchase Order" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-regular fa-clipboard icon"></i>
-                                        <p class="text">
-                                            Purchase Order
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Invoices" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fa-solid fa-newspaper icon"></i>
-                                        <p class="text">
-                                            Invoices
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
-                                        }
-                                    </ul>
-                                </li>
-                            }
-                            else if (group == "Tasks" && hasViewPermission)
-                            {
-                                <li class="nav-item">
-                                    <a href="#" class="nav-link">
-                                        <i class="fas fa-tasks icon"></i>
-                                        <p class="text">
-                                            Tasks
-                                            <i class="right fas fa-angle-left"></i>
-                                        </p>
-                                    </a>
-                                    <ul class="nav nav-treeview" style="display: none;">
-                                        @foreach (var item in groupData)
-                                        {
-                                            @if (item.View)
-                                            {
-                                                <li class="nav-item">
-                                                    <a asp-action="@item.Action" asp-controller="@item.Controller" class="nav-link">
-                                                        <i class="far fa-circle nav-icon"></i>
-                                                        <p>@item.FormName</p>
-                                                    </a>
-                                                </li>
-                                            }
+                                            <li class="nav-item">
+                                                <a asp-action="@currentPage.Action" asp-controller="@currentPage.Controller" class="nav-link active">
+                                                    <i class="far fa-circle nav-icon"></i>
+                                                    <p>@currentPage.FormName</p>
+                                                </a>
+                                            </li>
                                         }
                                     </ul>
                                 </li>
@@ -660,6 +412,7 @@
                     </ul>
                 </nav>
             </div>
+
             <!-- /.sidebar -->
         </aside>
         <!-- Content Wrapper. Contains page content -->
