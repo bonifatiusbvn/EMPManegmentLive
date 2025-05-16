@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using EMPManegment.Inretface.Services.UserAttendanceServices;
@@ -23,9 +24,9 @@ namespace EMPManegment.Services.UserAttendance
 
         public IUserAttendance UserAttendance { get; }
 
-        public Task<jsonData> GetUserAttendanceList(DataTableRequstModel AttendancedataTable)
+        public Task<AGGridResponseModel<UserAttendanceModel>> GetUserAttendanceList(AGGridRequestModel AttendanceRequest)
         {
-            return UserAttendance.GetUserAttendanceList(AttendancedataTable);
+            return UserAttendance.GetUserAttendanceList(AttendanceRequest);
         }
         public Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel GetuserAttendance)
         {

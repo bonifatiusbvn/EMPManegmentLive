@@ -18,6 +18,7 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
         public string? EndDate { get; set; }
         public string SortColumn { get; set; }
         public string SortDirection { get; set; }
+        public string? UserFilter { get; set; }
     }
 
     public class SortModel

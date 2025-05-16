@@ -238,53 +238,6 @@ namespace EMPManegment.Web.Controllers
                 return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
-        //[HttpPost]
-        //public async Task<IActionResult> GetDatatableCompanyList()
-        //{
-        //    try
-        //    {
-        //        var draw = Request.Form["draw"].FirstOrDefault();
-        //        var start = Request.Form["start"].FirstOrDefault();
-        //        var length = Request.Form["length"].FirstOrDefault();
-        //        var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-        //        var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-        //        var searchValue = Request.Form["search[value]"].FirstOrDefault();
-        //        int pageSize = length != null ? Convert.ToInt32(length) : 0;
-        //        int skip = start != null ? Convert.ToInt32(start) : 0;
-
-        //        var dataTable = new DataTableRequstModel
-        //        {
-        //            draw = draw,
-        //            start = start,
-        //            pageSize = pageSize,
-        //            skip = skip,
-        //            lenght = length,
-        //            searchValue = searchValue,
-        //            sortColumn = sortColumn,
-        //            sortColumnDir = sortColumnDir
-        //        };
-        //        List<CompanyModel> vendorList = new List<CompanyModel>();
-        //        var data = new jsonData();
-        //        ApiResponseModel res = await APIServices.PostAsync(dataTable, "Company/GetDatatableCompanyList");
-        //        if (res.code == 200)
-        //        {
-        //            data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
-        //            vendorList = JsonConvert.DeserializeObject<List<CompanyModel>>(data.data.ToString());
-        //        }
-        //        var jsonData = new
-        //        {
-        //            draw = data.draw,
-        //            recordsFiltered = data.recordsFiltered,
-        //            recordsTotal = data.recordsTotal,
-        //            data = vendorList,
-        //        };
-        //        return new JsonResult(jsonData);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        throw ex;
-        //    }
-        //}
 
         [HttpPost]
         public async Task<IActionResult> DeleteCompanyDetails(Guid CompanyId)

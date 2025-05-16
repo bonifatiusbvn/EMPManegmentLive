@@ -19,7 +19,6 @@ namespace EMPManegment.Inretface.Interface.CompanyMaster
         Task<ApiResponseModel> AddCompany(CompanyModel AddCompany);
         Task<UserResponceModel> UpdateCompanyDetails(CompanyModel updateCompany);
         Task<UserResponceModel> DeleteCompanyDetails(Guid CompanyId);
-        //Task<jsonData> GetDatatableCompanyList(DataTableRequstModel CompanydataTable);
         Task<AGGridResponseModel<CompanyModel>> GetCompanyList(AGGridRequestModel CompanyRequest);
     }
 }

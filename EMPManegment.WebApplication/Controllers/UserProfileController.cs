@@ -12,6 +12,7 @@ using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
@@ -475,51 +476,23 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetUserAttendanceList()
+        public async Task<IActionResult> GetUserAttendanceList([FromBody] AGGridRequestModel AttendanceRequest)
         {
             try
             {
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[1][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
+                AttendanceRequest.filters ??= new List<FilterModel>();
 
-                var dataTable = new DataTableRequstModel
+                var AttendanceDetails = await APIServices.AGPostAsync<UserAttendanceModel>(AttendanceRequest, "UserProfile/GetUserAttendanceList");
+
+                return new JsonResult(new
                 {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<UserAttendanceModel> UserAttendance = new List<UserAttendanceModel>();
-                var data = new jsonData();
-                HttpClient client = WebAPI.Initil();
-                ApiResponseModel res = await APIServices.PostAsync(dataTable, "UserProfile/GetUserAttendanceList");
-                if (res.code == 200)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
-                    UserAttendance = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = UserAttendance,
-                };
-                return new JsonResult(jsonData);
+                    rowsThisPage = AttendanceDetails.Data,
+                    totalRowCount = AttendanceDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
 

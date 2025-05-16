@@ -540,6 +540,23 @@
         font-family: sans-serif;
     }
 
+.ag-paging-panel {
+    background-color: #f0f0f0;
+    color: #00796b; 
+    font-size: 14px;
+}
+
+.ag-paging-button {
+    color: #00796b;
+}
+
+.ag-paging-input {
+    border: 1px solid #ccc;
+    color: #333;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
 .deletebtn, .editbtn, .printbtn, .pdfbtn, .whatsappbtn, .telegrambtn {
     font-size: 1.2em;
     margin-right: 10px;
@@ -600,7 +617,6 @@
     content: " *";
     color: #dc3545;
 }
-
 
 .dropzone-area {
     border: 2px dashed #16989A;

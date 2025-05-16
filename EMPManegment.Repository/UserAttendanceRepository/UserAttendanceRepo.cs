@@ -1,16 +1,18 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.Common;
+using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using Microsoft.EntityFrameworkCore;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using System.Net;
-using System.Linq.Dynamic.Core;
-using EMPManegment.EntityModels.ViewModels.DataTableParameters;
-using EMPManegment.EntityModels.Common;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using System.Data.SqlClient;
-using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using System.Linq.Dynamic.Core;
+using System.Net;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 #nullable disable
 namespace EMPManegment.Repository.UserAttendanceRepository
 {
@@ -25,52 +27,56 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         public BonifatiusEmployeesContext Context { get; }
         public IConfiguration Configuration { get; }
 
-        public async Task<jsonData> GetUserAttendanceList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<UserAttendanceModel>> GetUserAttendanceList(AGGridRequestModel AttendanceRequest)
         {
-            string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
-            var dataSet = DbHelper.GetDataSet("[spGetAttendanceList]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
-
-            var AttendanceList = new List<UserAttendanceModel>();
-
-            foreach (DataRow row in dataSet.Tables[0].Rows)
+            try
             {
-                var Attendance = new UserAttendanceModel
+                var filterConditions = string.Join(" AND ", AttendanceRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = AttendanceRequest.SortModel?.FirstOrDefault()?.ColId ?? "Date";
+                string sortDirection = AttendanceRequest.SortModel?.FirstOrDefault()?.Sort ?? "desc";
+
+                var parameters = new List<SqlParameter>
                 {
-
-                    UserId = Guid.Parse(row["UserId"].ToString()),
-                    UserName = row["UserName"].ToString(),
-                    Date = Convert.ToDateTime(row["Date"]),
-                    AttendanceId = row["AttendanceId"] != DBNull.Value ? Convert.ToInt32(row["AttendanceId"]) : (int?)null,
-                    Intime = Convert.ToDateTime(row["INTime"]),
-                    OutTime = row["OutTime"] != DBNull.Value ? Convert.ToDateTime(row["OutTime"]) : (DateTime?)null,
-                    TotalHours = row["TotalHours"] != DBNull.Value ? TimeSpan.Parse(row["TotalHours"].ToString()) : (TimeSpan?)null,
-                    CreatedOn = row["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(row["CreatedOn"]) : (DateTime?)null,
+                new SqlParameter("@SearchValue", (object)AttendanceRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", AttendanceRequest.PageSize),
+                new SqlParameter("@Skip", AttendanceRequest.StartRow),
+                new SqlParameter("@StartDate", AttendanceRequest.StartDate),
+                new SqlParameter("@EndDate", AttendanceRequest.EndDate),
+                new SqlParameter("@UserFilter", AttendanceRequest.UserFilter),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
-                AttendanceList.Add(Attendance);
+
+                var dataSet = DbHelper.GetDataSet("spGetAttendanceList", CommandType.StoredProcedure, parameters.ToArray(), Configuration.GetConnectionString("EMPDbconn"));
+
+                var AttendanceList = dataSet.Tables[0].AsEnumerable().Select(row => new UserAttendanceModel
+                {
+                    AttendanceId = row["AttendanceId"] != DBNull.Value ? Convert.ToInt32(row["AttendanceId"]) : 0,
+                    UserId = row["UserId"] != DBNull.Value ? Guid.Parse(row["UserId"].ToString()) : Guid.Empty,
+                    FirstName = row["FirstName"]?.ToString(),
+                    LastName = row["LastName"]?.ToString(),
+                    Date = Convert.ToDateTime(row["Date"]),
+                    Intime = Convert.ToDateTime(row["InTime"]),
+                    OutTime = row["OutTime"] != DBNull.Value ? Convert.ToDateTime(row["OutTime"]) : (DateTime?)null,
+                    TotalHours = row["Totalhours"] != DBNull.Value ? (TimeSpan)row["Totalhours"] : TimeSpan.Zero,
+                    CreatedOn = row["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(row["CreatedOn"]) : (DateTime?)null,
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<UserAttendanceModel>
+                {
+                    Data = AttendanceList,
+                    RecordsTotal = totalRecords
+                };
             }
-            if (!string.IsNullOrEmpty(dataTable.searchValue))
+            catch (Exception ex)
             {
-                AttendanceList = AttendanceList.Where(e => e.UserName.Contains(dataTable.searchValue) || e.Date.ToString().ToLower().Contains(dataTable.searchValue.ToLower())).ToList();
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
-
-            IQueryable<UserAttendanceModel> queryableExpenseDetails = AttendanceList.AsQueryable();
-
-            if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
-            {
-                queryableExpenseDetails = queryableExpenseDetails.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
-            }
-            var totalRecord = queryableExpenseDetails.Count();
-            var filteredData = queryableExpenseDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
-
-            var jsonData = new jsonData
-            {
-                draw = dataTable.draw,
-                recordsFiltered = totalRecord,
-                recordsTotal = totalRecord,
-                data = filteredData
-            };
-
-            return jsonData;
         }
 
         public async Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
