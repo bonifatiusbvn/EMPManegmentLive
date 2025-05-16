@@ -1,0 +1,84 @@
+﻿@model EMPManegment.EntityModels.ViewModels.TaskModels.TaskDetailsView
+@using EMPManegment.Web.Models
+@inject UserSession _userSession
+@inject EMPManegment.Web.Helper.Common CommonHelper
+
+@{
+    var imageUrl = !string.IsNullOrEmpty(Model.UserProfile) ? Url.Content($"~/{Model.UserProfile}") : null;
+    var initials = !string.IsNullOrEmpty(Model.FirstName) && !string.IsNullOrEmpty(Model.LastName)
+        ? $"{Model.FirstName[0]}{Model.LastName[0]}".ToUpper()
+        : "NA";
+    var statusClass = Model.TaskStatus switch
+    {
+        "Working" => "bg-warning",
+        "Completed" => "bg-success",
+        "Pending" => "bg-secondary",
+        "InReview" => "bg-orange",
+        null => "bg-info",
+        _ => "bg-info"
+    };
+}
+
+<div class="task-card">
+    <div class="task-header">
+        <h6 class="task-title">@Model.TaskTitle</h6>
+        <div class="task-actions">
+            <div class="dropdown">
+                <button class="btn btn-sm btn-icon" data-bs-toggle="dropdown">
+                    <i class="ri-more-fill"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="#"><i class="ri-eye-fill me-2"></i>View</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="ri-edit-2-line me-2"></i>Edit</a></li>
+                    <li><a class="dropdown-item" href="#"><i class="ri-delete-bin-5-line me-2"></i>Delete</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <p class="task-description">@Model.TaskDetails</p>
+
+    <div class="task-meta">
+        @if (Model.TaskStatus != null)
+        {
+            <span class="badge @statusClass">@Model.TaskStatus</span>
+        }
+        <div class="task-assignee">
+            @if (!string.IsNullOrEmpty(imageUrl))
+            {
+                <img src="@imageUrl" alt="@Model.FirstName" class="assignee-avatar">
+            }
+            else
+            {
+                <div class="avatar-initials">@initials</div>
+            }
+        </div>
+    </div>
+
+    <div class="task-status-update">
+        <select class="form-select form-select-sm" id="ddlStatus@(Model.Id)">
+            <option selected disabled>Select Status</option>
+            @if (Model.TaskStatus == null || Model.TaskStatus == "Pending")
+            {
+                <option value="Working">Working</option>
+            }
+            @if (Model.TaskStatus == "Working")
+            {
+                <option value="Pending">Pending</option>
+                <option value="InReview">In Review</option>
+            }
+            @if (Model.TaskStatus == "InReview" && _userSession.UserRoll == "Admin")
+            {
+                <option value="Completed">Completed</option>
+            }
+        </select>
+        <button class="btn btn-sm btn-success" onclick="updateStatus('@Model.Id')">
+            <i class="ri-check-line"></i> Update
+        </button>
+    </div>
+
+    <div class="task-dates">
+        <small><i class="ri-calendar-line"></i> @CommonHelper.GetCommonDateFormat(Model?.TaskDate ?? DateTime.MinValue)</small>
+        <small><i class="ri-calendar-line"></i> @CommonHelper.GetCommonDateFormat(Model?.TaskEndDate ?? DateTime.MinValue)</small>
+    </div>
+</div>
