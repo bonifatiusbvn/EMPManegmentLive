@@ -378,20 +378,23 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header bg-primary-subtle p-3">
-                    <h5 class="modal-title" id="flipModalLabel">Add Expense Type</h5>
+                    <div class="card-header fm-card-header">
+                        Add Expense Type
+                    </div>
+
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="hstack gap-3 align-items-start">
                         <div class="flex-grow-1">
-                            <label>Expense Type <span class="text-danger">*</span></label>
+                            <label>Expense Type<span class="text-danger">*</span></label>
                             <input class="form-control" id="textExpenseType" name="textExpenseType" placeholder="Enter Expense Type" type="text" />
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success" onclick="AddExpenseType()">Save</button>
+                    <button type="button" class="btn button-cls" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn button-teal" onclick="AddExpenseType()">Save</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

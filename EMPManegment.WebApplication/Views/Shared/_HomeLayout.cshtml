@@ -100,7 +100,7 @@
                     @if (_userSession.UserRoll != "Admin")
                     {
                         <select class="form-control select2 select2-teal"
-                                                data-dropdown-css-class="select2-teal" id="drpProjectName" name="drpProjectName">
+                                data-dropdown-css-class="select2-teal" id="drpProjectName" name="drpProjectName">
                             @if (UserProjects != null)
                             {
                                 foreach (var Project in UserProjects)
@@ -126,7 +126,7 @@
                     else
                     {
                         <select class="form-control select2 select2-teal"
-                                                data-dropdown-css-class="select2-teal" id="drpProjectName" name="drpProjectName">
+                                data-dropdown-css-class="select2-teal" id="drpProjectName" name="drpProjectName">
                             <option value="">All Project</option>
                             @if (UserProjects != null)
                             {
@@ -321,25 +321,25 @@
             {
             ("User", "Create User", "UserProfile", "CreateUser"),
             ("Projects", "Create Project", "Project", "CreateProject"),
-            ("Projects", "GetProjectDetails", "Project", "ProjectDetails"),
+            ("Projects", "Project Details", "Project", "ProjectDetails"),
             ("Product Master", "Create Product", "ProductMaster", "CreateProduct"),
             ("Product Master", "Product Details", "ProductMaster", "ProductDetails"),
             ("Purchase Request", "Create Purchase Request", "PurchaseRequest", "CreatePurchaseRequest"),
             ("Purchase Order", "Create Purchase Order", "PurchaseOrderMaster", "CreatePurchaseOrder"),
             ("Payment Transaction", "Show Payment Details", "PurchaseOrderMaster", "PaymentDetails"),
-            ("Purchase Order", "ShowProductDetails", "PurchaseOrderMaster", "PurchaseOrderDetails"),
+            ("Purchase Order", "Product Details", "PurchaseOrderMaster", "PurchaseOrderDetails"),
             ("Invoices", "Create Invoice", "Invoice", "CreateInvoice"),
-            ("Invoices", "VendorInvoiceListView", "Invoice", "PayVendors"),
-            ("Invoices", "DisplayInvoiceDetails", "Invoice", "DisplayInvoiceDetails"),
-            ("Invoices", "ShowInvoiceDetailsByOrderId", "Invoice", "ShowInvoiceDetailsByOrderId"),
+            ("Invoices", "Vendor Invoice", "Invoice", "PayVendors"),
+            ("Invoices", "Invoice Details", "Invoice", "DisplayInvoiceDetails"),
+            ("Invoices", "InvoiceDetails By OrderId", "Invoice", "ShowInvoiceDetailsByOrderId"),
             ("Invoices", "GetAllTransactionByVendorId", "Invoice", "VendorAllTransaction"),
-            ("Invoices", "InvoiceDetails", "Invoice", "InvoiceDetails"),
+            ("Invoices", "Invoice Details", "Invoice", "InvoiceDetails"),
             ("Tasks", "Create Task", "Task", "AddTaskDetails"),
-            ("Expense", "GetPayExpense", "ExpenseMaster", "PayExpense"),
-            ("Expense", "ApprovedExpense", "ExpenseMaster", "ApprovedExpense"),
-            ("Purchase Request", "PurchaseRequestDetails", "PurchaseRequest", "PurchaseRequestDetails"),
-            ("InvoicesManual", "CreateInvoiceManual", "ManualInvoice", "CreateInvoiceManual"),
-            ("InvoicesManual", "ManualInvoiceDetails", "ManualInvoice", "ManualInvoiceDetails"),
+            ("Expense", "Pay Expense", "ExpenseMaster", "PayExpense"),
+            ("Expense", "Approved Expense", "ExpenseMaster", "ApprovedExpense"),
+            ("Purchase Request", "Purchase Request Details", "PurchaseRequest", "PurchaseRequestDetails"),
+            ("InvoicesManual", "Manual Invoice Creatation", "ManualInvoice", "CreateInvoiceManual"),
+            ("InvoicesManual", "Manual Invoice Details", "ManualInvoice", "ManualInvoiceDetails"),
 
             };
 
@@ -523,55 +523,54 @@
 
 <script lang="ts" setup type="text/javascript">
 
-    $(document).ready(function () {
-        var Role = "@_userSession.UserRoll";
-        var ProjectId = "@UserSession.ProjectId";
-        var ProjectName = "@UserSession.ProjectName";
+        $(document).ready(function () {
+            var Role = "@_userSession.UserRoll";
+            var ProjectId = "@UserSession.ProjectId";
+            var ProjectName = "@UserSession.ProjectName";
 
-        $('#drpProjectName').change(function () {
+            $('#drpProjectName').change(function () {
 
-            var ProjectText = $(this).find('option:selected').text();
-            var selectedProjectId = $(this).val();
+                var ProjectText = $(this).find('option:selected').text();
+                var selectedProjectId = $(this).val();
 
-            $('#drpProjectName').text(ProjectText);
-            fn_ChangeProject(selectedProjectId, ProjectText);
-
-        });
-
-        $('#drpProjectName').select2({
-        placeholder: 'Select Project',
-        width: '100%',
-        minimumResultsForSearch: Infinity,
-    });
-
-    function fn_ChangeProject(selectedProjectId, ProjectText) {
-
-        $.ajax({
-            url: '/Home/ProjectList',
-            type: 'GET',
-            data: {
-                ProjectId: selectedProjectId,
-                ProjectName: ProjectText
-            },
-            success: function (result) {
-                siteloaderhide();
                 $('#drpProjectName').text(ProjectText);
-                sessionStorage.setItem('SelectedProjectId', selectedProjectId);
-                location.reload();
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching purchase request list:", error);
-            }
+                fn_ChangeProject(selectedProjectId, ProjectText);
+
+            });
+
+            $('#drpProjectName').select2({
+            placeholder: 'Select Project',
+            width: '100%',
+            minimumResultsForSearch: Infinity,
         });
-    }
-    function viewAllTaskbtn() {
-        window.location.href = '/Task/UserTasks';
-    }
 
-    function viewAllMessages() {
-        window.location.href = '/Home/ChatMessages';
-    }
+        function fn_ChangeProject(selectedProjectId, ProjectText) {
 
-});
+            $.ajax({
+                url: '/Home/ProjectList',
+                type: 'GET',
+                data: {
+                    ProjectId: selectedProjectId,
+                    ProjectName: ProjectText
+                },
+                success: function (result) {
+                    siteloaderhide();
+                    $('#drpProjectName').text(ProjectText);
+                    sessionStorage.setItem('SelectedProjectId', selectedProjectId);
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error fetching purchase request list:", error);
+                }
+            });
+        }
+        function viewAllTaskbtn() {
+            window.location.href = '/Task/UserTasks';
+        }
+
+        function viewAllMessages() {
+            window.location.href = '/Home/ChatMessages';
+        }
+    });
 </script>
 
