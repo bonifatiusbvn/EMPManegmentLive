@@ -27,6 +27,19 @@ function GetMemberList() {
         }
     });
 }
+
+$(document).ready(function () {
+    $('#projectPriority').select2({
+        placeholder: 'Select Project Priority',
+        width: '100%',
+        minimumResultsForSearch: Infinity,
+    });
+    $('#projectStatus').select2({
+        placeholder: 'Select Project Status',
+        width: '100%',
+        minimumResultsForSearch: Infinity,
+    });
+});
 function btnCreateProjectDetail() {
 
     if ($('#formprojectdetails').valid()) {

@@ -125,60 +125,12 @@ function GetCountry() {
             $.each(result, function (i, data) {
                 $('#ddlCountry').append('<Option value=' + data.id + '>' + data.countryName + '</Option>')
             });
-            $.each(result, function (i, data) {
-                $('#projectCountry').append('<option value=' + data.id + '>' + data.countryName + '</option>')
-            });
-        }
-    });
-}
-
-
-
-
-function fn_getProjectState(drpProjectstate, countryId, that) {
-    var cid = countryId;
-    if (cid == undefined || cid == null) {
-        var cid = $(that).val();
-    }
-
-
-    $('#' + drpProjectstate).empty();
-    $('#' + drpProjectstate).append('<Option >--Select State--</Option>');
-    $.ajax({
-        url: '/Authentication/GetState?StateId=' + cid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpProjectstate).append('<Option value=' + data.id + '>' + data.stateName + '</Option>')
-            });
-        }
-    });
-}
-
-function fn_getProjectcitiesbystateId(drpProjectcity, stateid, that) {
-
-    var sid = stateid;
-    if (sid == undefined || sid == null) {
-        var sid = $(that).val();
-    }
-
-
-    $('#' + drpProjectcity).empty();
-    $('#' + drpProjectcity).append('<Option >--Select City--</Option>');
-    $.ajax({
-        url: '/Authentication/GetCity?CityId=' + sid,
-        success: function (result) {
-
-            $.each(result, function (i, data) {
-                $('#' + drpProjectcity).append('<Option value=' + data.id + '>' + data.cityName + '</Option>');
-
-            });
         }
     });
 }
 
 $(document).ready(function () {
-    $('#drpCuCountry,#VendorCountry,#CompanyCountry').select2({
+    $('#drpCuCountry,#VendorCountry,#CompanyCountry,#projectCountry').select2({
         placeholder: 'Select Contry',
         width: '100%',
         dropdownAutoWidth: true,
@@ -198,13 +150,13 @@ $(document).ready(function () {
         }
     });
 
-    $('#drpCuState,#VendorState,#CompanyState').select2({
+    $('#drpCuState,#VendorState,#CompanyState,#ProjectState').select2({
         placeholder: 'Select State',
         width: '100%',
         allowClear: true
     });
 
-    $('#drpCuCity,#VendorCity,#CompanyCity').select2({
+    $('#drpCuCity,#VendorCity,#CompanyCity,#ProjectCity').select2({
         placeholder: 'Select City',
         width: '100%',
         allowClear: true
@@ -323,6 +275,42 @@ function fn_getCompanycitiesbystateId(drpCompanycity, stateid, that) {
     var sid = stateid ?? $(that).val();
 
     let $cityDropdown = $('#' + drpCompanycity);
+    $cityDropdown.empty().append('<option value="">--Select City--</option>');
+
+    $.ajax({
+        url: '/Authentication/GetCity?CityId=' + sid,
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $cityDropdown.append('<option value="' + data.id + '">' + data.cityName + '</option>');
+            });
+
+            $cityDropdown.trigger('change');
+        }
+    });
+}
+function fn_getProjectState(drpProjectstate, countryId, that) {
+    var cid = countryId ?? $(that).val();
+
+    let $stateDropdown = $('#' + drpProjectstate);
+    $stateDropdown.empty().append('<option value="">--Select State--</option>');
+
+    $.ajax({
+        url: '/Authentication/GetState?StateId=' + cid,
+        success: function (result) {
+            $.each(result, function (i, data) {
+                $stateDropdown.append('<option value="' + data.id + '">' + data.stateName + '</option>');
+            });
+
+            $stateDropdown.trigger('change');
+        }
+    });
+}
+
+function fn_getProjectcitiesbystateId(drpProjectcity, stateid, that) {
+
+    var sid = stateid ?? $(that).val();
+
+    let $cityDropdown = $('#' + drpProjectcity);
     $cityDropdown.empty().append('<option value="">--Select City--</option>');
 
     $.ajax({

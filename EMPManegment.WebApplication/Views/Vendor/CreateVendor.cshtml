@@ -13,11 +13,6 @@
                    : string.Empty;
 }
 <style>
-    .auth-bg-cover {
-        width: 1800px;
-        margin-left: -300px;
-    }
-
     .form-container {
         background: rgba(255, 255, 255, 0.9);
         width: 1600px;
@@ -30,8 +25,8 @@
     }
 
     #vendorImagePreview {
-        height: 160px;
-        width: 160px;
+        height: 150px;
+        width: 150px;
         border: 2px solid grey;
         margin-top: -65px;
         margin-right: -157px;
@@ -52,11 +47,6 @@
     }
 
     @@media only screen and (max-width: 768px) {
-        .auth-bg-cover {
-            width: 330px;
-            margin-left: 46px;
-            background: none;
-        }
 
         .Bank_Details {
             height: 600px;
@@ -88,11 +78,6 @@
     }
 
     @@media only screen and (min-width: 768px) and (max-width: 1024px) {
-        .auth-bg-cover {
-            width: 700px;
-            margin-left: 46px;
-            background: none;
-        }
 
         .Bank_Details {
             height: 600px;
@@ -118,12 +103,6 @@
     }
 
     @@media only screen and (min-width: 1024px) and (max-width: 1370px) {
-        .auth-bg-cover {
-            width: 670px;
-            margin-left: 55px;
-            background: none;
-            margin-top: -145px;
-        }
 
         #vendorImagePreview {
             height: 160px;
@@ -485,8 +464,10 @@
                 <div class="text-end  mb-3">
                     @if (Model.Vid == null || Model.Vid == Guid.Empty)
                     {
-                        <button type="button" class="btn button-teal btn-lg Submit_Button" onclick="AddVendorDetails()" id="SubmitVendorDetails" style="width: 230px;height: 50px;margin-right:20px;">Submit</button>
-                    }
+                        <button type="button" class="btn button-teal"
+                                onclick="AddVendorDetails()" id="SubmitVendorDetails">
+                            <i class="ri-save-line me-1"></i> Create
+                        </button>                    }
                     else
                     {
                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Vendor List" && (a.Edit == true)))
