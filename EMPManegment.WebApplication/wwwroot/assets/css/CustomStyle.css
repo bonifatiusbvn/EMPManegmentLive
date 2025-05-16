@@ -576,7 +576,11 @@
         border-color: #16989A;
         box-shadow: 0 0 0 0.2rem rgba(22, 152, 154, 0.25);
     }
-
+.fm-container {
+    max-width: 1450px;
+    margin: 0 auto;
+    padding: 20px;
+}
 .fm-card {
     border-radius: 10px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
