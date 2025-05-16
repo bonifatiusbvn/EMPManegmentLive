@@ -97,10 +97,12 @@
 <!---Start Pagination--->
 @Html.PagedListPager((IPagedList)Model, page => Url.Action("ShowTeam", new
     {
-        page = page,
+        page,
+        searchfor = Context.Request.Query["searchfor"].ToString(),
+        searchby = Context.Request.Query["searchby"].ToString()
     }),
-new X.PagedList.Web.Common.PagedListRenderOptions
+    new PagedListRenderOptions
 {
-  LiElementClasses = new string[] { "page-item" },
-  PageClasses = new string[] { "page-link" }
+    LiElementClasses = new[] { "page-item" },
+    PageClasses = new[] { "page-link" }
 })

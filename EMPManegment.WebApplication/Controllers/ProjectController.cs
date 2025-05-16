@@ -24,6 +24,7 @@ using DocumentFormat.OpenXml.Drawing.Charts;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using Microsoft.Build.Evaluation;
 using Microsoft.AspNetCore.Authorization;
+using X.PagedList.Extensions;
 
 namespace EMPManegment.Web.Controllers
 {

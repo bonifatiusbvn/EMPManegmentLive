@@ -26,6 +26,7 @@ using EMPManegment.EntityModels.ViewModels.Weather;
 using EMPManegment.EntityModels.ViewModels.Chat;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
+using X.PagedList.Extensions;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
