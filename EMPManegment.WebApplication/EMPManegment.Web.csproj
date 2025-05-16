@@ -22,7 +22,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.12" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="RestSharp" Version="112.1.0" />
-    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.3.5" />
+    <PackageReference Include="System.Linq.Dynamic.Core" Version="1.6.3" />
     <PackageReference Include="X.PagedList.Mvc.Core" Version="10.5.7" />
     <PackageReference Include="X.PagedList.Web.Common" Version="8.0.7" />
   </ItemGroup>
