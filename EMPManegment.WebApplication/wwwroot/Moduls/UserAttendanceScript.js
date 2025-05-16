@@ -1,4 +1,6 @@
-﻿var datas = userPermissions
+﻿//var datas = userPermissions
+var Formdata = window.userFormPermissions || 0;
+
 var selectedUserName = null;
 var selectedDate = null;
 var selectedStartDate = null;
@@ -16,165 +18,318 @@ $(document).ready(function () {
         $('#txtmonth').val('');
     }
 
-    $('.dropdown-item').click(function (e) {
-        e.preventDefault();
+    //$('.dropdown-item').click(function (e) {
+    //    e.preventDefault();
 
-        var selectedValue = $(this).data('value');
-        $('#ddlatendanceser').data('value', selectedValue).text($(this).text());
-        $('#ddlmyattendanceser').data('value', selectedValue).text($(this).text());
+    //    var selectedValue = $(this).data('value');
+    //    $('#ddlatendanceser').data('value', selectedValue).text($(this).text());
+    //    $('#ddlmyattendanceser').data('value', selectedValue).text($(this).text());
 
-        clearTextBox();
-        $("#usernamebox").show();
+    //    clearTextBox();
+    //    $("#usernamebox").show();
 
-        if (selectedValue === "ByUsername") {
-            GetUsernameList();
-            $("#usernamebox").show();
-            $("#datesbox").hide();
-            $("#startdatebox").hide();
-            $("#enddatebox").hide();
-            $("#searchUserAttendancebtn").show();
-        }
-        else if (selectedValue === "ByDate") {
-            $("#datesbox").show();
-            $("#usernamebox").hide();
-            $("#startdatebox").hide();
-            $("#enddatebox").hide();
-            $("#searchUserAttendancebtn").show();
-        }
-        else if (selectedValue === "ByDateAndUser") {
-            GetUsernameList();
-            $("#usernamebox").show();
-            $("#datesbox").show();
-            $("#startdatebox").hide();
-            $("#enddatebox").hide();
-            $("#searchUserAttendancebtn").show();
-        }
-        else if (selectedValue === "ByDatesAndUser") {
-            GetUsernameList();
-            $("#usernamebox").show();
-            $("#datesbox").hide();
-            $("#startdatebox").show();
-            $("#enddatebox").show();
-            $("#searchUserAttendancebtn").show();
-        }
-        else if (selectedValue == "ByMonth") {
-            $("#monthbox").show();
-            $("#datebox").hide();
-            $("#datebox1").hide();
-            $("#myattendanceseachbtn").show();
-        }
-        else if (selectedValue == "BetweenDates") {
-            $("#monthbox").hide();
-            $("#datebox").show();
-            $("#datebox1").show();
-            $("#myattendanceseachbtn").show();
-        }
-    });
+    //    if (selectedValue === "ByUsername") {
+    //        GetUsernameList();
+    //        $("#usernamebox").show();
+    //        $("#datesbox").hide();
+    //        $("#startdatebox").hide();
+    //        $("#enddatebox").hide();
+    //        $("#searchUserAttendancebtn").show();
+    //    }
+    //    else if (selectedValue === "ByDate") {
+    //        $("#datesbox").show();
+    //        $("#usernamebox").hide();
+    //        $("#startdatebox").hide();
+    //        $("#enddatebox").hide();
+    //        $("#searchUserAttendancebtn").show();
+    //    }
+    //    else if (selectedValue === "ByDateAndUser") {
+    //        GetUsernameList();
+    //        $("#usernamebox").show();
+    //        $("#datesbox").show();
+    //        $("#startdatebox").hide();
+    //        $("#enddatebox").hide();
+    //        $("#searchUserAttendancebtn").show();
+    //    }
+    //    else if (selectedValue === "ByDatesAndUser") {
+    //        GetUsernameList();
+    //        $("#usernamebox").show();
+    //        $("#datesbox").hide();
+    //        $("#startdatebox").show();
+    //        $("#enddatebox").show();
+    //        $("#searchUserAttendancebtn").show();
+    //    }
+    //    else if (selectedValue == "ByMonth") {
+    //        $("#monthbox").show();
+    //        $("#datebox").hide();
+    //        $("#datebox1").hide();
+    //        $("#myattendanceseachbtn").show();
+    //    }
+    //    else if (selectedValue == "BetweenDates") {
+    //        $("#monthbox").hide();
+    //        $("#datebox").show();
+    //        $("#datebox1").show();
+    //        $("#myattendanceseachbtn").show();
+    //    }
+    //});
 
 });
 
-
+let AllUserAttendanceGridOptions = [];
+let startDate = null;
+let endDate = null;
 
 $(document).ready(function () {
-    function data(datas) {
-        var userPermission = datas;
-        GetUserAttendance(userPermission);
-    }
 
-    function GetUserAttendance(userPermission) {
-        var userPermissionArray = JSON.parse(userPermission);
-        var canEdit = userPermissionArray.some(permission => permission.formName === "Users Attendance" && permission.edit);
-        var columns = [
-            { "data": "userName", "name": "UserName" },
+    AllUserAttendanceGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": "date", "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "intime", "name": "InTime",
-                render: function (data) {
-                    return new Date(data).toLocaleTimeString('en-US');
-                }
-            },
-            {
-                "data": "outTime", "name": "OutTime",
-                render: function (data, type, full) {
-                    var userDate = new Date(full.date).toLocaleDateString('en-US');
-                    var todayDate = new Date().toLocaleDateString('en-US');
-                    if (data != null) {
-                        return new Date(data).toLocaleTimeString('en-US');
+                headerName: "Employee Name", field: "firstName", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
                     }
-                    else if (data == null && userDate == todayDate) {
+                    return params.data.firstName + ' ' + params.data.lastName;
+                }
+            },
+            {
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
+                    }
+                    return getCommonDateformat(params.data.date);
+                }
+            },
+            {
+                headerName: "Intime", field: "intime", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
+                    }
+                    return new Date(params.data.intime).toLocaleTimeString('en-US');
+                }
+            },
+            {
+                headerName: "Outtime", field: "outTime", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
+                    }
+                    var userDate = new Date(params.data.date).toLocaleDateString('en-US');
+                    var todayDate = new Date().toLocaleDateString('en-US');
+                    if (params.data.outTime != null) {
+                        return new Date(params.data.outTime).toLocaleTimeString('en-US');
+                    }
+                    else if (params.data.outTime == null && userDate == todayDate) {
                         return "Pending...";
                     }
                     else {
                         return "Missing";
                     }
+
                 }
             },
             {
-                "data": "totalHours", "name": "TotalHours",
-                render: function (data, type, full) {
-                    var userDate = new Date(full.date).toLocaleDateString('en-US');
+                headerName: "Total Hours", field: "totalHours", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
+                    }
+                    var userDate = new Date(params.data.date).toLocaleDateString('en-US');
                     var todayDate = new Date().toLocaleDateString('en-US');
-                    if (full.totalHours != null) {
-                        return full.totalHours.substr(0, 8) + ' hr';
-                    } else if (full.totalHours == null && userDate === todayDate) {
+                    if (params.data.totalHours != null) {
+                        return params.data.totalHours.substr(0, 8) + ' hr';
+                    } else if (params.data.totalHours == null && userDate === todayDate) {
                         return "Pending...";
                     } else {
                         return "Missing";
                     }
                 }
-            },
-        ];
-
-        if (canEdit) {
-            columns.push({
-                "data": null,
-                "orderable": false,
-                "searchable": false,
-                "render": function (data, type, full) {
-                    return '<a onclick="EditUserAttendance(\'' + full.attendanceId + '\')" class="btn text-info">' +
-                        '<i class="fa-regular fa-pen-to-square"></i></a>';
-                }
-            });
-        }
-
-        $('#attendanceTableData').DataTable({
-            processing: false,
-            serverSide: true,
+            }
+        ],
+        defaultColDef: {
+            sortable: true,
             filter: true,
-            destroy: true,
-            pageLength: 30,
-            lengthMenu: [[10, 25, 30, 50, -1], [10, 25, 30, 50, "All"]],
-            ajax: {
-                type: "POST",
-                url: '/UserProfile/GetUserAttendanceList',
-                dataType: 'json'
-            },
-            columns: columns,
-            scrollY: 400,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            autoWidth: false,
-            columnDefs: [
-                {
-                    targets: '_all', width: 'auto'
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            AllUserAttendanceGridOptions.api = params.api;
+            AllUserAttendanceGridOptions.columnApi = params.columnApi;
+            AllUserAttendanceGridOptions.api.sizeColumnsToFit();
+
+            $('#AllUserAttendanceTable').addClass('custom-pagination-style');
+        },
+
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        pagination: true,
+        paginationPageSize: 20,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: AllUserAttendanceGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtAllUserAttendanceSearch').val(),
+                    UserFilter: $('#drpAttusername').val(),
+                    StartDate: startDate,
+                    EndDate: endDate,
+                };
+
+                $.ajax({
+                    url: '/UserProfile/GetUserAttendanceList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const userFormPermissionArray = Formdata;
+    let canEdit = false;
+
+    for (let i = 0; i < userFormPermissionArray.length; i++) {
+        const permission = userFormPermissionArray[i];
+        if (permission.formName === "Users Attendance") {
+            canEdit = permission.edit;
+            break;
+        }
+    }
+    
+    if (canEdit) {
+        AllUserAttendanceGridOptions.columnDefs.push({
+            headerName: "Action",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.attendanceId) {
+                    return '';
                 }
-            ],
-            order: [[1, 'asc']]
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `
+                         <li class="list-inline-item"><a onclick="EditUserAttendance('${params.data.attendanceId}')"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
+                }
+                return buttons;
+            }
         });
     }
 
+    const myGridElement = document.querySelector('#AllUserAttendanceTable');
+    agGrid.createGrid(myGridElement, AllUserAttendanceGridOptions);
 
-    data(datas);
+    $('#txtAllUserAttendanceSearch').on('change keyup', function () {
+        AllUserAttendanceGridOptions.api.onFilterChanged();
+    });
+    $('#drpAttusername').change(() => {
+        const userText = $("#drpAttusername option:selected").text();
+        $("#txtUserName").val(userText === 'All User' ? '' : userText);
+        if (AllUserAttendanceGridOptions.api) {
+            AllUserAttendanceGridOptions.api.onFilterChanged();
+        }
+    });
+
+    $('#toggleDateFilter').click(e => {
+        e.stopPropagation();
+        $('#dateFilterContainer').toggle();
+    });
+
+    $('#applyFilters').click(() => {
+        startDate = $('#txtstartdatebox').val() || null;
+        endDate = $('#txtenddatebox').val() || null;
+        if (AllUserAttendanceGridOptions.api) {
+            AllUserAttendanceGridOptions.api.onFilterChanged();
+        }
+    });
+
+    $('#drpAttusername').select2({
+        placeholder: 'Select Employee',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Task/GetUserName',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.firstName + ' ' + item.lastName + ' ( ' + item.userName + ' ) ',
+                    }))
+                };
+            }
+        }
+    });
+    $('#AddUserAttendanceModel').on('shown.bs.modal', function () {
+        $('#ddlusername').select2({
+            placeholder: 'Select User',
+            width: '100%',
+            dropdownParent: $('#AddUserAttendanceModel'), // <-- important for modals!
+            dropdownAutoWidth: true,
+            allowClear: true,
+            ajax: {
+                url: '/Task/GetUserName',
+                dataType: 'json',
+                delay: 250,
+                processResults: function (data) {
+                    return {
+                        results: data.map(item => ({
+                            id: item.id,
+                            text: item.firstName + ' ' + item.lastName + ' ( ' + item.userName + ' ) ',
+                        }))
+                    };
+                }
+            }
+        });
+    });
 });
+$(document).click(function (event) {
+    const target = $(event.target);
+    if (
+        !target.closest('#dateFilterContainer').length &&
+        !target.closest('#toggleDateFilter').length
+    ) {
+        $('#dateFilterContainer').hide();
+    }
+});
+
+function ResetAllUserAttendanceData() {
+    $('#drpAttusername').empty();
+    $('#txtstartdatebox').val('');
+    $('#txtenddatebox').val('');
+    startDate = null;
+    endDate = null;
+    $('#dateFilterContainer').hide();
+    AllUserAttendanceGridOptions.api.setFilterModel(null);
+    AllUserAttendanceGridOptions.api.onFilterChanged();
+}
+
 
 function formatDateToLocal(date) {
     var year = date.getFullYear();
@@ -529,16 +684,16 @@ function fn_SearchMyAttendanceList(UserPermissionData) {
     if ($('#txtmonth').val() == "" && $("#txtstartdate").val() == "" && $("#txtenddate").val() == "") {
         toastr.warning("Select the Month or UserName");
     } else {
-    selectedMonth = $('#txtmonth').val();
-    selectedStartDate = $("#txtstartdate").val();
-    selectedEndDate = $("#txtenddate").val();
-    var FilterData = {
-        Cmonth: selectedMonth,
-        StartDate: selectedStartDate,
-        EndDate: selectedEndDate
-    };
-    MySearchAttendanceList(UserPermissionData, FilterData);
-}
+        selectedMonth = $('#txtmonth').val();
+        selectedStartDate = $("#txtstartdate").val();
+        selectedEndDate = $("#txtenddate").val();
+        var FilterData = {
+            Cmonth: selectedMonth,
+            StartDate: selectedStartDate,
+            EndDate: selectedEndDate
+        };
+        MySearchAttendanceList(UserPermissionData, FilterData);
+    }
 }
 
 function MySearchAttendanceList(UserPermissionData, FilterData) {
@@ -802,8 +957,7 @@ function UpdateUserAttendanceSrc() {
                         icon: "success",
                         confirmButtonColor: '#3085d6',
                         confirmButtonText: 'OK'
-                    }).then(function ()
-                    {
+                    }).then(function () {
                         $('#editTimeModelsearch').modal('hide');
 
                         var FilterData = {
@@ -890,8 +1044,7 @@ function updateMyAttendance() {
                 if (Result.code != 200) {
                     toastr.warning(Result.message);
                 }
-                else
-                {
+                else {
                     Swal.fire({
                         title: Result.message,
                         icon: "success",
@@ -912,7 +1065,7 @@ function ExportToExcel() {
         Cmonth: selectedMonth,
         StartDate: selectedStartDate,
         EndDate: selectedEndDate,
-        UserId : $("#AttandanceUserId").val()
+        UserId: $("#AttandanceUserId").val()
     };
 
     $.ajax({

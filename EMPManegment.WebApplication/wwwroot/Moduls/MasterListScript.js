@@ -470,14 +470,6 @@ function GetUsernameList() {
             $.each(result, function (i, data) {
                 dropdown.append('<option class="User-dropdown-item-custom dropdown-item" data-value=' + data.id + '>' + data.firstName + ' ' + data.lastName + '</option>');
             });
-            $.each(result, function (i, data) {
-                $('#drpAttusername').append('<option value=' + data.id + '>' + data.firstName + ' ' + data.lastName + ' (' + data.userName + ')</option>');
-            });
-            $('#ddlusername').empty();
-            $('#ddlusername').append('<option selected disabled value="">--Select Username--</option>');
-            $.each(result, function (i, data) {
-                $('#ddlusername').append('<Option value=' + data.id + '>' + data.firstName + " " + data.lastName + " " + "(" + data.userName + ")" + '</Option>')
-            });
         }
     });
 }

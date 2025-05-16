@@ -197,10 +197,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetUserAttendanceList")]
-        public async Task<IActionResult> GetUserAttendanceList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<UserAttendanceModel>> GetUserAttendanceList(AGGridRequestModel AttendanceRequest)
         {
-            var UserAttendanceList = await UserAttendance.GetUserAttendanceList(dataTable);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = UserAttendanceList });
+            var UserAttendanceList = await UserAttendance.GetUserAttendanceList(AttendanceRequest);
+            return new AGGridResponseModel<UserAttendanceModel>
+            {
+                Data = UserAttendanceList.Data,
+                RecordsTotal = UserAttendanceList.RecordsTotal
+            };
         }
 
         [HttpGet]

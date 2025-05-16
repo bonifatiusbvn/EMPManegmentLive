@@ -10,8 +10,9 @@ namespace EMPManegment.EntityModels.ViewModels.Models
     public class UserAttendanceModel
     {
         public Guid UserId { get; set; }
-
         public string? UserName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
         public DateTime Date { get; set; }
         public int? AttendanceId { get; set; }
         public DateTime Intime { get; set; }
