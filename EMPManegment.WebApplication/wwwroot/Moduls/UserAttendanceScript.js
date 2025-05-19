@@ -24,55 +24,41 @@ let startDate = null;
 let endDate = null;
 
 $(document).ready(function () {
-
-    let startDate = null;
-    let endDate = null;
-
     AllUserAttendanceGridOptions = {
         rowHeight: 50,
         columnDefs: [
             {
                 headerName: "Employee Name", field: "firstName", sortable: true, filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.attendanceId) {
-                        return '';
-                    }
+                    if (!params.data || !params.data.attendanceId) return '';
                     return params.data.firstName + ' ' + params.data.lastName;
                 }
             },
             {
                 headerName: "Date", field: "date", sortable: true, filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.attendanceId) {
-                        return '';
-                    }
+                    if (!params.data || !params.data.attendanceId) return '';
                     return getCommonDateformat(params.data.date);
                 }
             },
             {
                 headerName: "Intime", field: "intime", sortable: true, filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.attendanceId) {
-                        return '';
-                    }
+                    if (!params.data || !params.data.attendanceId) return '';
                     return new Date(params.data.intime).toLocaleTimeString('en-US');
                 }
             },
             {
                 headerName: "Outtime", field: "outTime", sortable: true, filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.attendanceId) {
-                        return '';
-                    }
-                    var userDate = new Date(params.data.date).toLocaleDateString('en-US');
-                    var todayDate = new Date().toLocaleDateString('en-US');
+                    if (!params.data || !params.data.attendanceId) return '';
+                    const userDate = new Date(params.data.date).toLocaleDateString('en-US');
+                    const todayDate = new Date().toLocaleDateString('en-US');
                     if (params.data.outTime != null) {
                         return new Date(params.data.outTime).toLocaleTimeString('en-US');
-                    }
-                    else if (params.data.outTime == null && userDate == todayDate) {
+                    } else if (params.data.outTime == null && userDate === todayDate) {
                         return "Pending...";
-                    }
-                    else {
+                    } else {
                         return "Missing";
                     }
                 }
@@ -80,11 +66,9 @@ $(document).ready(function () {
             {
                 headerName: "Total Hours", field: "totalHours", sortable: true, filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.attendanceId) {
-                        return '';
-                    }
-                    var userDate = new Date(params.data.date).toLocaleDateString('en-US');
-                    var todayDate = new Date().toLocaleDateString('en-US');
+                    if (!params.data || !params.data.attendanceId) return '';
+                    const userDate = new Date(params.data.date).toLocaleDateString('en-US');
+                    const todayDate = new Date().toLocaleDateString('en-US');
                     if (params.data.totalHours != null) {
                         return params.data.totalHours.substr(0, 8) + ' hr';
                     } else if (params.data.totalHours == null && userDate === todayDate) {
@@ -109,15 +93,18 @@ $(document).ready(function () {
             AllUserAttendanceGridOptions.api = params.api;
             AllUserAttendanceGridOptions.columnApi = params.columnApi;
             AllUserAttendanceGridOptions.api.sizeColumnsToFit();
-
             createEnhancedPagination(params.api);
         },
         rowModelType: 'infinite',
-        cacheBlockSize: 10,
+        cacheBlockSize: 20,
         pagination: true,
         paginationPageSize: 20,
         suppressPaginationPanel: true,
-        datasource: {
+        datasource: getAttendanceDatasource()
+    };
+
+    function getAttendanceDatasource() {
+        return {
             getRows: function (params) {
                 const request = {
                     StartRow: params.startRow,
@@ -145,17 +132,15 @@ $(document).ready(function () {
                     success: function (response) {
                         params.successCallback(response.rowsThisPage, response.totalRowCount);
                         const rangeDisplay = document.querySelector('#AllUserAttendanceTable .range-display');
-                        if (rangeDisplay) {
-                            updateEnhancedPagination(AllUserAttendanceGridOptions.api, rangeDisplay);
-                        }
+                        if (rangeDisplay) updateEnhancedPagination(AllUserAttendanceGridOptions.api, rangeDisplay);
                     },
                     error: function () {
                         params.failCallback();
                     }
                 });
             }
-        }
-    };
+        };
+    }
 
     function createEnhancedPagination(gridApi) {
         const paginationContainer = document.createElement('div');
@@ -173,10 +158,8 @@ $(document).ready(function () {
             </select>
         `;
 
-
         const rangeDisplay = document.createElement('div');
         rangeDisplay.className = 'range-display';
-
 
         const navContainer = document.createElement('div');
         navContainer.className = 'navigation-container';
@@ -204,16 +187,13 @@ $(document).ready(function () {
         navContainer.appendChild(pageButtonsContainer);
         navContainer.appendChild(nextButton);
 
-
         const pageInfo = document.createElement('div');
         pageInfo.className = 'page-info';
-
 
         paginationContainer.appendChild(pageSizeContainer);
         paginationContainer.appendChild(rangeDisplay);
         paginationContainer.appendChild(navContainer);
         paginationContainer.appendChild(pageInfo);
-
 
         const eGui = document.querySelector('#AllUserAttendanceTable');
         const paginationEl = document.createElement('div');
@@ -221,22 +201,23 @@ $(document).ready(function () {
         paginationEl.appendChild(paginationContainer);
         eGui.appendChild(paginationEl);
 
-
         const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
         pageSizeSelector.addEventListener('change', function () {
             const newPageSize = Number(this.value);
 
+            // Destroy and recreate grid with new block size
+            const gridDiv = document.querySelector('#AllUserAttendanceTable');
 
-            AllUserAttendanceGridOptions.paginationPageSize = newPageSize;
+            AllUserAttendanceGridOptions = {
+                ...AllUserAttendanceGridOptions,
+                cacheBlockSize: newPageSize,
+                paginationPageSize: newPageSize,
+                datasource: getAttendanceDatasource(),
+            };
 
-
-            gridApi.setDatasource(AllUserAttendanceGridOptions.datasource);
-
-
-            gridApi.paginationGoToPage(0);
-
-
-            updateEnhancedPagination(gridApi, rangeDisplay);
+            // Clear old grid and re-init
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, AllUserAttendanceGridOptions);
         });
 
         updateEnhancedPagination(gridApi, rangeDisplay);
@@ -248,25 +229,18 @@ $(document).ready(function () {
         const totalRows = gridApi.paginationGetRowCount();
         const pageSize = AllUserAttendanceGridOptions.paginationPageSize;
 
-
         const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
         const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
 
-
         rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
 
-
         const pageInfo = document.querySelector('.page-info');
-        if (pageInfo) {
-            pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
-        }
-
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
 
         const pageButtonsContainer = document.querySelector('.page-buttons');
         if (!pageButtonsContainer) return;
 
         pageButtonsContainer.innerHTML = '';
-
 
         const startPage = Math.max(1, currentPage - 1);
         const endPage = Math.min(totalPages, currentPage + 1);
@@ -282,32 +256,20 @@ $(document).ready(function () {
             pageButtonsContainer.appendChild(pageButton);
         }
 
-
         const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
         const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
-
-        if (prevButton) {
-            prevButton.disabled = currentPage === 1;
-        }
-        if (nextButton) {
-            nextButton.disabled = currentPage === totalPages || totalPages === 0;
-        }
-
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
 
         const pageSizeSelector = document.querySelector('.page-size-selector');
-        if (pageSizeSelector) {
-            pageSizeSelector.value = pageSize;
-        }
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
     }
-
 
     const userFormPermissionArray = Formdata;
     let canEdit = false;
-
     for (let i = 0; i < userFormPermissionArray.length; i++) {
-        const permission = userFormPermissionArray[i];
-        if (permission.formName === "Users Attendance") {
-            canEdit = permission.edit;
+        if (userFormPermissionArray[i].formName === "Users Attendance") {
+            canEdit = userFormPermissionArray[i].edit;
             break;
         }
     }
@@ -319,16 +281,13 @@ $(document).ready(function () {
             sortable: false,
             filter: false,
             cellRenderer: function (params) {
-                if (!params.data || !params.data.attendanceId) {
-                    return '';
-                }
-
-                let buttons = '';
-                if (canEdit) {
-                    buttons += `
-                         <li class="list-inline-item"><a onclick="EditUserAttendance('${params.data.attendanceId}')"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
-                }
-                return buttons;
+                if (!params.data || !params.data.attendanceId) return '';
+                return `
+                    <li class="list-inline-item">
+                        <a onclick="EditUserAttendance('${params.data.attendanceId}')">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                    </li>`;
             }
         });
     }
@@ -339,6 +298,7 @@ $(document).ready(function () {
     $('#txtAllUserAttendanceSearch').on('change keyup', function () {
         AllUserAttendanceGridOptions.api.onFilterChanged();
     });
+
     $('#drpAttusername').change(() => {
         const userText = $("#drpAttusername option:selected").text();
         $("#txtUserName").val(userText === 'All User' ? '' : userText);
@@ -373,12 +333,13 @@ $(document).ready(function () {
                 return {
                     results: data.map(item => ({
                         id: item.id,
-                        text: item.firstName + ' ' + item.lastName + ' ( ' + item.userName + ' ) ',
+                        text: `${item.firstName} ${item.lastName} ( ${item.userName} )`,
                     }))
                 };
             }
         }
     });
+
     $('#AddUserAttendanceModel').on('shown.bs.modal', function () {
         $('#ddlusername').select2({
             placeholder: 'Select User',
@@ -394,7 +355,7 @@ $(document).ready(function () {
                     return {
                         results: data.map(item => ({
                             id: item.id,
-                            text: item.firstName + ' ' + item.lastName + ' ( ' + item.userName + ' ) ',
+                            text: `${item.firstName} ${item.lastName} ( ${item.userName} )`,
                         }))
                     };
                 }
@@ -402,6 +363,7 @@ $(document).ready(function () {
         });
     });
 });
+
 
 $(document).click(function (event) {
     const target = $(event.target);
@@ -749,15 +711,18 @@ $(document).ready(function () {
             MyAttendanceGridOptions.api = params.api;
             MyAttendanceGridOptions.columnApi = params.columnApi;
             MyAttendanceGridOptions.api.sizeColumnsToFit();
-
-            $('#AllUserAttendanceTable').addClass('custom-pagination-style');
+            createMyAttendanceEnhancedPagination(params.api);
         },
 
         rowModelType: 'infinite',
-        cacheBlockSize: 10,
+        cacheBlockSize: 20,
         pagination: true,
         paginationPageSize: 20,
-        datasource: {
+        suppressPaginationPanel: true,
+        datasource: getMyAttendanceDatasource()
+    };
+    function getMyAttendanceDatasource() {
+        return {
             getRows: function (params) {
                 const request = {
                     StartRow: params.startRow,
@@ -785,14 +750,139 @@ $(document).ready(function () {
                     data: JSON.stringify(request),
                     success: function (response) {
                         params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#MyAttendanceTable .range-display');
+                        if (rangeDisplay) updateMyAttendanceEnhancedPagination(MyAttendanceGridOptions.api, rangeDisplay);
                     },
                     error: function () {
                         params.failCallback();
                     }
                 });
             }
+        };
+    }
+
+    function createMyAttendanceEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
+
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateMyAttendanceEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateMyAttendanceEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#MyAttendanceTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+            // Destroy and recreate grid with new block size
+            const gridDiv = document.querySelector('#MyAttendanceTable');
+
+            MyAttendanceGridOptions = {
+                ...MyAttendanceGridOptions,
+                cacheBlockSize: newPageSize,
+                paginationPageSize: newPageSize,
+                datasource: getMyAttendanceDatasource(),
+            };
+
+            // Clear old grid and re-init
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, MyAttendanceGridOptions);
+        });
+
+        updateMyAttendanceEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateMyAttendanceEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = MyAttendanceGridOptions.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateMyAttendanceEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
         }
-    };
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
 
     const userFormPermissionArray = Formdata;
     let canEdit = false;
