@@ -6,25 +6,28 @@ var selectedDate = null;
 var selectedStartDate = null;
 var selectedEndDate = null;
 var selectedMonth = null;
-$(document).ready(function () {
-    function clearTextBox() {
-        $('#drpAttusername').find('option').not(':first').remove();
-        $('#ddlmyattendanceser').find('option').not(':first').remove();
-        $('#txtdate').val('');
-        $('#txtstartdatebox').val('');
-        $('#txtenddatebox').val('');
-        $('#txtstartdate').val('');
-        $('#txtenddate').val('');
-        $('#txtmonth').val('');
-    }
+function clearTextBox() {
+    $('#drpAttusername').find('option').not(':first').remove();
+    $('#ddlmyattendanceser').find('option').not(':first').remove();
+    $('#txtdate').val('');
+    $('#txtstartdatebox').val('');
+    $('#txtenddatebox').val('');
+    $('#txtstartdate').val('');
+    $('#txtenddate').val('');
+    $('#txtmonth').val('');
+}
 
-});
+
 
 let AllUserAttendanceGridOptions = [];
 let startDate = null;
 let endDate = null;
 
 $(document).ready(function () {
+
+    let startDate = null;
+    let endDate = null;
+
     AllUserAttendanceGridOptions = {
         rowHeight: 50,
         columnDefs: [
@@ -118,7 +121,7 @@ $(document).ready(function () {
             getRows: function (params) {
                 const request = {
                     StartRow: params.startRow,
-                    PageSize: AllUserAttendanceGridOptions.cacheBlockSize || 10,
+                    PageSize: params.endRow - params.startRow,
                     SearchType: "",
                     SearchValue: "",
                     SortModel: params.sortModel || [],
@@ -158,24 +161,23 @@ $(document).ready(function () {
         const paginationContainer = document.createElement('div');
         paginationContainer.className = 'enhanced-pagination-container';
 
-        // Page size selector
         const pageSizeContainer = document.createElement('div');
         pageSizeContainer.className = 'page-size-container';
         pageSizeContainer.innerHTML = `
-        <span>Page Size: </span>
-        <select class="page-size-selector">
-            <option value="10">10</option>
-            <option value="20" selected>20</option>
-            <option value="50">50</option>
-            <option value="100">100</option>
-        </select>
-    `;
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
 
-        // Range display
+
         const rangeDisplay = document.createElement('div');
         rangeDisplay.className = 'range-display';
 
-        // Navigation controls
+
         const navContainer = document.createElement('div');
         navContainer.className = 'navigation-container';
 
@@ -202,39 +204,41 @@ $(document).ready(function () {
         navContainer.appendChild(pageButtonsContainer);
         navContainer.appendChild(nextButton);
 
-        // Page info
+
         const pageInfo = document.createElement('div');
         pageInfo.className = 'page-info';
 
-        // Assemble everything
+
         paginationContainer.appendChild(pageSizeContainer);
         paginationContainer.appendChild(rangeDisplay);
         paginationContainer.appendChild(navContainer);
         paginationContainer.appendChild(pageInfo);
 
-        // Add to grid
+
         const eGui = document.querySelector('#AllUserAttendanceTable');
         const paginationEl = document.createElement('div');
         paginationEl.className = 'ag-paging-panel enhanced';
         paginationEl.appendChild(paginationContainer);
         eGui.appendChild(paginationEl);
 
-        // Event listener for page size changes - CORRECTED VERSION
+
         const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
         pageSizeSelector.addEventListener('change', function () {
             const newPageSize = Number(this.value);
 
-            // Use the correct API method
-            gridApi.setPageSize(newPageSize);
 
-            // Reset to first page when page size changes
+            AllUserAttendanceGridOptions.paginationPageSize = newPageSize;
+
+
+            gridApi.setDatasource(AllUserAttendanceGridOptions.datasource);
+
+
             gridApi.paginationGoToPage(0);
 
-            // Force refresh of data
-            gridApi.onFilterChanged();
+
+            updateEnhancedPagination(gridApi, rangeDisplay);
         });
 
-        // Initialize with correct values
         updateEnhancedPagination(gridApi, rangeDisplay);
     }
 
@@ -242,28 +246,28 @@ $(document).ready(function () {
         const currentPage = gridApi.paginationGetCurrentPage() + 1;
         const totalPages = gridApi.paginationGetTotalPages();
         const totalRows = gridApi.paginationGetRowCount();
-        const pageSize = gridApi.paginationGetPageSize();
+        const pageSize = AllUserAttendanceGridOptions.paginationPageSize;
 
-        // Calculate correct range values
+
         const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
         const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
 
-        // Update range display
+
         rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
 
-        // Update page info
+
         const pageInfo = document.querySelector('.page-info');
         if (pageInfo) {
             pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
         }
 
-        // Update page buttons
+
         const pageButtonsContainer = document.querySelector('.page-buttons');
         if (!pageButtonsContainer) return;
 
         pageButtonsContainer.innerHTML = '';
 
-        // Always show buttons for current page and adjacent pages
+
         const startPage = Math.max(1, currentPage - 1);
         const endPage = Math.min(totalPages, currentPage + 1);
 
@@ -278,7 +282,7 @@ $(document).ready(function () {
             pageButtonsContainer.appendChild(pageButton);
         }
 
-        // Update Previous/Next button states
+
         const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
         const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
 
@@ -289,12 +293,13 @@ $(document).ready(function () {
             nextButton.disabled = currentPage === totalPages || totalPages === 0;
         }
 
-        // Update selected page size
+
         const pageSizeSelector = document.querySelector('.page-size-selector');
         if (pageSizeSelector) {
             pageSizeSelector.value = pageSize;
         }
     }
+
 
     const userFormPermissionArray = Formdata;
     let canEdit = false;
@@ -378,7 +383,7 @@ $(document).ready(function () {
         $('#ddlusername').select2({
             placeholder: 'Select User',
             width: '100%',
-            dropdownParent: $('#AddUserAttendanceModel'), // <-- important for modals!
+            dropdownParent: $('#AddUserAttendanceModel'),
             dropdownAutoWidth: true,
             allowClear: true,
             ajax: {
