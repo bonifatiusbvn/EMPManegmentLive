@@ -64,10 +64,10 @@
                     </select>
                 </div>
 
-                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Form Permission" && a.Add))
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Form Permission" && (a.Add == true)))
                 {
                     <div class="col-12 col-md-6 col-lg-10 text-md-end mt-2 mt-md-0">
-                        <button type="button" class="btn button-teal" data-bs-toggle="modal" data-bs-target="#createRoleModal" onclick="clearTextRoleName()"><i class="ri-add-line align-bottom me-1"></i>New Role</button>
+                        <button type="button" class="btn btn-block btn-info btn-md" data-bs-toggle="modal" data-bs-target="#createUserModal" onclick="clearTextUserName()" style="margin-top:0px;"><i class="ri-add-line align-bottom me-1"></i>UserPermission</button>
                     </div>
                 }
             </div>
@@ -98,7 +98,7 @@
         </div>
         <div class="card-footer">
             <div class="text-end" id="updatebtn" style="display:none;">
-                <button type="button" class="btn button-teal" onclick="UpdateRolewiseFormPermission()" id="btnUserRolewiseForm" style="width: 160px;height: 50px;">Update</button>
+                <button type="button" class="btn button-teal" onclick="UpdateRolewiseFormPermission()" id="btnUserRolewiseForm"> <i class="ri-edit-line me-1"></i> Update</button>
             </div>
         </div>
     </div>

@@ -22,28 +22,29 @@
     </div>
 </div>
 <!-- end page title -->
-<div id="createRoleModal" class="modal fade">
-    <div class="modal-dialog">
+<div id="createUserModal" class="modal fade flip" tabindex="-1" role="dialog" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="addUserRole">
-
-                <div class="modal-header bg-teal text-white p-3">
-                    <h5 class="modal-title">Create Role</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <form id="addUserForm">
+                <div class="modal-header bg-primary-subtle p-3">
+                    <h5 class="modal-title" id="createUserModalLabel">User Form Permission</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-
-                <div class="modal-body p-4">
-                    <div class="mb-3">
-                        <label for="textRoleName" class="form-label">Role Name <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="textRoleName" placeholder="Enter role name" required>
-                        <input type="hidden" id="txtUserId" value="@_userSession.UserId">
-                        <input type="hidden" id="textRoleId">
+                <div class="modal-body">
+                    <div class="hstack gap-3 align-items-start">
+                        <div class="flex-grow-1">
+                            <label for="drpAttusername" class="form-label">User <span class="text-danger">*</span></label>
+                            <input type="text" value="@_userSession.UserId" id="textuserId" hidden />
+                            <select class="form-control from-select" id="drpAttusername" name="drpAttusername">
+                                <option value="">---Select Username---</option>
+                            </select>
+                            <input type="text" class="form-control" id="textUserIdfrm" name="textUserIdfrm" hidden />
+                        </div>
                     </div>
                 </div>
-
-                <div class="modal-footer p-3">
-                    <button type="button" class="btn button-cls" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-teal" onclick="validateAndCreateRole()">Create</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-success" onclick="validateAndCreateUser()">Create</button>
                 </div>
             </form>
         </div>
@@ -57,12 +58,12 @@
                 <div class="col-12 col-md-6 col-lg-4 mb-2 mb-md-0">
                     <select class="form-control select2 select2-teal"
                             data-dropdown-css-class="select2-teal"
-                            id="ddlUserRole"
-                            name="ddlUserRole">
+                            id="usercustomDropdown"
+                            name="usercustomDropdown">
                     </select>
                 </div>
 
-                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Company List" && a.Add))
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "User Form Permission" && a.Add ))
                 {
                     <div class="col-12 col-md-6 col-lg-8 text-md-end mt-2 mt-md-0">
                         <button type="button" class="btn button-teal btn-md" data-bs-toggle="modal" data-bs-target="#createUserModal" onclick="clearTextUserName()" style="margin-top:0px;"><i class="ri-add-line align-bottom me-1"></i>UserPermission</button>
@@ -71,7 +72,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive" style="position: relative; height: 600px; overflow: auto;">
+            <div class="table-wrapper">
                 <table class="table fixed-header-table table-bordered table-striped">
                     <thead>
                         <tr>
@@ -81,8 +82,9 @@
                             <th>Edit</th>
                             <th>Delete</th>
                             <th>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="userCheckboxAll" onclick="userAllCheckboxes(this)">
+                                <div class="custom-control custom-switch">
+                                    <input class="custom-control-input" type="checkbox" id="userCheckboxAll" onclick="userAllCheckboxes(this)">
+                                    <label class="custom-control-label" for="userCheckboxAll"></label>
                                 </div>
                             </th>
                         </tr>
@@ -90,9 +92,11 @@
                     <tbody id="dveditUserForm" class="gridjs-tbody">
                     </tbody>
                 </table>
-                <div class="text-end" id="userupdatebtn" style="display:none;">
-                    <button type="button" class="btn button-teal" onclick="UpdateUserFormPermission()" style="width: 160px;height: 50px;">Update</button>
-                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="text-end" id="userupdatebtn" style="display:none;">
+                <button type="button" class="btn button-teal" onclick="UpdateUserFormPermission()"> <i class="ri-edit-line me-1"></i> Update</button>
             </div>
         </div>
     </div>

@@ -5,36 +5,53 @@
 
 @foreach (var item in Model)
 {
-    <tr id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" data-product-id="@item.FormId">
+    <tr class="forms" id="templateRow_@Convert.ToInt64(item.RowNumber + 1)" data-product-id="@item.FormId">
         <td>
-            <h6 class="pt-1" id="formName" data-product-id="@item.FormId">@item.FormName</h6>
-            <input type="text" id="textUserId" value="@item.UserId" hidden />
-            <input type="text" id="textFormId" value="@item.FormId" hidden />
+            <h6 class="pt-1" id="formName_@item.FormId" data-product-id="@item.FormId">@item.FormName</h6>
+            <input type="hidden" id="textUserId_@item.FormId" value="@item.UserId" />
+            <input type="hidden" id="textFormId_@item.FormId" value="@item.FormId" />
         </td>
+
+        @* Individual Permissions *@
         <td>
-            <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input user-checkbox" type="checkbox" id="txtIsAdd_@item.FormId" name="txtIsAdd" @(item.IsAddAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+            <div class="custom-control custom-switch">
+                <input class="custom-control-input toggle-checkbox" type="checkbox" id="txtIsAdd_@item.FormId" name="txtIsAdd"
+                       @(item.IsAddAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+                <label class="custom-control-label" for="txtIsAdd_@item.FormId"></label>
             </div>
         </td>
         <td>
-            <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input user-checkbox" type="checkbox" id="txtIsView_@item.FormId" name="txtIsView" @(item.IsViewAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+            <div class="custom-control custom-switch">
+                <input class="custom-control-input toggle-checkbox" type="checkbox" id="txtIsView_@item.FormId" name="txtIsView"
+                       @(item.IsViewAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+                <label class="custom-control-label" for="txtIsView_@item.FormId"></label>
             </div>
         </td>
         <td>
-            <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input user-checkbox" type="checkbox" id="txtIsEdit_@item.FormId" name="txtIsEdit" @(item.IsEditAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+            <div class="custom-control custom-switch">
+                <input class="custom-control-input toggle-checkbox" type="checkbox" id="txtIsEdit_@item.FormId" name="txtIsEdit"
+                       @(item.IsEditAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+                <label class="custom-control-label" for="txtIsEdit_@item.FormId"></label>
             </div>
         </td>
         <td>
-            <div class="form-check form-switch form-switch-success">
-                <input class="form-check-input user-checkbox" type="checkbox" id="txtIsDelete_@item.FormId" name="txtIsDelete" @(item.IsDeleteAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+            <div class="custom-control custom-switch">
+                <input class="custom-control-input toggle-checkbox" type="checkbox" id="txtIsDelete_@item.FormId" name="txtIsDelete"
+                       @(item.IsDeleteAllow ? "checked" : "") onchange="userUpdateSelectAll('@item.FormId')">
+                <label class="custom-control-label" for="txtIsDelete_@item.FormId"></label>
             </div>
         </td>
+
+        @* Master Row Checkbox *@
         <td>
-            <div class="form-check">
-                <input class="form-check-input form-check-input-all" type="checkbox" id="userCheckboxAll_@item.FormId" name="chk_child" data-Id="@item.UserId" onclick="userCheckboxes('@item.FormId')" @(item.IsAddAllow && item.IsViewAllow && item.IsEditAllow && item.IsDeleteAllow ? "checked" : "")>
+            <div class="custom-control custom-switch">
+                <input class="custom-control-input user-checkbox" type="checkbox" id="userCheckboxAll_@item.FormId" name="chk_child"
+                       data-id="@item.UserId"
+                       onclick="userCheckboxes('@item.FormId')"
+                       @(item.IsAddAllow && item.IsViewAllow && item.IsEditAllow && item.IsDeleteAllow ? "checked" : "")>
+                <label class="custom-control-label" for="userCheckboxAll_@item.FormId"></label>
             </div>
         </td>
     </tr>
 }
+

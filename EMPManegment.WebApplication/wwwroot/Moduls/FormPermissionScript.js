@@ -1,33 +1,29 @@
-﻿
-
-GetFormList();
-
-$(document).ready(function () {
+﻿$(document).ready(function () {
     // User dropdown functionality
-    $('#userdropdownButton').click(function () {
-        var dropdown = $('#usercustomDropdown');
-        if (dropdown.is(':visible')) {
-            dropdown.hide();
-        } else {
-            dropdown.show();
-        }
-    });
+    //$('#userdropdownButton').click(function () {
+    //    var dropdown = $('#usercustomDropdown');
+    //    if (dropdown.is(':visible')) {
+    //        dropdown.hide();
+    //    } else {
+    //        dropdown.show();
+    //    }
+    //});
 
-    $(document).on('click', '.User-dropdown-item-custom', function () {
-        var selectedText = $(this).text();
-        var selectedValue = $(this).data('value');
-        $('#userdropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
-        $('#usercustomDropdown').hide();
-        EditUserFormDetails(selectedValue);
-    });
+    //$(document).on('click', '.User-dropdown-item-custom', function () {
+    //    var selectedText = $(this).text();
+    //    var selectedValue = $(this).data('value');
+    //    $('#userdropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
+    //    $('#usercustomDropdown').hide();
+    //    EditUserFormDetails(selectedValue);
+    //});
 
-    $(document).click(function (event) {
-        if (!$(event.target).closest('#userdropdownButton').length &&
-            !$(event.target).closest('#usercustomDropdown').length) {
-            $('#usercustomDropdown').hide();
-        }
-    });
-
+    //$(document).click(function (event) {
+    //    if (!$(event.target).closest('#userdropdownButton').length &&
+    //        !$(event.target).closest('#usercustomDropdown').length) {
+    //        $('#usercustomDropdown').hide();
+    //    }
+    //});
+    
     $('#ddlRoleWiseFormPermission').select2({
         placeholder: 'Select Role',
         width: '100%',
@@ -73,6 +69,34 @@ $(document).ready(function () {
             },
         });
     }
+
+    $('#usercustomDropdown').select2({
+        placeholder: 'Select User',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Task/GetUserName',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.firstName + ' ' + item.lastName
+                    }))
+                };
+            }
+        }
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    });
+
+    $('#usercustomDropdown').on('select2:select', function (e) {
+        var selectedValue = e.params.data.id;
+        EditUserFormDetails(selectedValue);
+    });
+
 });
 
 function EditUserFormDetails(userId) {
@@ -95,6 +119,7 @@ function EditUserFormDetails(userId) {
         }
     });
 }
+
 $('#drpAttusername').change(function () {
     var Text = $("#drpAttusername Option:Selected").text();
     $("#textUserIdfrm").val(Text);
@@ -149,48 +174,53 @@ function UpdateRolewiseFormPermission() {
 }
 function UpdateUserFormPermission() {
     var formPermissions = [];
-    $(".forms").each(function () {
 
-        var userformRow = $(this);
+    // Loop through each row with class 'forms'
+    $(".forms").each(function () {
+        var $row = $(this);
+        var formId = $row.data('product-id'); // safer to cache this
+
         var objData = {
-            UserId: userformRow.find('#textUserId').val(),
+            UserId: $row.find(`#textUserId_${formId}`).val(),
             CreatedBy: $("#textuserId").val(),
-            FormId: userformRow.find('#textFormId').val(),
-            IsAddAllow: userformRow.find('#txtIsAdd_' + userformRow.data('product-id')).prop('checked'),
-            IsViewAllow: userformRow.find('#txtIsView_' + userformRow.data('product-id')).prop('checked'),
-            IsEditAllow: userformRow.find('#txtIsEdit_' + userformRow.data('product-id')).prop('checked'),
-            IsDeleteAllow: userformRow.find('#txtIsDelete_' + userformRow.data('product-id')).prop('checked'),
+            FormId: $row.find(`#textFormId_${formId}`).val(),
+            IsAddAllow: $(`#txtIsAdd_${formId}`).prop('checked'),
+            IsViewAllow: $(`#txtIsView_${formId}`).prop('checked'),
+            IsEditAllow: $(`#txtIsEdit_${formId}`).prop('checked'),
+            IsDeleteAllow: $(`#txtIsDelete_${formId}`).prop('checked')
         };
+
         formPermissions.push(objData);
     });
+
     var form_data = new FormData();
     form_data.append("UserPermissionDetails", JSON.stringify(formPermissions));
 
     $.ajax({
         url: '/UserProfile/UpdateUserPermission',
-        type: 'post',
+        type: 'POST',
         data: form_data,
         processData: false,
         contentType: false,
         dataType: 'json',
-        success: function (Result) {
-
-            if (Result.code == 200) {
+        success: function (result) {
+            if (result.code === 200) {
                 Swal.fire({
-                    title: Result.message,
+                    title: result.message,
                     icon: 'success',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
-                })
+                });
             } else {
-                toastr.error(Result.message);
+                toastr.error(result.message || 'An error occurred while updating permissions.');
             }
         },
         error: function (xhr, status, error) {
-            toastr.error(error);
+            toastr.error(error || 'Unexpected error occurred.');
         }
     });
 }
+
 function createRole() {
     if ($("#addUserRole").valid()) {
         var formData = new FormData();
@@ -265,16 +295,27 @@ function ResetUserForm() {
     }
 }
 
-function GetFormList() {
-    $.ajax({
-        url: '/UserProfile/GetFormNameList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#drpFormList').append('<Option value=' + data.formId + '>' + data.formName + '</Option>')
-            });
+$(document).ready(function () {
+    $('#drpFormList').select2({
+        placeholder: 'Select Form',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/UserProfile/GetFormNameList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.formId,
+                        text: item.formName
+                    }))
+                };
+            }
         }
     });
-}
+})
 function SaveFormDetails() {
     siteloadershow();
     var formData = new FormData();
@@ -382,29 +423,33 @@ function toggleAllCheckboxes(masterCheckbox) {
         checkbox.checked = masterCheckbox.checked;
     });
 }
-function userCheckboxes(textFormId) {
-    var isChecked = document.getElementById("userCheckboxAll_" + textFormId).checked;
-    document.getElementById("txtIsAdd_" + textFormId).checked = isChecked;
-    document.getElementById("txtIsView_" + textFormId).checked = isChecked;
-    document.getElementById("txtIsEdit_" + textFormId).checked = isChecked;
-    document.getElementById("txtIsDelete_" + textFormId).checked = isChecked;
+// When master checkbox (per row) is clicked
+function userCheckboxes(formId) {
+    var isChecked = document.getElementById("userCheckboxAll_" + formId).checked;
 
-}
-function userUpdateSelectAll(textFormId) {
-    const txtIsAdd = document.getElementById(`txtIsAdd_${textFormId}`);
-    const txtIsView = document.getElementById(`txtIsView_${textFormId}`);
-    const txtIsEdit = document.getElementById(`txtIsEdit_${textFormId}`);
-    const txtIsDelete = document.getElementById(`txtIsDelete_${textFormId}`);
-    const userCheckboxAll = document.getElementById(`userCheckboxAll_${textFormId}`);
-
-    const allChecked = txtIsAdd.checked && txtIsView.checked && txtIsEdit.checked && txtIsDelete.checked;
-
-    userCheckboxAll.checked = allChecked;
+    document.getElementById("txtIsAdd_" + formId).checked = isChecked;
+    document.getElementById("txtIsView_" + formId).checked = isChecked;
+    document.getElementById("txtIsEdit_" + formId).checked = isChecked;
+    document.getElementById("txtIsDelete_" + formId).checked = isChecked;
 }
 
+// When any individual permission changes (Add, View, Edit, Delete)
+function userUpdateSelectAll(formId) {
+    const txtIsAdd = document.getElementById(`txtIsAdd_${formId}`);
+    const txtIsView = document.getElementById(`txtIsView_${formId}`);
+    const txtIsEdit = document.getElementById(`txtIsEdit_${formId}`);
+    const txtIsDelete = document.getElementById(`txtIsDelete_${formId}`);
+    const userCheckboxAll = document.getElementById(`userCheckboxAll_${formId}`);
+
+    userCheckboxAll.checked = txtIsAdd.checked && txtIsView.checked && txtIsEdit.checked && txtIsDelete.checked;
+}
 function userAllCheckboxes(masterCheckbox) {
-    var checkboxes = document.querySelectorAll('.form-check-input-all, .user-checkbox');
-    checkboxes.forEach(function (checkbox) {
-        checkbox.checked = masterCheckbox.checked;
+    const isChecked = masterCheckbox.checked;
+    const allRowCheckboxes = document.querySelectorAll('.user-checkbox');
+
+    allRowCheckboxes.forEach(function (checkbox) {
+        checkbox.checked = isChecked;
+        const formId = checkbox.id.split("_")[1];
+        userCheckboxes(formId); // Trigger row-level toggle
     });
 }

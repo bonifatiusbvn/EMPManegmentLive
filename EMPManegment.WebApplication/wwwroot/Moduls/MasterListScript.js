@@ -7,7 +7,6 @@ $(document).ready(function () {
     GetPaymentMethodList();
     GetPaymentTypeList();
     GetCompanyNameList();
-    GetUsernameList();
     GetVendorNameList();
     fn_GetAllCities();
     GetGetInvoiceType();
@@ -458,19 +457,6 @@ function GetCompanyNameList() {
                 $('#textTransactionCompanyName').append('<option value="' + data.id + '">' + data.vendorCompany + '</option>');
             });
         },
-    });
-}
-
-function GetUsernameList() {
-    $.ajax({
-        url: '/Task/GetUserName',
-        success: function (result) {
-            var dropdown = $('#usercustomDropdown');
-            dropdown.empty();
-            $.each(result, function (i, data) {
-                dropdown.append('<option class="User-dropdown-item-custom dropdown-item" data-value=' + data.id + '>' + data.firstName + ' ' + data.lastName + '</option>');
-            });
-        }
     });
 }
 
