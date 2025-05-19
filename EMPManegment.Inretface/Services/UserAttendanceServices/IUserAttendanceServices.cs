@@ -13,7 +13,7 @@ namespace EMPManegment.Inretface.Services.UserAttendanceServices
     public interface IUserAttendanceServices
     {
         Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel GetAttendanceInTime);
-        Task<jsonData> GetAttendanceList(MyAttendanceRequestDataTableModel AttendanceRequestModel);
+        Task<AGGridResponseModel<UserAttendanceModel>> GetMyAttendanceList(AGGridRequestModel AttendanceRequest);
         Task<AGGridResponseModel<UserAttendanceModel>> GetUserAttendanceList(AGGridRequestModel AttendanceRequest);
         Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel UpdateUserOutTime);
         Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId);

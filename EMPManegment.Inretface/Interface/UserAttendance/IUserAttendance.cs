@@ -19,7 +19,7 @@ namespace EMPManegment.Inretface.Interface.UserAttendance
         Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel getAttendanceInTime);
         //Task<IEnumerable<UserAttendanceModel>> EditUserOutTime(UserAttendanceModel userAttendance);
    
-        Task<jsonData> GetAttendanceList(MyAttendanceRequestDataTableModel AttendanceRequestModel);
+        Task<AGGridResponseModel<UserAttendanceModel>> GetMyAttendanceList(AGGridRequestModel AttendanceRequest);
         Task<AGGridResponseModel<UserAttendanceModel>> GetUserAttendanceList(AGGridRequestModel AttendanceRequest);
         Task<UserResponceModel> UpdateUserOutTime(UserAttendanceModel UpdateUserOutTime);
         Task<IEnumerable<UserAttendanceModel>> GetUserAttendanceById(int attendanceId);

@@ -635,58 +635,25 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<JsonResult> GetAttendanceList(SearchAttendanceModel GetAttendanceList)
+        public async Task<IActionResult> GetMyAttendanceList([FromBody] AGGridRequestModel AttendanceRequest)
         {
-            var draw = Request.Form["draw"].FirstOrDefault();
-            var start = Request.Form["start"].FirstOrDefault();
-            var length = Request.Form["length"].FirstOrDefault();
-            var sortColumn = Request.Form["columns[" + Request.Form["order[1][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-            var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-            var searchValue = Request.Form["search[value]"].FirstOrDefault();
-            int pageSize = length != null ? Convert.ToInt32(length) : 0;
-            int skip = start != null ? Convert.ToInt32(start) : 0;
+            try
+            {
+                AttendanceRequest.filters ??= new List<FilterModel>();
+                AttendanceRequest.UserFilter = _userSession.UserId.ToString();
 
-            var dataTable = new DataTableRequstModel
-            {
-                draw = draw,
-                start = start,
-                pageSize = pageSize,
-                skip = skip,
-                lenght = length,
-                searchValue = searchValue,
-                sortColumn = sortColumn,
-                sortColumnDir = sortColumnDir
-            };
-            var AttendanceData = new SearchAttendanceModel
-            {
-                UserId = _userSession.UserId,
-                Cmonth = GetAttendanceList.Cmonth,
-                StartDate = GetAttendanceList.StartDate,
-                EndDate = GetAttendanceList.EndDate,
-            };
-            var AttendanceRequestModel = new MyAttendanceRequestDataTableModel
-            {
-                SearchAttendance = AttendanceData,
-                DataTable = dataTable
-            };
+                var AttendanceDetails = await APIServices.AGPostAsync<UserAttendanceModel>(AttendanceRequest, "UserProfile/GetMyAttendanceList");
 
-            List<UserAttendanceModel> getAttendanceList = new List<UserAttendanceModel>();
-            var data = new jsonData();
-            HttpClient client = WebAPI.Initil();
-            ApiResponseModel res = await APIServices.PostAsync(AttendanceRequestModel, "UserProfile/GetAttendanceList");
-            if (res.code == 200)
-            {
-                data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
-                getAttendanceList = JsonConvert.DeserializeObject<List<UserAttendanceModel>>(data.data.ToString());
+                return new JsonResult(new
+                {
+                    rowsThisPage = AttendanceDetails.Data,
+                    totalRowCount = AttendanceDetails.RecordsTotal
+                });
             }
-            var jsonData = new
+            catch (Exception ex)
             {
-                draw = data.draw,
-                recordsFiltered = data.recordsFiltered,
-                recordsTotal = data.recordsTotal,
-                data = getAttendanceList,
-            };
-            return new JsonResult(jsonData);
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
+            }
         }
 
         [HttpGet]
