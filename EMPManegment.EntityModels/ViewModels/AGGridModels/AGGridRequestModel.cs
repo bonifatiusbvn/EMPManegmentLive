@@ -20,6 +20,7 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
         public string SortColumn { get; set; }
         public string SortDirection { get; set; }
         public string? UserFilter { get; set; }
+        public string? ProductTypeFilter { get; set; }
     }
 
     public class SortModel

@@ -1,6 +1,7 @@
 ﻿
 using Azure;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -200,10 +201,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAllProductList")]
-        public async Task<IActionResult> GetAllProductList(string? sortBy)
+        public async Task<AGGridResponseModel<ProductDetailsView>> GetAllProductList(AGGridRequestModel ProductRequest)
         {
-            IEnumerable<ProductDetailsView> getProductList = await productMaster.GetAllProductList(sortBy);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = getProductList.ToList() });
+            var ProductList = await productMaster.GetAllProductList(ProductRequest);
+            return new AGGridResponseModel<ProductDetailsView>
+            {
+                Data = ProductList.Data,
+                RecordsTotal = ProductList.RecordsTotal
+            };
         }
     }
 }

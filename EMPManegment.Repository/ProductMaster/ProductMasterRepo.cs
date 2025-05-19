@@ -3,9 +3,14 @@ using EMPManagment.API;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using Microsoft.EntityFrameworkCore;
@@ -13,9 +18,9 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Data;
 using System.Data.SqlClient;
-using System.ComponentModel.Design;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
@@ -23,10 +28,7 @@ using System.Numerics;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using EMPManegment.EntityModels.ViewModels.UserModels;
 using static System.Runtime.InteropServices.JavaScript.JSType;
-using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
-using EMPManegment.EntityModels.ViewModels.ProjectModels;
 
 namespace EMPManegment.Repository.ProductMaster
 {
@@ -400,81 +402,59 @@ namespace EMPManegment.Repository.ProductMaster
             }
         }
 
-        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? sortBy)
+        public async Task<AGGridResponseModel<ProductDetailsView>> GetAllProductList(AGGridRequestModel ProductRequest)
         {
             try
             {
-                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var filterConditions = string.Join(" AND ", ProductRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = ProductRequest.SortModel?.FirstOrDefault()?.ColId ?? "ProductName";
+                string sortDirection = ProductRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
 
-                var DS = DbHelper.GetDataSet("GetAllProductList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
-
-                List<ProductDetailsView> productList = new List<ProductDetailsView>();
-
-                if (DS != null && DS.Tables.Count > 0)
+                var parameters = new List<SqlParameter>
                 {
-                    foreach (DataRow row in DS.Tables[0].Rows)
-                    {
-                        var productDetails = new ProductDetailsView
-                        {
-                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
-                            ProductImage = row["ProductImage"]?.ToString(),
-                            ProductDescription = row["ProductDescription"]?.ToString(),
-                            ProductName = row["ProductName"]?.ToString(),
-                            ProductShortDescription = row["ProductShortDescription"]?.ToString(),
-                            ProductTypeName = row["ProductTypeName"]?.ToString(),
-                            ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
-                            PerUnitPrice = Convert.ToDecimal(row["PerUnitPrice"]),
-                            IsWithGst = (bool)(row["IsWithGst"]),
-                            GstAmount = Convert.ToDecimal(row["GstAmount"]),
-                            GstPercentage = Convert.ToDecimal(row["GstPercentage"]),
-                            Hsn = row["Hsn"] != DBNull.Value ? (int)row["Hsn"] : 0,
-                            CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
-                        };
-                        productList.Add(productDetails);
-                    }
-                }
+                new SqlParameter("@SearchValue", (object)ProductRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", ProductRequest.PageSize),
+                new SqlParameter("@Skip", ProductRequest.StartRow),
+                new SqlParameter("@ProductTypeFilter", ProductRequest.ProductTypeFilter),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
+                };
 
-                if (string.IsNullOrEmpty(sortBy))
-                {
-                    productList = productList.OrderByDescending(a => a.CreatedOn).ToList();
-                }
-                else
-                {
-                    string sortOrder = sortBy.StartsWith("Ascending", StringComparison.OrdinalIgnoreCase) ? "ascending" :
-                                       sortBy.StartsWith("Descending", StringComparison.OrdinalIgnoreCase) ? "descending" :
-                                       string.Empty;
+                var dataSet = DbHelper.GetDataSet("GetAllProductList", CommandType.StoredProcedure, parameters.ToArray(), _configuration.GetConnectionString("EMPDbconn"));
 
-                    if (!string.IsNullOrEmpty(sortOrder))
-                    {
-                        string field = sortBy.Substring(sortOrder.Length).Trim();
-                        switch (field.ToLower())
-                        {
-                            case "productname":
-                                if (sortOrder == "ascending")
-                                    productList = productList.OrderBy(a => a.ProductName).ToList();
-                                else if (sortOrder == "descending")
-                                    productList = productList.OrderByDescending(a => a.ProductName).ToList();
-                                break;
-                            case "perunitprice":
-                                if (sortOrder == "ascending")
-                                    productList = productList.OrderBy(a => a.PerUnitPrice).ToList();
-                                else if (sortOrder == "descending")
-                                    productList = productList.OrderByDescending(a => a.PerUnitPrice).ToList();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-                return productList;
+                var ProductList = dataSet.Tables[0].AsEnumerable().Select(row => new ProductDetailsView
+                {
+                    Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                    ProductImage = row["ProductImage"]?.ToString(),
+                    ProductDescription = row["ProductDescription"]?.ToString(),
+                    ProductName = row["ProductName"]?.ToString(),
+                    ProductShortDescription = row["ProductShortDescription"]?.ToString(),
+                    ProductTypeName = row["ProductTypeName"]?.ToString(),
+                    ProductType = row["ProductType"] != DBNull.Value ? (int)row["ProductType"] : 0,
+                    PerUnitPrice = Convert.ToDecimal(row["PerUnitPrice"]),
+                    IsWithGst = (bool)(row["IsWithGst"]),
+                    GstAmount = Convert.ToDecimal(row["GstAmount"]),
+                    GstPercentage = Convert.ToDecimal(row["GstPercentage"]),
+                    Hsn = row["Hsn"] != DBNull.Value ? (int)row["Hsn"] : 0,
+
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<ProductDetailsView>
+                {
+                    Data = ProductList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw new Exception("Error fetching product list", ex);
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
-
-
 
         public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
         {

@@ -1,10 +1,4 @@
-﻿$(document).ready(function () {
-    GetProducts()
-    GetAllProductDetailsList();
-});
-
-
-function selectvendorId() {
+﻿function selectvendorId() {
     document.getElementById("txtvendorTypeid").value = document.getElementById("txtvendorname").value;
 }
 
@@ -45,60 +39,27 @@ function AddProductType() {
         toastr.warning("Kindly fill the product type")
     }
 }
-
-function GetProducts() {
-    $.ajax({
-        url: '/ProductMaster/GetProduct',
-        method: 'GET',
-        success: function (result) {
-            var productType = result.map(function (data) {
+$(document).ready(function () {
+    $('#txtProductTypeList,#txtProducts').select2({
+        placeholder: 'Select Product Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ProductMaster/GetProduct',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
                 return {
-                    label: data.productName,
-                    value: data.id
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.productName
+                    }))
                 };
-            });
-
-
-            $("#txtProducts").autocomplete({
-                source: productType,
-                minLength: 0,
-                select: function (event, ui) {
-
-                    event.preventDefault();
-                    $("#txtProducts").val(ui.item.label);
-                    $("#txtProductTypeidHidden").val(ui.item.value);
-
-                },
-                focus: function () {
-                    return false;
-                }
-            }).focus(function () {
-                $(this).autocomplete("search", "");
-            });
-
-            $("#txtProductList").autocomplete({
-                source: productType,
-                minLength: 0,
-                select: function (event, ui) {
-
-                    event.preventDefault();
-                    $("#txtProductList").val(ui.item.label);
-                    $("#txtProductTypeHidden").val(ui.item.value);
-                    selectProductId();
-                },
-                focus: function () {
-                    return false;
-                }
-            }).focus(function () {
-                $(this).autocomplete("search", "");
-            });
-        },
-        error: function (err) {
-            console.error("Failed to fetch unit types: ", err);
+            }
         }
     });
-}
-
+})
 
 function selectProductTypeId() {
     document.getElementById("txtProductTypeidHidden").value = document.getElementById("txtProducts").value;
@@ -406,65 +367,217 @@ $(document).ready(function () {
 });
 
 
-function SearchProductName() {
-    var searchValue = $('#txtsearch').val();
+//function SearchProductName() {
+//    var searchValue = $('#txtsearch').val();
 
-    $.ajax({
-        url: '/ProductMaster/GetAllProductList?ProductName=' + searchValue,
-        type: 'Get',
-        datatype: 'json',
-        complete: function (Result) {
-            $("#dvproductdetails").html(Result.responseText);
+//    $.ajax({
+//        url: '/ProductMaster/GetAllProductList?ProductName=' + searchValue,
+//        type: 'Get',
+//        datatype: 'json',
+//        complete: function (Result) {
+//            $("#dvproductdetails").html(Result.responseText);
+//        }
+//    });
+//}
+
+//function selectProductId() {
+//    var ProductId = document.getElementById("txtProductTypeHidden").value;
+//    $('#ddlSortBy').val("");
+//    GetAllProductDetailsList(1, null, ProductId);
+//}
+
+//function sortProductTable() {
+//    var sortBy = $('#ddlSortBy').val();
+//    document.getElementById("txtProductList").value = "";
+//    GetAllProductDetailsList(1, sortBy, null);
+//}
+//function GetAllProductDetailsList(page, sortBy, ProductId) {
+//    $.get("/ProductMaster/GetAllProductList", { page: page, sortBy: sortBy, ProductId: ProductId })
+//        .done(function (result) {
+//            $("#dvproductdetails").html(result);
+//        })
+//        .fail(function (error) {
+//            console.error(error);
+//        });
+//}
+
+//$(document).ready(function () {
+//    GetAllProductDetailsList(1, null, null);
+//});
+//$(document).on("click", ".pagination a", function (e) {
+//    e.preventDefault();
+//    var page = $(this).data("page") || $(this).attr("href").split('page=')[1];
+//    var sortBy = $('#ddlSortBy').val() || null;
+//    var ProductId = document.getElementById("txtProductList").value || null;
+//    GetAllProductDetailsList(page, sortBy, ProductId);
+//});
+//$(document).on("click", "#backButton", function (e) {
+//    e.preventDefault();
+//    var page = $(this).text();
+//    var sortBy = $('#ddlSortBy').val() || null;
+//    var ProductId = document.getElementById("txtProductList").value || null;
+//    GetAllProductDetailsList(page, sortBy, ProductId);
+//});
+
+
+//function clearSearchInput() {
+//    var input = document.getElementById('txtsearch');
+//    input.value = '';
+//    input.focus();
+//    GetAllProductDetailsList(1);
+//}
+
+var Formdata = window.userFormPermissions || 0;
+
+let ProductGridOptions = [];
+$(document).ready(function () {
+
+    ProductGridOptions = {
+        rowHeight: 150,
+        columnDefs: [
+            {
+                headerName: "Product Name",
+                field: "productName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
+
+                    return `
+            <div class="d-flex align-items-center">
+                <div class="flex-shrink-0 me-3">
+                    <div class="avatar-sm bg-teal p-1" style="height:100px;width:100px;">
+                        <img src="/${params.data.productImage}" alt="" class="img-fluid d-block" style="height: 93px;width: 100px;" />
+                    </div>
+                </div>
+                <div class="flex-grow-1" style="text-align: start;">
+                    <h5 class="fs-14 mb-1">
+                        <a href="/ProductMaster/ProductDetails/?ProductId=${params.data.id}" class="btn-block"  style="color: #16989A !important;font-weight:600;">
+                            ${params.data.productName}
+                        </a>
+                    </h5>
+                    <p class="text-muted mb-0">
+                        <span style="color: #16989A !important;"> Category: </span><span>${params.data.productTypeName}</span>
+                    </p>
+                    <p class="text-muted mb-0">
+                        <span style="color: #16989A !important;"> Details: </span><span>${params.data.productShortDescription}</span>
+                    </p>
+                </div>
+            </div>
+        `;
+                }
+            },
+            { headerName: "Price", field: "perUnitPrice", sortable: true, filter: true },
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            ProductGridOptions.api = params.api;
+            ProductGridOptions.columnApi = params.columnApi;
+            ProductGridOptions.api.sizeColumnsToFit();
+        },
+
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: ProductGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtProductSearch').val(),
+                    ProductTypeFilter: $('#txtProductTypeList').val(),
+                };
+
+                $.ajax({
+                    url: '/ProductMaster/GetAllProductList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const userPermissionArray = Formdata;
+    let canEdit = false;
+    let canDelete = false;
+
+    for (let i = 0; i < userPermissionArray.length; i++) {
+        const permission = userPermissionArray[i];
+        if (permission.formName === "Product List") {
+            canEdit = permission.edit;
+            canDelete = permission.delete;
+            break;
+        }
+    }
+
+    if (canEdit || canDelete) {
+        ProductGridOptions.columnDefs.push({
+            headerName: "Actions",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+
+                if (!params.data || !params.data.id) {
+                    return '';
+                }
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `
+                    <a onclick="EditProductDetails('${params.data.id}')"><i class="fa-regular fa-pen-to-square"></i></a>`;
+                }
+
+                if (canDelete) {
+                    buttons += `
+                    <a class="btn text-danger" onclick="DeleteProductDetails('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                }
+                return buttons;
+            }
+        });
+    }
+
+    const myGridElement = document.querySelector('#ProductTable');
+    agGrid.createGrid(myGridElement, ProductGridOptions);
+
+    $('#txtProductSearch').on('change keyup', function () {
+        ProductGridOptions.api.onFilterChanged();
+    });
+    $('#txtProductTypeList').change(() => {
+        const productText = $("#txtProductTypeList option:selected").text();
+        $("#txtProductTypeName").val(productText === 'All Product' ? '' : productText);
+        if (ProductGridOptions.api) {
+            ProductGridOptions.api.onFilterChanged();
         }
     });
-}
-
-function selectProductId() {
-    var ProductId = document.getElementById("txtProductTypeHidden").value;
-    $('#ddlSortBy').val("");
-    GetAllProductDetailsList(1, null, ProductId);
-}
-
-function sortProductTable() {
-    var sortBy = $('#ddlSortBy').val();
-    document.getElementById("txtProductList").value = "";
-    GetAllProductDetailsList(1, sortBy, null);
-}
-function GetAllProductDetailsList(page, sortBy, ProductId) {
-    $.get("/ProductMaster/GetAllProductList", { page: page, sortBy: sortBy, ProductId: ProductId })
-        .done(function (result) {
-            $("#dvproductdetails").html(result);
-        })
-        .fail(function (error) {
-            console.error(error);
-        });
-}
-
-$(document).ready(function () {
-    GetAllProductDetailsList(1, null, null); 
 });
-$(document).on("click", ".pagination a", function (e) {
-    e.preventDefault();
-    var page = $(this).data("page") || $(this).attr("href").split('page=')[1];
-    var sortBy = $('#ddlSortBy').val() || null;
-    var ProductId = document.getElementById("txtProductList").value || null;
-    GetAllProductDetailsList(page, sortBy, ProductId);
-});
-$(document).on("click", "#backButton", function (e) {
-    e.preventDefault();
-    var page = $(this).text();
-    var sortBy = $('#ddlSortBy').val() || null;
-    var ProductId = document.getElementById("txtProductList").value || null;
-    GetAllProductDetailsList(page, sortBy, ProductId);
-});
-
-
-function clearSearchInput() {
-    var input = document.getElementById('txtsearch');
-    input.value = '';
-    input.focus();
-    GetAllProductDetailsList(1);
-}
 
 $(document).ready(function () {
     function toggleProductImagePreview(show) {
