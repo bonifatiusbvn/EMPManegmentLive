@@ -1,7 +1,4 @@
-﻿/* ====================== */
-/* TABLE STYLING - AG-THEME-TEAL INSPIRED */
-/* ====================== */
-
+﻿
 /* Table Container */
 .table-wrapper {
     max-height: 550px;
@@ -299,6 +296,21 @@
         background-color: #ff1a1a !important;
         border-color: #0a58ca;
     }
+
+.button-rest {
+    color: #fff !important;
+    background-color: #878a99 !important;
+    border-color: #878a99;
+}
+
+    .button-rest:hover {
+        color: #fff !important;
+        background-color: #737582 !important;
+        border-color: #6c6e7a;
+    }
+
+
+
 
 /* Custom Control Styles */
 .custom-control-input-teal:checked ~ .custom-control-label::before {
@@ -623,7 +635,7 @@
 
 .ag-paging-panel {
     background-color: #f0f0f0;
-    color: #00796b; 
+    color: #00796b;
     font-size: 14px;
 }
 
@@ -637,6 +649,127 @@
     padding: 4px 8px;
     border-radius: 4px;
 }
+
+.ag-theme-teal .ag-paging-panel {
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: center;
+}
+
+.custom-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.enhanced-pagination-container {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    width: 100%;
+    padding: 0 15px;
+}
+
+.ag-paging-panel.enhanced {
+    background-color: #f8f9fa;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+@media (max-width: 768px) {
+    .enhanced-pagination-container {
+        flex-direction: column;
+        align-items: stretch;
+    }
+}
+
+.page-size-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+    .page-size-container span {
+        color: #6c757d;
+        font-size: 14px;
+    }
+
+.page-size-selector {
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    padding: 5px;
+    color: #16989A;
+    background-color: white;
+    z-index: 1;
+    position: relative;
+    cursor: pointer;
+}
+
+.range-display {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+.navigation-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-info {
+    color: #6c757d;
+    font-size: 14px;
+}
+
+/* Keep your existing pagination button styles */
+.pagination-button {
+    background: transparent;
+    border: 1px solid #dee2e6;
+    color: #16989A;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    min-width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+    .pagination-button:hover:not(:disabled) {
+        background-color: #e9fbfc;
+        border-color: #16989A;
+    }
+
+    .pagination-button:disabled {
+        color: #6c757d;
+        background-color: #fff;
+        border-color: #dee2e6;
+        cursor: not-allowed;
+    }
+
+    .pagination-button.active {
+        background-color: #16989A;
+        border-color: #16989A;
+        color: #fff;
+    }
+
+.page-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+
 
 .deletebtn, .editbtn, .printbtn, .pdfbtn, .whatsappbtn, .telegrambtn {
     font-size: 1.2em;
