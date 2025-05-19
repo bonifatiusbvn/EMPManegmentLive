@@ -403,14 +403,16 @@ $(document).ready(function () {
     });
 });
 
-
 $(document).click(function (event) {
     const target = $(event.target);
     if (
         !target.closest('#dateFilterContainer').length &&
-        !target.closest('#toggleDateFilter').length
+        !target.closest('#AttendanceMonthFilterContainer').length &&
+        !target.closest('#dateFilterContainer').length &&
+        !target.closest('#AttendanceMonthFiltertoggle').length
     ) {
         $('#dateFilterContainer').hide();
+        $('#AttendanceMonthFilterContainer').hide();
     }
 });
 
@@ -656,106 +658,222 @@ function GetUserSearchAttendanceList(FilterData, UserPermissionData) {
         order: [[1, 'asc']]
     });
 }
-$(document).ready(function () {
-    function data(datas) {
-        var userPermission = datas;
-        GetMyAttendanceList(userPermission);
-    }
 
-    function GetMyAttendanceList(userPermission) {
-        var userPermissionArray = JSON.parse(userPermission);
-        var canEdit = userPermissionArray.some(permission => permission.formName === "Users Attendance" && permission.edit);
-        var columns = [
-            { "data": "userName", "name": "UserName" },
+let MyAttendanceGridOptions = [];
+let MyAttendancestartDate = null;
+let MyAttendanceendDate = null;
+let MyAttendanceMonth = new Date().toISOString().slice(0, 7);
+
+$(document).ready(function () {
+
+    MyAttendanceGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": "date", "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "intime", "name": "InTime",
-                render: function (data) {
-                    return new Date(data).toLocaleTimeString('en-US');
-                }
-            },
-            {
-                "data": "outTime", "name": "OutTime",
-                render: function (data, type, full) {
-                    var userDate = new Date(full.date).toLocaleDateString('en-US');
-                    var todayDate = new Date().toLocaleDateString('en-US');
-                    if (data != null) {
-                        return new Date(data).toLocaleTimeString('en-US');
+                headerName: "Employee Name", field: "firstName", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
                     }
-                    else if (data == null && userDate == todayDate) {
+                    return params.data.firstName + ' ' + params.data.lastName;
+                }
+            },
+            {
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
+                    }
+                    return getCommonDateformat(params.data.date);
+                }
+            },
+            {
+                headerName: "Intime", field: "intime", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
+                    }
+                    return new Date(params.data.intime).toLocaleTimeString('en-US');
+                }
+            },
+            {
+                headerName: "Outtime", field: "outTime", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
+                    }
+                    var userDate = new Date(params.data.date).toLocaleDateString('en-US');
+                    var todayDate = new Date().toLocaleDateString('en-US');
+                    if (params.data.outTime != null) {
+                        return new Date(params.data.outTime).toLocaleTimeString('en-US');
+                    }
+                    else if (params.data.outTime == null && userDate == todayDate) {
                         return "Pending...";
                     }
                     else {
                         return "Missing";
                     }
+
                 }
             },
             {
-                "data": "totalHours", "name": "TotalHours",
-                render: function (data, type, full) {
-                    var userDate = new Date(full.date).toLocaleDateString('en-US');
+                headerName: "Total Hours", field: "totalHours", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.attendanceId) {
+                        return '';
+                    }
+                    var userDate = new Date(params.data.date).toLocaleDateString('en-US');
                     var todayDate = new Date().toLocaleDateString('en-US');
-                    if (full.totalHours != null) {
-                        return full.totalHours.substr(0, 8) + ' hr';
-                    } else if (full.totalHours == null && userDate === todayDate) {
+                    if (params.data.totalHours != null) {
+                        return params.data.totalHours.substr(0, 8) + ' hr';
+                    } else if (params.data.totalHours == null && userDate === todayDate) {
                         return "Pending...";
                     } else {
                         return "Missing";
                     }
                 }
-            },
-        ];
-
-        if (canEdit) {
-            columns.push({
-                "data": null,
-                "orderable": false,
-                "searchable": false,
-                "render": function (data, type, full) {
-                    return '<a onclick="editMyAttendance(\'' + full.attendanceId + '\')" class="btn text-info">' +
-                        '<i class="fa-regular fa-pen-to-square"></i></a>';
-                }
-            });
-        }
-
-        $('#MyAttendanceData').DataTable({
-            processing: false,
-            serverSide: true,
+            }
+        ],
+        defaultColDef: {
+            sortable: true,
             filter: true,
-            destroy: true,
-            pageLength: 30,
-            lengthMenu: [[10, 25, 30, 50, -1], [10, 25, 30, 50, "All"]],
-            ajax: {
-                type: "POST",
-                url: '/UserProfile/GetAttendanceList',
-                dataType: 'json'
-            },
-            columns: columns,
-            scrollY: 400,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            autoWidth: false,
-            columnDefs: [
-                {
-                    targets: '_all', width: 'auto'
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            MyAttendanceGridOptions.api = params.api;
+            MyAttendanceGridOptions.columnApi = params.columnApi;
+            MyAttendanceGridOptions.api.sizeColumnsToFit();
+
+            $('#AllUserAttendanceTable').addClass('custom-pagination-style');
+        },
+
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        pagination: true,
+        paginationPageSize: 20,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: MyAttendanceGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtAllUserAttendanceSearch').val(),
+                    UserFilter: $('#drpAttusername').val(),
+                    StartDate: MyAttendancestartDate,
+                    EndDate: MyAttendanceendDate,
+                    Month: MyAttendanceMonth,
+                };
+
+                $.ajax({
+                    url: '/UserProfile/GetMyAttendanceList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const userFormPermissionArray = Formdata;
+    let canEdit = false;
+
+    for (let i = 0; i < userFormPermissionArray.length; i++) {
+        const permission = userFormPermissionArray[i];
+        if (permission.formName === "Users Attendance") {
+            canEdit = permission.edit;
+            break;
+        }
+    }
+
+    if (canEdit) {
+        MyAttendanceGridOptions.columnDefs.push({
+            headerName: "Action",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.attendanceId) {
+                    return '';
                 }
-            ],
-            order: [[1, 'asc']]
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `
+                         <li class="list-inline-item"><a onclick="editMyAttendance('${params.data.attendanceId}')"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
+                }
+                return buttons;
+            }
         });
     }
 
+    const myGridElement = document.querySelector('#MyAttendanceTable');
+    agGrid.createGrid(myGridElement, MyAttendanceGridOptions);
 
-    data(datas);
+    $('#txtMyAttendanceSearch').on('change keyup', function () {
+        MyAttendanceGridOptions.api.onFilterChanged();
+    });
+
+    $('#toggleDateFilter').click(e => {
+        e.stopPropagation();
+        $('#dateFilterContainer').toggle();
+        $('#AttendanceMonthFilterContainer').hide();
+    });
+
+    $('#AttendanceMonthFiltertoggle').click(function (e) {
+        e.stopPropagation();
+        $('#AttendanceMonthFilterContainer').toggle();
+        $('#dateFilterContainer').hide();
+    });
+
+    $('#applyFilters').click(() => {
+        MyAttendancestartDate = $('#txtstartdatebox').val() || null;
+        MyAttendanceendDate = $('#txtenddatebox').val() || null;
+        if (MyAttendanceGridOptions.api) {
+            MyAttendanceGridOptions.api.onFilterChanged();
+        }
+        $('#dateFilterContainer').hide();
+    });
+    $('#applyMonthAttendanceFilter').click(() => {
+        MyAttendanceMonth = $('#txtmonth').val() || null;
+        if (MyAttendanceGridOptions.api) {
+            MyAttendanceGridOptions.api.onFilterChanged();
+        }
+        $('#AttendanceMonthFilterContainer').hide();
+    });
 });
+function ResetMyAttendanceData() {
+    $('#txtstartdatebox').val('');
+    $('#txtenddatebox').val('');
+    $('#txtmonth').val('');
+    $('#txtMyAttendanceSearch').val('');
+    MyAttendancestartDate = null;
+    MyAttendanceendDate = null;
+    MyAttendanceMonth = null;
+    $('#dateFilterContainer').hide();
+    $('#AttendanceMonthFilterContainer').hide();
+    MyAttendanceGridOptions.api.setFilterModel(null);
+    MyAttendanceGridOptions.api.onFilterChanged();
+}
 
 function GetMySearchAttendanceList() {
     var UserPermissionData = datas;

@@ -43,9 +43,9 @@ namespace EMPManegment.Services.UserAttendance
             return UserAttendance.GetUserAttendanceById(GetattendanceId);
         }
 
-        public Task<jsonData> GetAttendanceList(MyAttendanceRequestDataTableModel AttendanceRequestModel)
+        public Task<AGGridResponseModel<UserAttendanceModel>> GetMyAttendanceList(AGGridRequestModel AttendanceRequest)
         {
-            return UserAttendance.GetAttendanceList(AttendanceRequestModel);
+            return UserAttendance.GetMyAttendanceList(AttendanceRequest);
         }
         public Task<jsonData> GetSearchAttendanceList(AttendanceRequestDataTableModel AttendanceRequestModel)
         {
