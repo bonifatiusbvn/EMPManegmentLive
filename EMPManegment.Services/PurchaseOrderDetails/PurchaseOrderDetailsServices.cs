@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
@@ -21,9 +22,9 @@ namespace EMPManegment.Services.OrderDetails
 
         public IPurchaseOrderDetails PurchaseOrderDetails { get; }
 
-        public async Task<IEnumerable<PurchaseOrderDetailView>> GetPurchaseOrderList()
+        public async Task<AGGridResponseModel<PurchaseOrderDetailView>> GetPurchaseOrderList(AGGridRequestModel PurchaseOrderRequest)
         {
-            return await PurchaseOrderDetails.GetPurchaseOrderList();
+            return await PurchaseOrderDetails.GetPurchaseOrderList(PurchaseOrderRequest);
         }
         public async Task<List<PurchaseOrderDetailView>> GetPurchaseOrderDetailsByStatus(string DeliveryStatus)
         {

@@ -1,6 +1,8 @@
 ﻿using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -37,20 +39,26 @@ namespace EMPManegment.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> PurchaseOrders()
         {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> GetPurchaseOrderList([FromBody] AGGridRequestModel PurchaseOrderRequest)
+        {
             try
             {
-                List<PurchaseOrderDetailView> orderList = new List<PurchaseOrderDetailView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "PurchaseOrderDetails/GetPurchaseOrderList");
-                if (res.code == 200)
+                PurchaseOrderRequest.filters ??= new List<FilterModel>();
+
+                var PurchaseOrderDetails = await APIServices.AGPostAsync<PurchaseOrderDetailView>(PurchaseOrderRequest, "PurchaseOrderDetails/GetPurchaseOrderList");
+
+                return new JsonResult(new
                 {
-                    orderList = JsonConvert.DeserializeObject<List<PurchaseOrderDetailView>>(res.data.ToString());
-                    ViewBag.ordersList = orderList.Count;
-                }
-                return View(orderList);
+                    rowsThisPage = PurchaseOrderDetails.Data,
+                    totalRowCount = PurchaseOrderDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
 

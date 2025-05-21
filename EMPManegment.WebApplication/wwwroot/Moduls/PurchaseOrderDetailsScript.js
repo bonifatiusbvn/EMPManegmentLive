@@ -1,4 +1,309 @@
-﻿$(document).ready(function () {
+﻿var Formdata = window.userFormPermissions || 0;
+
+let PurchaseOrderGridOptions = [];
+let startDate = null;
+let endDate = null;
+
+$(document).ready(function () {
+    PurchaseOrderGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
+            {
+                headerName: "Order Id", field: "firstName", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return `<a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=${params.data.orderId}"><span style="color: #16989A !important;">` + params.data.orderId +`</span></a>`;
+                }
+            },
+            { headerName: "Company Name", field: "companyName", sortable: true, filter: true },
+            {
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.orderDate);
+                }
+            },
+            {
+                headerName: "Total amount", field: "totalamount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return '₹' + params.data.totalAmount;
+                }
+            },
+            { headerName: "Payment Method", field: "paymentMethodName", sortable: true, filter: true },
+            { headerName: "Delivery Status", field: "deliveryStatus", sortable: true, filter: true },
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            PurchaseOrderGridOptions.api = params.api;
+            PurchaseOrderGridOptions.columnApi = params.columnApi;
+            PurchaseOrderGridOptions.api.sizeColumnsToFit();
+            createEnhancedPagination(params.api);
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 20,
+        pagination: true,
+        paginationPageSize: 20,
+        suppressPaginationPanel: true,
+        datasource: getPurchaseOrderDatasource()
+    };
+
+    function getPurchaseOrderDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtPurchaseOrderSearch').val(),
+                    ComapnyFilter: $('#txtPOCompanyName').val(),
+                    StartDate: startDate,
+                    EndDate: endDate,
+                };
+
+                $.ajax({
+                    url: '/PurchaseOrderMaster/GetPurchaseOrderList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#PurchaseOrderTable .range-display');
+                        if (rangeDisplay) updateEnhancedPagination(PurchaseOrderGridOptions.api, rangeDisplay);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
+    }
+
+    function createEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
+
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#PurchaseOrderTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+            // Destroy and recreate grid with new block size
+            const gridDiv = document.querySelector('#PurchaseOrderTable');
+
+            PurchaseOrderGridOptions = {
+                ...PurchaseOrderGridOptions,
+                cacheBlockSize: newPageSize,
+                paginationPageSize: newPageSize,
+                datasource: getPurchaseOrderDatasource(),
+            };
+
+            // Clear old grid and re-init
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, PurchaseOrderGridOptions);
+        });
+
+        updateEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = PurchaseOrderGridOptions.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
+        }
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
+
+    const userFormPermissionArray = Formdata;
+    let canEdit = false;
+    let canDelete = false;
+    for (let i = 0; i < userFormPermissionArray.length; i++) {
+        if (userFormPermissionArray[i].formName === "Create Purchase Order") {
+            canEdit = userFormPermissionArray[i].edit;
+            canDelete = userFormPermissionArray[i].delete;
+            break;
+        }
+    }
+
+    if (canEdit || canDelete) {
+        PurchaseOrderGridOptions.columnDefs.push({
+            headerName: "Action",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) return '';
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `
+                         <li class="list-inline-item"><a href="/PurchaseOrderMaster/CreatePurchaseOrder?id=${params.data.id}"><i class="fa-regular fa-pen-to-square"></i></a></li>`;
+                }
+
+                if (canDelete) {
+                    buttons += `
+                    <a class="btn text-danger" onclick="deletePurchaseOrderDetails('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                }
+                return buttons;
+            }
+        });
+    }
+
+    const myGridElement = document.querySelector('#PurchaseOrderTable');
+    agGrid.createGrid(myGridElement, PurchaseOrderGridOptions);
+
+    $('#txtPurchaseOrderSearch').on('change keyup', function () {
+        PurchaseOrderGridOptions.api.onFilterChanged();
+    });
+
+    $('#txtPOCompanyName').change(() => {
+        const companyText = $("#txtPOCompanyName option:selected").text();
+        $("#txtCompanyName").val(companyText === 'All Company' ? '' : companyText);
+        if (PurchaseOrderGridOptions.api) {
+            PurchaseOrderGridOptions.api.onFilterChanged();
+        }
+    });
+
+    $('#toggleDateFilter').click(e => {
+        e.stopPropagation();
+        $('#dateFilterContainer').toggle();
+    });
+
+    $('#applyFilters').click(() => {
+        startDate = $('#txtstartdatebox').val() || null;
+        endDate = $('#txtenddatebox').val() || null;
+        if (PurchaseOrderGridOptions.api) {
+            PurchaseOrderGridOptions.api.onFilterChanged();
+        }
+    });
+
+    $('#txtPOCompanyName').select2({
+        placeholder: 'Select Company',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Company/GetCompanyNameList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.compnyName,
+                    }))
+                };
+            }
+        }
+    });
+});
+
+
+$(document).ready(function () {
 
     fn_GetPOPaymentTypeList();
     fn_GetPOVendorNameList();
