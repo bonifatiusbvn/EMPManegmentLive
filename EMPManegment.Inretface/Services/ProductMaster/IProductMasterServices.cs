@@ -22,6 +22,7 @@ namespace EMPManegment.Inretface.Services.ProductMaster
         Task<List<ProductDetailsView>> SerchProductByVendor(int ProductId, Guid VendorId);
         Task<ProductDetailsView> DisplayProductDetailsById(Guid ProductId);
         Task<AGGridResponseModel<ProductDetailsView>> GetAllProductList(AGGridRequestModel ProductRequest);
+        Task<IEnumerable<ProductDetailsView>> GetAllProductDetailsList(string? sortBy);
         Task<UserResponceModel> DeleteProductDetails(Guid ProductId);
     }
 }

@@ -1477,7 +1477,6 @@ function ExportToPDF() {
 }
 
 function DisplayAddUserModel() {
-    GetUsernameList();
     $('#AddUserAttendanceModel').modal('show');
 }
 

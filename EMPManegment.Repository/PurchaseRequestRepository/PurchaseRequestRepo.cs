@@ -1,31 +1,33 @@
-﻿using EMPManagment.API;
+﻿using Azure;
+using EMPManagment.API;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.Common;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.Inretface.Interface.PurchaseRequest;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
-using System.Net;
 using System.Linq.Dynamic.Core;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using X.PagedList;
-using Microsoft.AspNetCore.Mvc;
-using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
-using Microsoft.EntityFrameworkCore;
-using Azure;
-using EMPManegment.EntityModels.ViewModels.ProductMaster;
-using Microsoft.AspNetCore.Http.HttpResults;
-using EMPManegment.EntityModels.Common;
-using EMPManegment.EntityModels.ViewModels.ManualInvoice;
-using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
 #nullable disable
 
 namespace EMPManegment.Repository.PurchaseRequestRepository
@@ -292,21 +294,35 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
             }
         }
 
-        public async Task<jsonData> GetPRList(DataTableRequstModel PRdataTable)
+        public async Task<AGGridResponseModel<PurchaseRequestModel>> GetPRList(AGGridRequestModel PurchaseRequest)
         {
-            string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
-            var dataSet = DbHelper.GetDataSet("[spGetPurchaseRequestList]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
-
-            var PRList = new List<PurchaseRequestModel>();
-
-            foreach (DataRow row in dataSet.Tables[0].Rows)
+            try
             {
-                var PurchaseRequest = new PurchaseRequestModel
+                var filterConditions = string.Join(" AND ", PurchaseRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = PurchaseRequest.SortModel?.FirstOrDefault()?.ColId ?? "Date";
+                string sortDirection = PurchaseRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
+
+                var parameters = new List<SqlParameter>
+                {
+                new SqlParameter("@SearchValue", (object)PurchaseRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", PurchaseRequest.PageSize),
+                new SqlParameter("@Skip", PurchaseRequest.StartRow),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
+                };
+
+                var dataSet = DbHelper.GetDataSet("spGetPurchaseRequestList", CommandType.StoredProcedure, parameters.ToArray(), Configuration.GetConnectionString("EMPDbconn"));
+
+                var PRList = dataSet.Tables[0].AsEnumerable().Select(row => new PurchaseRequestModel
                 {
                     PrId = Guid.Parse(row["PrId"].ToString()),
                     UserId = Guid.Parse(row["UserId"].ToString()),
                     UserName = row["UserName"].ToString(),
-                    FullName = row["FullName"].ToString(),
+                    FirstName = row["FirstName"].ToString(),
+                    LastName = row["LastName"].ToString(),
                     ProjectId = Guid.Parse(row["ProjectId"].ToString()),
                     ProductId = Guid.Parse(row["ProductId"].ToString()),
                     ProjectName = row["ProjectName"].ToString(),
@@ -316,63 +332,26 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
                     IsDeleted = row["IsDeleted"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsDeleted"]) : null,
                     PrNo = row["PrNo"].ToString(),
-                    CreatedOn = Convert.ToDateTime(row["CreatedOn"]),
-                    CreatedBy = Guid.Parse(row["CreatedBy"].ToString()),
                     Date = Convert.ToDateTime(row["Date"]),
-                };
-                PRList.Add(PurchaseRequest);
-            }
 
-            if (!string.IsNullOrEmpty(PRdataTable.searchValue))
-            {
-                PRList = PRList.Where(e =>
-                    e.ProjectName.Contains(PRdataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
-                    e.PrNo.Contains(PRdataTable.searchValue) ||
-                    e.ProductName.Contains(PRdataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
-                    e.FullName.Contains(PRdataTable.searchValue)).ToList();
-            }
+                }).ToList();
 
-            if (!string.IsNullOrEmpty(PRdataTable.sortColumn) && !string.IsNullOrEmpty(PRdataTable.sortColumnDir))
-            {
-                switch (PRdataTable.sortColumn)
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<PurchaseRequestModel>
                 {
-                    case "PrNo":
-                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.PrNo).ToList() : PRList.OrderByDescending(e => e.PrNo).ToList();
-                        break;
-                    case "FullName":
-                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.FullName).ToList() : PRList.OrderByDescending(e => e.FullName).ToList();
-                        break;
-                    case "ProjectName":
-                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.ProjectName).ToList() : PRList.OrderByDescending(e => e.ProjectName).ToList();
-                        break;
-                    case "ProductName":
-                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.ProductName).ToList() : PRList.OrderByDescending(e => e.ProductName).ToList();
-                        break;
-                    case "Quantity":
-                        PRList = PRdataTable.sortColumnDir == "asc" ? PRList.OrderBy(e => e.Quantity).ToList() : PRList.OrderByDescending(e => e.Quantity).ToList();
-                        break;
-                    default:
-                        break;
-                }
+                    Data = PRList,
+                    RecordsTotal = totalRecords
+                };
             }
-
-            var totalRecord = PRList.Count;
-            var filteredData = PRList.Skip(PRdataTable.skip).Take(PRdataTable.pageSize).ToList();
-
-            var jsonData = new jsonData
+            catch (Exception ex)
             {
-                draw = PRdataTable.draw,
-                recordsFiltered = totalRecord,
-                recordsTotal = totalRecord,
-                data = filteredData
-            };
-
-            return jsonData;
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
+            }
         }
 
         public async Task<PurchaseRequestMasterView> PurchaseRequestDetailsByPrNo(string PrNo)
         {
-
             try
             {
                 string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
@@ -380,7 +359,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 {
                    new SqlParameter("@PrNo", PrNo),
                 };
-                var PR = DbHelper.GetDataSet("[GetPRDetailsByPRId]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+                var PR = DbHelper.GetDataSet("GetPRDetailsByPRId", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
                 PurchaseRequestMasterView PRDetails = new PurchaseRequestMasterView();
 

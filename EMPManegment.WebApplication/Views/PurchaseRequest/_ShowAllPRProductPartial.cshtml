@@ -6,14 +6,14 @@
 @inject UserSession _userSession
 
 <div class="card-body">
-    <div class="table-responsive table-card">
-        <table class="table table-borderless align-middle mb-0 dt-responsive nowrap" id="productTable">
-            <thead class="table-light text-muted">
+    <div class="table-wrapper">
+        <table class="table fixed-header-table table-bordered table-striped">
+            <thead>
                 <tr>
-                    <th style="width: 90px;" scope="col" class="text-center">Product</th>
-                    <th scope="col" class="text-center">Product Info</th>
-                    <th scope="col" class="text-center">Product Price</th>
-                    <th scope="col" class="text-center">Add</th>
+                    <th style="width: 90px;">Product</th>
+                    <th scope="col">Product Info</th>
+                    <th scope="col">Product Price</th>
+                    <th scope="col">Add</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,8 +21,8 @@
                 {
                     <tr>
                         <td>
-                            <div class="avatar-md bg-light rounded p-1">
-                                <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+                            <div class="avatar-md bg-teal rounded p-1">
+                                <img src="~/@item.ProductImage" alt="" class="img-fluid d-block" style="height: 64px;width:100px;">
                             </div>
                         </td>
                         <td class="text-center">
@@ -34,7 +34,7 @@
                             <p class="text-muted mb-0">@item.PerUnitPrice</p>
                         </td>
                         <td class="text-end">
-                            <a id="addItemButton" class="btn btn-sm btn-warning" onclick="fn_SearchItemDetailsById('@item.Id')"><i class="ri-add-line align-bottom me-1"></i>Add</a>
+                            <a id="addItemButton" class="btn button-teal" onclick="fn_SearchItemDetailsById('@item.Id')"><i class="ri-add-line align-bottom me-1"></i>Add</a>
                         </td>
                     </tr>
                 }

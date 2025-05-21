@@ -1,5 +1,6 @@
 ﻿
 using Azure;
+using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -210,5 +211,30 @@ namespace EMPManagment.API.Controllers
                 RecordsTotal = ProductList.RecordsTotal
             };
         }
+        [HttpPost]
+        [Route("GetAllProductDetailsList")]
+        public async Task<ApiResponseModel> GetAllProductDetailsList(string? sortBy)
+        {
+            try
+            {
+                var productList = await productMaster.GetAllProductDetailsList(sortBy);
+                return new ApiResponseModel
+                {
+                    code = 200,
+                    message = "Success",
+                    data = productList
+                };
+            }
+            catch (Exception ex)
+            {
+                return new ApiResponseModel
+                {
+                    code = 500,
+                    message = ex.Message,
+                    data = null
+                };
+            }
+        }
+
     }
 }

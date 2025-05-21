@@ -10,8 +10,8 @@
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0"> Create Purchase Request</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0"> Create Purchase Request</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Purchase Request</a></li>
@@ -26,11 +26,11 @@
 <!-- end page title -->
 <div class="row">
     <div class="col-xl-9">
-        <div class="card">
-            <div class="card-header">
+        <div class="card fm-card">
+            <div class="card-header ">
                 <div class="row align-items-center gy-3">
                     <div class="col-sm">
-                        # @ViewData["PrNo"] <h5 class="fs-14 mb-0" id="cartTotalItemCount"></h5>
+                        <p style="font-size:16px;font-weight:700;color:#16989A;margin-bottom: 5px;"># @ViewData["PrNo"]</p> <h5 class="fs-14 mb-0" id="cartTotalItemCount"></h5>
                     </div>
                     <div class="col-sm-auto">
                         <div class="d-flex gap-1 flex-wrap">
@@ -43,9 +43,9 @@
                             }
                             else
                             {
-                                <input type="date" class="form-control" id="txtUpdatePrDate" style="width:200px;" value="@formattedDate" />
+                                <input type="date" class="form-control" id="txtUpdatePrDate" style="width:200px;margin-right:10px;" value="@formattedDate" />
                             }
-                            <a class="btn btn-warning" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
+                            <a class="btn button-teal" onclick="fn_OpenAddproductmodal()"><i class="ri-add-line align-bottom me-1"></i> Add Product</a>
                             <input type="text" class="form-control" id="prNo" value="@ViewData["PrNo"].ToString()" hidden />
                         </div>
                     </div>
@@ -65,14 +65,14 @@
                         </div>
                     }
                 </div>
-                <div class="text-end mb-4">
+                <div class="text-end mb-4" style="margin-top:25px;">
                     @if (Model.PRList != null)
                     {
-                        <a id="btnpurchaserequest" onclick="UpdatePurchaseRequestDetails()" class="btn button-teal btn-lg" style="margin-bottom: -30px;margin-right: 15px;width: 160px;height: 50px;">Update<i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i></a>
+                        <a id="btnpurchaserequest" onclick="UpdatePurchaseRequestDetails()" class="btn button-teal"><i class="ri-edit-line me-1"></i> Update</a>
                     }
                     else
                     {
-                        <a id="btnpurchaserequest" onclick="CreatePurchaseRequest()" class="btn button-teal btn-lg" style="display: none; margin-bottom: -30px;margin-right: 15px;width: 160px;height: 50px;">Create<i class="ri-arrow-right-line label-icon align-bottom fs-16 ms-2"></i></a>
+                        <a id="btnpurchaserequest" onclick="CreatePurchaseRequest()" class="btn button-teal"><i class="ri-save-line me-1"></i> Create</a>
                     }
                 </div>
             </div>
@@ -85,7 +85,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="d-flex">
-                    <h5 class="card-title flex-grow-1 mb-0"><i class="mdi mdi-truck-fast-outline align-middle me-1 text-muted"></i>Order Summary</h5>
+                    <h5 class="card-title flex-grow-1 mb-0" style="font-size:16px;font-weight:700;color:#16989A;"><i class="mdi mdi-truck-fast-outline align-middle me-1 text-muted" style="font-size:21px;font-weight:700;color:#16989A !important;"></i>Order Summary</h5>
                 </div>
             </div>
             <div class="card-body">
@@ -117,9 +117,9 @@
 <!-- end card -->
 <div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Select Product</h5>
+        <div class="modal-content fm-form">
+            <div class="modal-header bg-teal p-3">
+                <h5 class="modal-title" style="color:white;">Select Product</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearProductListSearchText()"></button>
             </div>
             <div class="modal-header">
@@ -127,6 +127,9 @@
                 <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallProducts()" />
             </div>
             <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+            </div>
+            <div class="model-footer" style="text-align:right;margin-top:-60px;">
+                <button type="button" class="btn btn-secondary btn-default m-1" data-bs-dismiss="modal">Close</button>
             </div>
         </div>
     </div>

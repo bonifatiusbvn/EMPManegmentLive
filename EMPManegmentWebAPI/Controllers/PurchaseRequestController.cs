@@ -1,6 +1,7 @@
 ﻿using Azure;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -135,10 +136,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetPRList")]
-        public async Task<IActionResult> GetPRList(DataTableRequstModel PRdataTable)
+        public async Task<AGGridResponseModel<PurchaseRequestModel>> GetPRList(AGGridRequestModel PurchaseRequest)
         {
-            var purchaseRequestList = await purchaseRequest.GetPRList(PRdataTable);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = purchaseRequestList });
+            var purchaseRequestList = await purchaseRequest.GetPRList(PurchaseRequest);
+            return new AGGridResponseModel<PurchaseRequestModel>
+            {
+                Data = purchaseRequestList.Data,
+                RecordsTotal = purchaseRequestList.RecordsTotal,
+            };
         }
 
         [HttpGet]

@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
@@ -13,7 +14,7 @@ namespace EMPManegment.Inretface.Services.PurchaseRequestServices
     public interface IPurchaseRequestServices
     {
         Task<ApiResponseModel> CreatePurchaseRequest(PurchaseRequestMasterView AddPurchaseRequest);
-        Task<jsonData> GetPRList(DataTableRequstModel PRdataTable);
+        Task<AGGridResponseModel<PurchaseRequestModel>> GetPRList(AGGridRequestModel PurchaseRequest);
         Task<IEnumerable<PurchaseRequestModel>> GetPurchaseRequestList();
         Task<PurchaseRequestModel> GetPurchaseRequestDetailsById(string PrId);
         Task<ApiResponseModel> UpdatePurchaseRequestDetails(PurchaseRequestMasterView UpdatePurchaseRequest);

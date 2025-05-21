@@ -455,7 +455,47 @@ namespace EMPManegment.Repository.ProductMaster
                 throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductDetailsList(string? sortBy)
+        {
+            try
+            {
+                var query = from a in Context.TblProductDetailsMasters
+                            join b in Context.TblProductTypeMasters on a.ProductType equals b.Id
+                            where a.IsDeleted == false
+                            select new ProductDetailsView
+                            {
+                                Id = a.Id,
+                                ProductType = a.ProductType,
+                                ProductTypeName = b.Type,
+                                ProductName = a.ProductName,
+                                ProductDescription = a.ProductDescription,
+                                ProductShortDescription = a.ProductShortDescription,
+                                ProductImage = a.ProductImage,
+                                PerUnitPrice = a.PerUnitPrice,
+                                IsWithGst = a.IsWithGst,
+                                GstPercentage = a.GstPercentage,
+                                GstAmount = a.GstAmount,
+                                Hsn = a.Hsn,
+                                CreatedBy = a.CreatedBy,
+                                CreatedOn = a.CreatedOn
+                            };
 
+                query = sortBy switch
+                {
+                    "AscendingProductName" => query.OrderBy(x => x.ProductName),
+                    "DescendingProductName" => query.OrderByDescending(x => x.ProductName),
+                    "AscendingPerUnitPrice" => query.OrderBy(x => x.PerUnitPrice),
+                    "DescendingPerUnitPrice" => query.OrderByDescending(x => x.PerUnitPrice),
+                    _ => query.OrderByDescending(x => x.CreatedOn) 
+                };
+
+                return await query.ToListAsync();
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
         {
             UserResponceModel response = new UserResponceModel();

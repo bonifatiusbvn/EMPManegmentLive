@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -70,7 +71,10 @@ namespace EMPManegment.Services.ProductMaster
         {
             return await productMaster.GetAllProductList(ProductRequest);
         }
-
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductDetailsList(string? sortBy)
+        {
+            return await productMaster.GetAllProductDetailsList(sortBy);
+        }
         public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
         {
             return await productMaster.DeleteProductDetails(ProductId);

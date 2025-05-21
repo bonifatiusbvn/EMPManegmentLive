@@ -47,6 +47,8 @@ namespace EMPManegment.EntityModels.ViewModels.Purchase_Request
         public int RowNumber {get; set; }
 
         public string? FullName {get; set; }
+        public string? FirstName {get; set; }
+        public string? LastName {get; set; }
 
         public string? ProductTypeName {get; set; }
 
