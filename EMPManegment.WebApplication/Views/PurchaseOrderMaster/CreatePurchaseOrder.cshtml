@@ -43,8 +43,8 @@
                                     <div class=" border-bottom border-bottom-dashed">
                                         <div class="row">
                                             <div class="col-6 col-lg-6">
-                                                <div class=" card">
-                                                    <h5 class="card-header">Vendor Details</h5>
+                                                <div class=" card fm-card">
+                                                    <h5 class="card-header fm-card-header">Vendor Details</h5>
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-6 col-lg-6 ">
@@ -86,8 +86,8 @@
                                                 </div>
                                             </div>
                                             <div class="col-6 col-lg-6">
-                                                <div class=" card">
-                                                    <h5 class="card-header">Purchase Order Details</h5>
+                                                <div class="card fm-card">
+                                                    <h5 class="card-header fm-card-header">Purchase Order Details</h5>
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <div class="col-md-4">
@@ -140,13 +140,13 @@
                                 <!---- Product Details ---->
                                 <div class="row">
                                 </div>
-                                <div class="card">
+                                <div class="card fm-card">
                                     <div class="card-header">
                                         <div class="d-flex align-items-center">
-                                            <h5 class="card-title mb-0 flex-grow-1">Purchase Order</h5>
+                                            <h5 class="card-title mb-0 flex-grow-1" style="font-size:20px;font-weight:600;color:#16989A;">Purchase Order</h5>
                                             <div class="flex-shrink-0">
                                                 <div class="d-flex flex-wrap gap-2">
-                                                    <a class="btn btn-block btn-warning" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i>Add Product</a>
+                                                    <a class="btn button-teal" style="text-align:end;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="ri-add-fill me-1 align-bottom"></i> Product</a>
                                                     <span id="spnitembutton" class="text-danger"></span>
                                                 </div>
                                             </div>
@@ -154,8 +154,8 @@
                                     </div>
 
                                     <div class="card-body pt-0">
-                                        <div class="table-responsive table-container">
-                                            <table class="table align-middle mb-0 dt-responsive nowrap">
+                                        <div class="table-wrapper">
+                                            <table class="table fixed-header-table table-bordered table-striped">
                                                 <thead class="table-secondary">
                                                     <tr class="text-uppercase">
                                                         <th>#</th>
@@ -267,14 +267,14 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class=" card">
+                                        <div class="card fm-card">
                                             <div class="row card-body">
                                                 <div class="col-lg-6 col-sm-12">
                                                     <div class="row">
                                                         <div class="col-lg-12 col-sm-12">
                                                             <div class="mb-3">
                                                                 <div class="input-group">
-                                                                    <label class="input-group-text" for="textDeliveryStatus">Delivery Status <span class="text-danger">*</span></label>
+                                                                    <label class="input-group-text required-field" for="textDeliveryStatus">Delivery Status</label>
                                                                     <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" value="@Model.DeliveryStatus" placeholder="Enter Delivery Status">
                                                                 </div>
                                                             </div>
@@ -282,7 +282,7 @@
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-3">
                                                                 <div class="input-group">
-                                                                    <label for="txtPOpaymentmethod" class="input-group-text">Payment Method <span class="text-danger">*</span></label>
+                                                                    <label for="txtPOpaymentmethod" class="input-group-text required-field">Payment Method </label>
                                                                     @if (Model.PaymentMethod != null)
                                                                     {
                                                                         <select class="form-control form-select valid" id="txtPOpaymentmethod" name="txtPOpaymentmethod">
@@ -302,7 +302,7 @@
                                                         <div class="col-lg-12 col-sm-12 mt-2">
                                                             <div class="mb-3">
                                                                 <div class="input-group mb-3">
-                                                                    <label for="txtPOpaymenttype" class="input-group-text">Payment Status</label>
+                                                                    <label for="txtPOpaymenttype" class="input-group-text ">Payment Status</label>
                                                                     @if (Model.PaymentStatus != null)
                                                                     {
                                                                         <select class="form-control form-select valid" id="txtPOpaymenttype" name="txtPOpaymenttype">
@@ -365,8 +365,8 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-6 col-sm-12">
-                                        <div class="card">
-                                            <h5 class="card-header">
+                                        <div class="card fm-card">
+                                            <h5 class="card-header fm-card-header">
                                                 Shipping Addresses
                                                 <a class="font-22" onclick="fn_OpenShippingModal()">
                                                     <i class="bi bi-plus-circle"></i>
@@ -392,11 +392,11 @@
                                         <div class="hstack gap-2 justify-content-end d-print-none mt-4">
                                             @if (Model.Id != Guid.Empty)
                                             {
-                                                <button type="button" class="btn btn-lg button-teal" id="UpdatePOButton" onclick="fn_UpdatePurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
+                                                <button type="button" class="btn button-teal" id="UpdatePOButton" onclick="fn_UpdatePurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i>Update</button>
                                             }
                                             else
                                             {
-                                                <button type="button" class="btn btn-lg button-teal" id="SavePOButton" onclick="fn_InsertPurchaseOrderDetails()" style="width: 160px;height: 50px;"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
+                                                <button type="button" class="btn button-teal" id="SavePOButton" onclick="fn_InsertPurchaseOrderDetails()"><i class="ri-printer-line align-bottom me-1"></i>Create</button>
                                             }
                                         </div>
                                     </div>

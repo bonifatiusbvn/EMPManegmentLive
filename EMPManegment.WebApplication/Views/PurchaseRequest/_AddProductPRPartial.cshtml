@@ -10,12 +10,12 @@
             <div class="row gy-3">
                 <div class="col-sm-auto">
                     <input type="text" id="textPRProjectId" class="form-control" hidden value="@item.ProjectId" />
-                    <div class="avatar-lg bg-light rounded p-1">
-                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block" style="width: 100px;height: 100px;">
+                    <div class="avatar-lg bg-teal rounded p-1">
+                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block" style="width: 100px;height: 88px;">
                     </div>
                 </div>
                 <div class="col-sm">
-                    <h5 class="fs-14 text-truncate"><a href="/ProductMaster/ProductDetails/?ProductId=@item.ProductId" class="text-body">@item.ProductName</a></h5>
+                    <h5 class="fs-14 text-truncate"><a href="/ProductMaster/ProductDetails/?ProductId=@item.ProductId" class="text-body" style="color: #16989A !important;font-size: 16px;font-weight: 600;">@item.ProductName</a></h5>
                     <ul class="list-inline text-muted">
                         <li class="list-inline-item">Category : <span class="fw-medium">@item.ProductTypeName</span></li>
                     </ul>

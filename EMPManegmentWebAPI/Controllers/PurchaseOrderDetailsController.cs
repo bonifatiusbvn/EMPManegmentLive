@@ -1,5 +1,6 @@
 ﻿using Azure;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -28,13 +29,16 @@ namespace EMPManagment.API.Controllers
 
         public IPurchaseOrderDetailsServices PurchaseOrderDetails { get; }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetPurchaseOrderList")]
-        public async Task<IActionResult> GetPurchaseOrderList()
+        public async Task<AGGridResponseModel<PurchaseOrderDetailView>> GetPurchaseOrderList(AGGridRequestModel PurchaseOrderRequest)
         {
-            IEnumerable<PurchaseOrderDetailView> orderlist = await PurchaseOrderDetails.GetPurchaseOrderList();
-            return Ok(new { code = (int)HttpStatusCode.OK, data = orderlist });
-
+            var PurchaseOrderList = await PurchaseOrderDetails.GetPurchaseOrderList(PurchaseOrderRequest);
+            return new AGGridResponseModel<PurchaseOrderDetailView>
+            {
+                Data = PurchaseOrderList.Data,
+                RecordsTotal = PurchaseOrderList.RecordsTotal
+            };
         }
         [HttpPost]
         [Route("GetPurchaseOrderDetailsByStatus")]

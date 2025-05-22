@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.Purchase_Request;
@@ -51,9 +52,9 @@ namespace EMPManegment.Services.PurchaseRequest
             return purchaseRequest.CheckPRNo();
         }
 
-        public async Task<jsonData> GetPRList(DataTableRequstModel PRdataTable)
+        public async Task<AGGridResponseModel<PurchaseRequestModel>> GetPRList(AGGridRequestModel PurchaseRequest)
         {
-            return await purchaseRequest.GetPRList(PRdataTable);
+            return await purchaseRequest.GetPRList(PurchaseRequest);
         }
         public async Task<PurchaseRequestMasterView> PurchaseRequestDetailsByPrNo(string PrNo)
         {

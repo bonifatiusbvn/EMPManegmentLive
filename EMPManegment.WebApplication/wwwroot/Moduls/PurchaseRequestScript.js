@@ -25,105 +25,289 @@ $(document).ready(function () {
     });
 });
 
-$(document).ready(function () {
+var Formdata = window.userFormPermissions || 0;
+let PurchaseRequestGridOptions = [];
 
-    function data(datas) {
-        userPermission = datas;
-        GetPRData(userPermission);
+$(document).ready(function () {
+    PurchaseRequestGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
+            {
+                headerName: "PR No.", field: "prNo", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.prId) return '';
+                    return '<h5 class="fs-15"><a href="/PurchaseRequest/PurchaseRequestDetails?prNo=' + params.data.prNo + '" style="color: #16989A !important;" >' + params.data.prNo + '</a></h5>';
+
+                }
+            },
+            {
+                headerName: "User Name", field: "firstName", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.prId) return '';
+                    return params.data.firstName + ' ' + params.data.lastName + ' ( ' + params.data.userName + ' )';
+
+                }
+            },
+            { headerName: "Project Name", field: "projectName", sortable: true, filter: true },
+            { headerName: "Product Name", field: "productName", sortable: true, filter: true },
+            { headerName: "Quantity", field: "quantity", sortable: true, filter: true },
+            {
+                headerName: "Approve",
+                field: "isApproved",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.prId) return '';
+
+                    const isChecked = params.data.isApproved;
+                    const checkboxId = 'chk_child_' + params.data.prId;
+
+                    return `
+                        <div class="custom-control custom-checkbox">
+                        <input type="checkbox"
+                        class="custom-control-input custom-control-input-teal"
+                        id="${checkboxId}"
+                        data-id="${params.data.prId}"
+                        data-approved="${isChecked}"
+                        ${isChecked ? 'checked' : ''}>
+                        <label class="custom-control-label" for="${checkboxId}" style="margin-top: 11px;"></label>
+                        </div>
+                `;
+                }
+            }
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            PurchaseRequestGridOptions.api = params.api;
+            PurchaseRequestGridOptions.columnApi = params.columnApi;
+            PurchaseRequestGridOptions.api.sizeColumnsToFit();
+            createEnhancedPagination(params.api);
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 20,
+        pagination: true,
+        paginationPageSize: 20,
+        suppressPaginationPanel: true,
+        datasource: getPRDatasource()
+    };
+
+    function getPRDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtPurchaseRequestSearch').val(),
+                };
+
+                $.ajax({
+                    url: '/PurchaseRequest/GetPRList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#PurchaseRequestTable .range-display');
+                        if (rangeDisplay) updateEnhancedPagination(PurchaseRequestGridOptions.api, rangeDisplay);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
     }
 
-    function GetPRData(userPermission) {
-        var userPermissionArray = JSON.parse(userPermission);
+    function createEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
 
-        var canEdit = false;
-        var canDelete = false;
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
 
-        for (var i = 0; i < userPermissionArray.length; i++) {
-            var permission = userPermissionArray[i];
-            if (permission.formName.trim() === "Purchase Request List") {
-                canEdit = permission.edit;
-                canDelete = permission.delete;
-                break;
-            }
-        }
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
 
-        var columns = [
-            {
-                "data": "prNo","name": "PrNo",
-                "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/PurchaseRequest/PurchaseRequestDetails?prNo=' + full.prNo + '" class="fw-medium link-primary">' + full.prNo + '</a></h5>';
-                }
-            },
-            {
-                "data": null, "name": "FullName",
-                "render": function (data, type, full) {
-                    return full.fullName + ' ( ' + full.userName + ' )';
-                },
-            },
-            { "data": "projectName", "name": "ProjectName" },
-            { "data": "productName", "name": "ProductName" },
-            { "data": "quantity", "name": "Quantity" },
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var isChecked = full.isApproved;
-                    return '<div class="form-check">' +
-                        '<input class="form-check-input" ' +
-                        'data-id="' + full.prId + '" ' +
-                        'data-approved="' + isChecked + '" ' +
-                        'type="checkbox" name="chk_child"' + (isChecked ? ' checked' : '') + '>' +
-                        '</div>';
-                },
-                "orderable": false
-            }
-        ];
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
 
-        if (canEdit || canDelete) {
-            columns.push({
-                "data": null,
-                "orderable": false,
-                "searchable": false,
-                "render": function (data, type, full) {
-                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
 
-                    if (canEdit) {
-                        buttons += '<a class="btn text-info" href="/PurchaseRequest/CreatePurchaseRequest?id=' + full.prNo + '">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a>';
-                    }
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
 
-                    if (canDelete) {
-                        buttons += '<a class="text-danger" onclick="DeletePurchaseRequest(\'' + full.prNo + '\')">' +
-                            '<i class="fas fa-trash"></i></a>';
-                    }
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
 
-                    buttons += '</ul>';
-                    return buttons;
-                }
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#PurchaseRequestTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+            // Destroy and recreate grid with new block size
+            const gridDiv = document.querySelector('#PurchaseRequestTable');
+
+            PurchaseRequestGridOptions = {
+                ...PurchaseRequestGridOptions,
+                cacheBlockSize: newPageSize,
+                paginationPageSize: newPageSize,
+                datasource: getPRDatasource(),
+            };
+
+            // Clear old grid and re-init
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, PurchaseRequestGridOptions);
+        });
+
+        updateEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = PurchaseRequestGridOptions.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateEnhancedPagination(gridApi, rangeDisplay);
             });
+            pageButtonsContainer.appendChild(pageButton);
         }
 
-        $('#PRListTable').DataTable({
-            processing: false,
-            serverSide: true,
-            filter: true,
-            "bDestroy": true,
-            ajax: {
-                type: "POST",
-                url: '/PurchaseRequest/GetPRList',
-                dataType: 'json'
-            },
-            columns: columns,
-            columnDefs: [{
-                "defaultContent": "",
-                "targets": "_all"
-            }],
-            drawCallback: function () {
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
 
-                updateCheckedAllState();
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
+
+    const userFormPermissionArray = Formdata;
+    let canEdit = false;
+    let canDelete = false;
+
+    for (let i = 0; i < userFormPermissionArray.length; i++) {
+        if (userFormPermissionArray[i].formName === "Create Purchase Request") {
+            canEdit = userFormPermissionArray[i].edit;
+            canDelete = userFormPermissionArray[i].delete;
+            break;
+        }
+    }
+
+    if (canEdit || canDelete) {
+        PurchaseRequestGridOptions.columnDefs.push({
+            headerName: "Action",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.prId) return '';
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `
+                    <li class="list-inline-item">
+                        <a href="/PurchaseRequest/CreatePurchaseRequest?id=${params.data.prNo}">
+                            <i class="fa-regular fa-pen-to-square"></i>
+                        </a>
+                    </li>`;
+                }
+                if (canDelete) {
+                    buttons += `
+                    <li class="list-inline-item">
+                        <a onclick="DeletePurchaseRequest('${params.data.prNo}')">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </li>`;
+                }
+                return buttons;
             }
         });
     }
-    data(datas);
+
+    const myGridElement = document.querySelector('#PurchaseRequestTable');
+    agGrid.createGrid(myGridElement, PurchaseRequestGridOptions);
+
+    $('#txtPurchaseRequestSearch').on('change keyup', function () {
+        PurchaseRequestGridOptions.api.onFilterChanged();
+    });
 });
 
 function fn_SearchItemDetailsById(Id) {

@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.Models;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.ProductMaster;
@@ -6,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -65,11 +67,14 @@ namespace EMPManegment.Services.ProductMaster
         {
             return await productMaster.DisplayProductDetailsById(ProductId);
         }
-        public async Task<IEnumerable<ProductDetailsView>> GetAllProductList(string? sortBy)
+        public async Task<AGGridResponseModel<ProductDetailsView>> GetAllProductList(AGGridRequestModel ProductRequest)
         {
-            return await productMaster.GetAllProductList(sortBy);
+            return await productMaster.GetAllProductList(ProductRequest);
         }
-
+        public async Task<IEnumerable<ProductDetailsView>> GetAllProductDetailsList(string? sortBy)
+        {
+            return await productMaster.GetAllProductDetailsList(sortBy);
+        }
         public async Task<UserResponceModel> DeleteProductDetails(Guid ProductId)
         {
             return await productMaster.DeleteProductDetails(ProductId);

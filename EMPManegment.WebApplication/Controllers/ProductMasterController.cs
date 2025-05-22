@@ -3,6 +3,8 @@ using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.Crypto;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
@@ -188,41 +190,24 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetAllProductList(int? page, int? ProductId, string? ProductName, string? sortBy)
+        [HttpPost]
+        public async Task<IActionResult> GetAllProductList([FromBody] AGGridRequestModel ProductRequest)
         {
             try
             {
-                List<ProductDetailsView> productlist = new List<ProductDetailsView>();
-                ApiResponseModel response = await APIServices.PostAsync("", "ProductMaster/GetAllProductList?sortBy=" + sortBy);
-                if (response.code == 200)
-                {
-                    productlist = JsonConvert.DeserializeObject<List<ProductDetailsView>>(response.data.ToString());
-                }
+                ProductRequest.filters ??= new List<FilterModel>();
 
-                if (ProductId.HasValue)
-                {
-                    productlist = productlist.Where(e => e.ProductType == ProductId).ToList();
-                }
-                else if (!string.IsNullOrEmpty(ProductName))
-                {
-                    productlist = productlist.Where(e => e.ProductName.Contains(ProductName, StringComparison.OrdinalIgnoreCase)).ToList();
-                }
+                var ProductDetails = await APIServices.AGPostAsync<ProductDetailsView>(ProductRequest, "ProductMaster/GetAllProductList");
 
-                if (!productlist.Any())
+                return new JsonResult(new
                 {
-                    TempData["EmptyProductList"] = "No data for selected!";
-                }
-
-                int pageSize = 5;
-                var pageNumber = page ?? 1;
-                var pagedList = productlist.ToPagedList(pageNumber, pageSize);
-
-                return PartialView("~/Views/ProductMaster/_ProductDetailsbtVendorId.cshtml", pagedList);
+                    rowsThisPage = ProductDetails.Data,
+                    totalRowCount = ProductDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -16,7 +17,7 @@ namespace EMPManegment.Inretface.Interface.OrderDetails
 {
     public interface IPurchaseOrderDetails
     {
-        Task<IEnumerable<PurchaseOrderDetailView>> GetPurchaseOrderList();
+        Task<AGGridResponseModel<PurchaseOrderDetailView>> GetPurchaseOrderList(AGGridRequestModel PurchaseOrderRequest);
         Task<List<PurchaseOrderDetailView>> GetPurchaseOrderDetailsByStatus(string DeliveryStatus);
         string CheckPurchaseOrder(string projectname);
         Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsByOrderId(string OrderId);

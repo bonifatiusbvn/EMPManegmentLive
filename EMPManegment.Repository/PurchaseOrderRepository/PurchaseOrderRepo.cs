@@ -3,6 +3,7 @@ using EMPManagment.API;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
@@ -41,39 +42,56 @@ namespace EMPManegment.Repository.OrderRepository
 
         public IConfiguration _configuration { get; }
 
-        public async Task<IEnumerable<PurchaseOrderDetailView>> GetPurchaseOrderList()
+        public async Task<AGGridResponseModel<PurchaseOrderDetailView>> GetPurchaseOrderList(AGGridRequestModel PurchaseOrderRequest)
         {
             try
             {
-                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
-                var dataSet = DbHelper.GetDataSet("[spGetPODetails]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+                var filterConditions = string.Join(" AND ", PurchaseOrderRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = PurchaseOrderRequest.SortModel?.FirstOrDefault()?.ColId ?? "OrderDate";
+                string sortDirection = PurchaseOrderRequest.SortModel?.FirstOrDefault()?.Sort ?? "desc";
 
-                var POList = new List<PurchaseOrderDetailView>();
-
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                var parameters = new List<SqlParameter>
                 {
-                    var PurchaseOrder = new PurchaseOrderDetailView
-                    {
-                        Id = Guid.Parse(row["Id"].ToString()),
-                        OrderId = row["OrderId"].ToString(),
-                        CompanyId = Guid.Parse(row["CompanyId"].ToString()),
-                        VendorId = Guid.Parse(row["VendorId"].ToString()),
-                        CompanyName = row["CompnyName"].ToString(),
-                        PaymentMethodName = row["PaymentMethodName"].ToString(),
-                        DeliveryStatus = row["DeliveryStatus"].ToString(),
-                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
-                        PaymentMethod = Convert.ToInt32(row["PaymentMethod"]),
-                        CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
-                        OrderDate = Convert.ToDateTime(row["OrderDate"]),
-                    };
-                    POList.Add(PurchaseOrder);
-                }
+                new SqlParameter("@SearchValue", (object)PurchaseOrderRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", PurchaseOrderRequest.PageSize),
+                new SqlParameter("@Skip", PurchaseOrderRequest.StartRow),
+                new SqlParameter("@StartDate", PurchaseOrderRequest.StartDate),
+                new SqlParameter("@EndDate", PurchaseOrderRequest.EndDate),
+                new SqlParameter("@CompanyFilter", PurchaseOrderRequest.CompanyFilter),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
+                };
 
-                return POList;
+                var dataSet = DbHelper.GetDataSet("spGetPODetails", CommandType.StoredProcedure, parameters.ToArray(), _configuration.GetConnectionString("EMPDbconn"));
+
+                var PurchaseOrderList = dataSet.Tables[0].AsEnumerable().Select(row => new PurchaseOrderDetailView
+                {
+                    Id = Guid.Parse(row["Id"].ToString()),
+                    OrderId = row["OrderId"].ToString(),
+                    CompanyId = Guid.Parse(row["CompanyId"].ToString()),
+                    VendorId = Guid.Parse(row["VendorId"].ToString()),
+                    CompanyName = row["CompnyName"].ToString(),
+                    PaymentMethodName = row["PaymentMethodName"].ToString(),
+                    DeliveryStatus = row["DeliveryStatus"].ToString(),
+                    TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                    PaymentMethod = Convert.ToInt32(row["PaymentMethod"]),
+                    OrderDate = Convert.ToDateTime(row["OrderDate"]),
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<PurchaseOrderDetailView>
+                {
+                    Data = PurchaseOrderList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
 
