@@ -27,9 +27,17 @@
 <!--- Partial View --->
 <div class="tab-pane" id="project" role="tabpanel">
     <div class="card" fm-card>
-        <div class="card-header fm-card-header">
-            <div class="card-header fm-card-header">
-                Project Details
+        <div class="card-header">
+            <div class="d-flex align-items-center">
+                <h5 class="card-title mb-0 flex-grow-1">Create Project</h5>
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Project" && (a.Add == true)))
+                {
+                    <div class="flex-shrink-0">
+                        <div class="d-flex gap-2 flex-wrap">
+                            <a href="/Project/CreateProject" class="btn button-teal btn-md"><i class="fa-solid fa-circle-plus me-1"></i>Project</a>
+                        </div>
+                    </div>
+                }
             </div>
         </div>
         <div class="card-body">

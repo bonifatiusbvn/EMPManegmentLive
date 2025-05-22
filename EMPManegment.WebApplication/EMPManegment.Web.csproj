@@ -9,7 +9,6 @@
   <ItemGroup>
     <PackageReference Include="Aspose.PDF" Version="25.5.0" />
     <PackageReference Include="ClosedXML" Version="0.105.0" />
-    <PackageReference Include="ContentReportBuilder.iTextSharp" Version="1.1.9.3" />
     <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="DotNetCorePdf" Version="1.0.3" />
     <PackageReference Include="HtmlToPdfConverter.Core" Version="2.0.0" />

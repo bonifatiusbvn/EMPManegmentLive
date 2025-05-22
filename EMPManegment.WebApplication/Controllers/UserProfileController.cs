@@ -24,7 +24,6 @@ using EMPManegment.EntityModels.ViewModels.UserModels;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
-using iTextSharp.text.pdf;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
