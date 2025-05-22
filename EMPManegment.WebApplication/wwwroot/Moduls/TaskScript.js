@@ -7,7 +7,7 @@
 function showadddetails() {
     ClearTextBox();
     GetTaskType();
-    GetUsernameList();
+
     $('#addtasks').modal('show');
 }
 
@@ -735,8 +735,8 @@ function UpdateTaskDetails() {
         UserName: $("#EditUserName").val(),
         TaskTitle: $("#EditTaskTitle").val(),
         TaskDetails: $("#EditDescription").val(),
-        TaskDate: $("#EditStartDate").val(), 
-        TaskEndDate: $("#EditEndDate").val(), 
+        TaskDate: $("#EditStartDate").val(),
+        TaskEndDate: $("#EditEndDate").val(),
         TaskTypeName: $("#EditTaskType").val(),
         TaskType: $("#EditTaskTypeId").val(),
         TaskStatus: $("#EditStatus").val(),
@@ -754,7 +754,7 @@ function UpdateTaskDetails() {
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK',
                 }).then(function () {
-                    window.location = '/Task/AllTaskDetails'; 
+                    window.location = '/Task/AllTaskDetails';
                 })
             } else {
                 toastr.error(Result.message);
