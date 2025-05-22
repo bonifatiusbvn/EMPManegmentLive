@@ -507,7 +507,8 @@ namespace EMPManegment.Repository.OrderRepository
                     PurchaseOrder.UpdatedOn = DateTime.Now;
                     PurchaseOrder.UpdatedBy = UpdatePurchaseorder.UpdatedBy;
                     PurchaseOrder.DollarPrice = UpdatePurchaseorder.DollarPrice;
-                };
+                }
+                ;
                 Context.TblPurchaseOrderMasters.Update(PurchaseOrder);
 
                 foreach (var item in UpdatePurchaseorder.ProductList)
