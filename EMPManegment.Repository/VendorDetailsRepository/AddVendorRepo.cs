@@ -288,7 +288,8 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                             vendordata.VendorTypeId = row["VendorTypeId"] != DBNull.Value ? (int)row["VendorTypeId"] : 0; ;
                             vendordata.VendorTypeName = row["VendorTypeName"]?.ToString();
                             vendordata.FullAddress = row["FullAddress"]?.ToString();
-                        };
+                        }
+                        ;
                     }
                 }
                 return vendordata;
@@ -299,22 +300,30 @@ namespace EMPManegment.Repository.VendorDetailsRepository
             }
         }
 
-        public async Task<IEnumerable<VendorListDetailsView>> GetVendorNameList()
+        public async Task<IEnumerable<VendorListDetailsView>> GetVendorNameList(string? search)
         {
             try
             {
-                IEnumerable<VendorListDetailsView> GetVendorList = Context.TblVendorMasters.ToList().Select(a => new VendorListDetailsView
+                var vendor = from a in Context.TblVendorMasters
+                             orderby a.VendorCompany
+                             select new VendorListDetailsView
+                             {
+                                 Id = a.Vid,
+                                 VendorCompany = a.VendorCompany,
+                             };
+
+                if (!string.IsNullOrEmpty(search))
                 {
-                    Id = a.Vid,
-                    VendorCompany = a.VendorCompany,
+                    vendor = vendor.Where(pt => pt.VendorCompany.Contains(search));
+                }
 
 
-                }).ToList();
-                return GetVendorList;
+                var vendorList = await vendor.ToListAsync();
+                return vendorList;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new ApplicationException("An error occurred while retrieving design types.", ex);
             }
         }
 

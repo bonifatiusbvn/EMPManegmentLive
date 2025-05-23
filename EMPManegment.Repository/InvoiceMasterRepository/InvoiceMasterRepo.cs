@@ -35,6 +35,8 @@ using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
 using X.PagedList;
 using System.Collections;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 #nullable disable
 
 namespace EMPManegment.Repository.InvoiceMasterRepository
@@ -239,106 +241,59 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
             return response;
         }
 
-        public async Task<jsonData> GetInvoiceDetailsList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<InvoiceViewModel>> InvoiceDetailsList(AGGridRequestModel InvoiceRequest)
         {
             try
             {
-                string dbConnectionStr = Configuration.GetConnectionString("EMPDbconn");
-                var dataSet = DbHelper.GetDataSet("[spGetInvoiceDetailsList]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
+                var filterConditions = string.Join(" AND ", InvoiceRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = InvoiceRequest.SortModel?.FirstOrDefault()?.ColId ?? "InvoiceDate";
+                string sortDirection = InvoiceRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
 
-                var invoiceList = new List<InvoiceViewModel>();
-
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                var parameters = new List<SqlParameter>
                 {
-                    var invoice = new InvoiceViewModel
-                    {
-                        Id = Guid.Parse(row["Id"]?.ToString() ?? Guid.Empty.ToString()),
-                        InvoiceNo = row["InvoiceNo"]?.ToString() ?? string.Empty,
-                        InvoiceDate = row["InvoiceDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["InvoiceDate"]),
-                        VendorName = row["VendorName"]?.ToString() ?? string.Empty,
-                        VandorId = Guid.Parse(row["VandorId"]?.ToString() ?? Guid.Empty.ToString()),
-                        ProjectId = Guid.Parse(row["ProjectId"]?.ToString() ?? Guid.Empty.ToString()),
-                        ProjectName = row["ProjectName"]?.ToString() ?? string.Empty,
-                        DispatchThrough = row["DispatchThrough"]?.ToString() ?? string.Empty,
-                        BuyesOrderNo = row["BuyesOrderNo"]?.ToString() ?? string.Empty,
-                        BuyesOrderDate = row["BuyesOrderDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["BuyesOrderDate"]),
-                        TotalAmount = row["TotalAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(row["TotalAmount"]),
-                        CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
-                        CreatedBy = Guid.Parse(row["CreatedBy"]?.ToString() ?? Guid.Empty.ToString()),
-                        Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
-                        DollarPrice = row["DollarPrice"] == DBNull.Value ? 0 : Convert.ToDecimal(row["DollarPrice"]),
-                    };
-                    invoiceList.Add(invoice);
-                }
-
-                if (!string.IsNullOrEmpty(dataTable.searchValue))
-                {
-                    invoiceList = invoiceList.Where(e =>
-                        e.VendorName.Contains(dataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
-                        e.InvoiceNo.Contains(dataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
-                        e.ProjectName.Contains(dataTable.searchValue, StringComparison.OrdinalIgnoreCase) ||
-                        e.TotalAmount.ToString().Contains(dataTable.searchValue)).ToList();
-                }
-
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
-                {
-                    switch (dataTable.sortColumn.ToLower())
-                    {
-                        case "createdon":
-                            invoiceList = (dataTable.sortColumnDir == "asc"
-                                ? invoiceList.OrderBy(e => e.CreatedOn)
-                                : invoiceList.OrderByDescending(e => e.CreatedOn)).ToList();
-                            break;
-
-                        case "vendorname":
-                            invoiceList = (dataTable.sortColumnDir == "asc"
-                                ? invoiceList.OrderBy(e => e.VendorName)
-                                : invoiceList.OrderByDescending(e => e.VendorName)).ToList();
-                            break;
-
-                        case "invoiceno":
-                            invoiceList = (dataTable.sortColumnDir == "asc"
-                                ? invoiceList.OrderBy(e => e.InvoiceNo)
-                                : invoiceList.OrderByDescending(e => e.InvoiceNo)).ToList();
-                            break;
-
-                        case "totalamount":
-                            invoiceList = (dataTable.sortColumnDir == "asc"
-                                ? invoiceList.OrderBy(e => e.TotalAmount)
-                                : invoiceList.OrderByDescending(e => e.TotalAmount)).ToList();
-                            break;
-                        case "projectname":
-                            invoiceList = (dataTable.sortColumnDir == "asc"
-                                ? invoiceList.OrderBy(e => e.ProjectName)
-                                : invoiceList.OrderByDescending(e => e.ProjectName)).ToList();
-                            break;
-
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    invoiceList = invoiceList.OrderByDescending(e => e.CreatedOn).ToList();
-                }
-
-                var totalRecord = invoiceList.Count;
-                var filteredData = invoiceList.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
-
-                var jsonData = new jsonData
-                {
-                    draw = dataTable.draw,
-                    recordsFiltered = totalRecord,
-                    recordsTotal = totalRecord,
-                    data = filteredData
+                new SqlParameter("@SearchValue", (object)InvoiceRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", InvoiceRequest.PageSize),
+                new SqlParameter("@Skip", InvoiceRequest.StartRow),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
-                return jsonData;
+                var dataSet = DbHelper.GetDataSet("spGetInvoiceDetailsList", CommandType.StoredProcedure, parameters.ToArray(), Configuration.GetConnectionString("EMPDbconn"));
+
+                var CompanyList = dataSet.Tables[0].AsEnumerable().Select(row => new InvoiceViewModel
+                {
+                    Id = Guid.Parse(row["Id"]?.ToString() ?? Guid.Empty.ToString()),
+                    InvoiceNo = row["InvoiceNo"]?.ToString() ?? string.Empty,
+                    InvoiceDate = row["InvoiceDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["InvoiceDate"]),
+                    VendorName = row["VendorName"]?.ToString() ?? string.Empty,
+                    VandorId = Guid.Parse(row["VandorId"]?.ToString() ?? Guid.Empty.ToString()),
+                    ProjectId = Guid.Parse(row["ProjectId"]?.ToString() ?? Guid.Empty.ToString()),
+                    ProjectName = row["ProjectName"]?.ToString() ?? string.Empty,
+                    DispatchThrough = row["DispatchThrough"]?.ToString() ?? string.Empty,
+                    BuyesOrderNo = row["BuyesOrderNo"]?.ToString() ?? string.Empty,
+                    BuyesOrderDate = row["BuyesOrderDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["BuyesOrderDate"]),
+                    TotalAmount = row["TotalAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(row["TotalAmount"]),
+                    CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
+                    CreatedBy = Guid.Parse(row["CreatedBy"]?.ToString() ?? Guid.Empty.ToString()),
+                    Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
+                    DollarPrice = row["DollarPrice"] == DBNull.Value ? 0 : Convert.ToDecimal(row["DollarPrice"]),
+
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<InvoiceViewModel>
+                {
+                    Data = CompanyList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
-                return new jsonData { };
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
 

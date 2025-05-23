@@ -15,7 +15,7 @@ namespace EMPManegment.Services.OrderDetails
 {
     public class PurchaseOrderDetailsServices : IPurchaseOrderDetailsServices
     {
-        public PurchaseOrderDetailsServices(IPurchaseOrderDetails purchaseOrderDetails) 
+        public PurchaseOrderDetailsServices(IPurchaseOrderDetails purchaseOrderDetails)
         {
             PurchaseOrderDetails = purchaseOrderDetails;
         }
@@ -46,9 +46,9 @@ namespace EMPManegment.Services.OrderDetails
             return await PurchaseOrderDetails.InsertMultiplePurchaseOrder(InsertPurchaseOrder);
         }
 
-        public async Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod()
+        public async Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod(string? search)
         {
-            return await PurchaseOrderDetails.GetAllPaymentMethod();
+            return await PurchaseOrderDetails.GetAllPaymentMethod(search);
         }
 
         public async Task<PurchaseOrderMasterView> EditPurchaseOrderDetails(Guid Id)

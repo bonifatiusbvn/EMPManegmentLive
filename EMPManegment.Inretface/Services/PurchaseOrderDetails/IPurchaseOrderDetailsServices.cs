@@ -18,7 +18,7 @@ namespace EMPManegment.Inretface.Services.OrderDetails
         string CheckPurchaseOrder(string projectname);
         Task<PurchaseOrderMasterView> GetPurchaseOrderDetailsByOrderId(string OrderId);
         Task<ApiResponseModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder);
-        Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod();
+        Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod(string? search);
         Task<PurchaseOrderMasterView> EditPurchaseOrderDetails(Guid Id);
         Task<UserResponceModel> UpdatePurchaseOrderDetails(PurchaseOrderMasterView UpdatePurchaseorder);
         Task<UserResponceModel> DeletePurchaseOrderDetails(Guid Id);

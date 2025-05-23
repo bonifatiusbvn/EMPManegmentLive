@@ -16,7 +16,7 @@ namespace EMPManegment.Inretface.Interface.ExpenseMaster
     {
         Task<UserResponceModel> AddPaymentType(PaymentTypeView AddPayment);
 
-        Task<IEnumerable<PaymentTypeView>> GetAllPaymentType();
+        Task<IEnumerable<PaymentTypeView>> GetAllPaymentType(string? search);
 
         Task<UserResponceModel> GetPaymentById(int PaymentId);
 

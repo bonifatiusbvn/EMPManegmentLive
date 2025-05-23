@@ -9,6 +9,7 @@ using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Services.ExpenseMaster;
 using EMPManegment.Inretface.Services.ProductMaster;
+using EMPManegment.Services.VendorDetails;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -61,7 +62,7 @@ namespace EMPManagment.API.Controllers
         {
             try
             {
-                var getExpense = await expenseMaster.GetExpenseDetailList(DataTable,unapprove,TodayDate);
+                var getExpense = await expenseMaster.GetExpenseDetailList(DataTable, unapprove, TodayDate);
                 return Ok(new { code = (int)HttpStatusCode.OK, data = getExpense });
             }
             catch (Exception ex)
@@ -142,11 +143,11 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetAllPaymentType")]
-        public async Task<IActionResult> GetAllPaymentType()
+        public async Task<IActionResult> GetAllPaymentType(string? search)
         {
             try
             {
-                IEnumerable<PaymentTypeView> getExpense = await expenseMaster.GetAllPaymentType();
+                var getExpense = await expenseMaster.GetAllPaymentType(search);
                 return Ok(new { code = (int)HttpStatusCode.OK, data = getExpense.ToList() });
             }
             catch (Exception ex)
@@ -161,7 +162,7 @@ namespace EMPManagment.API.Controllers
         {
             try
             {
-                var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable,filterType,unapprove,approve,startDate,endDate,account,selectMonthlyExpense);
+                var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable, filterType, unapprove, approve, startDate, endDate, account, selectMonthlyExpense);
                 return Ok(new { code = (int)HttpStatusCode.OK, data = getUserExpense });
             }
             catch (Exception ex)

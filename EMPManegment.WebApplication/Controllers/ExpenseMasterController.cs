@@ -219,12 +219,12 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpGet]
-        public async Task<JsonResult> GetPaymentTypeList()
+        public async Task<JsonResult> GetPaymentTypeList(string? search)
         {
             try
             {
                 List<PaymentTypeView> PaymentType = new List<PaymentTypeView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "ExpenseMaster/GetAllPaymentType");
+                ApiResponseModel res = await APIServices.GetAsync(search, "ExpenseMaster/GetAllPaymentType");
                 if (res.code == 200)
                 {
                     PaymentType = JsonConvert.DeserializeObject<List<PaymentTypeView>>(res.data.ToString());

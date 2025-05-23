@@ -1,5 +1,7 @@
 ﻿using Azure;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -37,19 +39,27 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetInvoiceDetailsList")]
-        public async Task<IActionResult> GetInvoiceDetailsList(DataTableRequstModel InvoiceList)
+        public async Task<IActionResult> InvoiceDetailsList(AGGridRequestModel InvoiceRequest)
         {
             try
             {
-                var AllInvoiceList = await InvoiceMaster.GetInvoiceDetailsList(InvoiceList);
-                return Ok(new { code = (int)HttpStatusCode.OK, data = AllInvoiceList });
+                var GetInvoiceList = await InvoiceMaster.InvoiceDetailsList(InvoiceRequest);
+                return Ok(new AGGridResponseModel<InvoiceViewModel>
+                {
+                    Data = GetInvoiceList.Data,
+                    RecordsTotal = GetInvoiceList.RecordsTotal,
+                });
             }
             catch (Exception ex)
             {
-
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+                return StatusCode((int)HttpStatusCode.InternalServerError, new
+                {
+                    code = (int)HttpStatusCode.InternalServerError,
+                    message = "An error occurred while processing the request."
+                });
             }
         }
+
 
         [HttpGet]
         [Route("CheckInvoiceNo")]

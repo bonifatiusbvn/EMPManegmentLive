@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -58,9 +59,9 @@ namespace EMPManegment.Services.InvoiceMaster
             return await InvoiceMaster.GetInvoiceDetailsByOrderId(OrderId);
         }
 
-        public async Task<jsonData> GetInvoiceDetailsList(DataTableRequstModel InvoiceList)
+        public async Task<AGGridResponseModel<InvoiceViewModel>> InvoiceDetailsList(AGGridRequestModel InvoiceRequest)
         {
-            return await InvoiceMaster.GetInvoiceDetailsList(InvoiceList);
+            return await InvoiceMaster.InvoiceDetailsList(InvoiceRequest);
         }
 
         public async Task<InvoicePayVendorModel> GetInvoiceListByVendorId(Guid Vid)

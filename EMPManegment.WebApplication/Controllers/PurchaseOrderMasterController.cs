@@ -164,12 +164,12 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetPaymentMethodList()
+        public async Task<JsonResult> GetPaymentMethodList(string? search)
         {
             try
             {
                 List<PaymentMethodView> PaymentMethod = new List<PaymentMethodView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "PurchaseOrderDetails/GetAllPaymentMethod");
+                ApiResponseModel res = await APIServices.GetAsync(search, "PurchaseOrderDetails/GetAllPaymentMethod");
                 if (res.code == 200)
                 {
                     PaymentMethod = JsonConvert.DeserializeObject<List<PaymentMethodView>>(res.data.ToString());

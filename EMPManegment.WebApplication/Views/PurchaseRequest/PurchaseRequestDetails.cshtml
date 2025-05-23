@@ -6,7 +6,27 @@
     ViewData["Title"] = "PurchaseRequestDetails";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
+<style>
+    .hover-effect:hover {
+        background-color: rgba(0, 168, 255, 0.03) !important;
+        transform: translateY(-1px);
+        transition: all 0.2s ease;
+    }
 
+    .hover-primary:hover {
+        color: #00a8ff !important;
+    }
+
+    .rounded-start {
+        border-top-left-radius: 12px !important;
+        border-bottom-left-radius: 12px !important;
+    }
+
+    .rounded-end {
+        border-top-right-radius: 12px !important;
+        border-bottom-right-radius: 12px !important;
+    }
+</style>
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
@@ -27,25 +47,34 @@
     var firstItem = Model;
 }
 
-<div class="card">
-    <div class="card-header">
-        <div class="d-flex align-items-center">
-            <h5 class="card-title flex-grow-1 mb-0">Purchase Request NO : @firstItem.PrNo</h5>
+<div class="card border-0 overflow-hidden" style="box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+    <div class="card-header position-relative" style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);">
+        <div class="position-absolute top-0 end-0 w-100 h-100" style="background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiPjxkZWZzPjxwYXR0ZXJuIGlkPSJwYXR0ZXJuIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiIHBhdHRlcm5UcmFuc2Zvcm09InJvdGF0ZSg0NSkiPjxyZWN0IHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgZmlsbD0icmdiYSgyNTUsMjU1LDI1NSwwLjMpIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI3BhdHRlcm4pIi8+PC9zdmc+')"></div>
+        <div class="d-flex align-items-center position-relative">
+            <div class="flex-grow-1">
+                <h5 class="card-title mb-1 text-dark">
+                    <span class="badge bg-white text-dark shadow-sm me-2"><i class="ri-file-list-2-line"></i></span>
+                    Purchase Request #<span class="fw-bold">@firstItem.PrNo</span>
+                </h5>
+                <p class="text-muted small mb-0"><i class="ri-calendar-line me-1"></i> @DateTime.Now.ToString("dd MMM yyyy")</p>
+            </div>
             <div class="flex-shrink-0 d-print-none">
-                <a id="PrintPRPage" class="btn button-teal btn-sm"><i class="ri-download-2-fill align-middle me-1"></i> Invoice</a>
+                <a id="PrintPRPage" class="btn button-teal btn-sm shadow-sm rounded-pill px-3">
+                    <i class="ri-download-2-fill align-middle me-1"></i> Download Invoice
+                </a>
             </div>
         </div>
     </div>
-    <div class="card-body">
-        <div class="table-responsive table-card">
-            <table class="table dt-responsive nowrap align-middle table-borderless mb-0 ">
-                <thead class="button-teal border">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead class="button-teal text-white" style="background: linear-gradient(135deg, #20c997 0%, #00a8ff 100%);">
                     <tr>
-                        <th class="border">Product Details</th>
-                        <th class="border">Item Price</th>
-                        <th class="border">Quantity</th>
-                        <th class="border">GST</th>
-                        <th class="border">Total Amount</th>
+                        <th class="border-0 ps-4 rounded-start" style="width: 40%">Product Details</th>
+                        <th class="border-0 text-end">Unit Price</th>
+                        <th class="border-0 text-center">Qty</th>
+                        <th class="border-0 text-end">Tax</th>
+                        <th class="border-0 text-end pe-4 rounded-end">Amount</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -62,71 +91,85 @@
                         ProductAmount = item.Price * item.Quantity;
                         ProductGst = item.GstAmount * item.Quantity;
                         ProductTotalAmount = ProductAmount + ProductGst;
-                        <tr>
-                            <td class="border">
-                                <div class="d-flex">
-                                    <div class="flex-shrink-0 avatar-md bg-light rounded p-1">
-                                        <img src="~/@item.ProductImage" alt="" class="img-fluid d-block">
+                        <tr class="border-top hover-effect">
+                            <td class="ps-4 py-3">
+                                <div class="d-flex align-items-center">
+                                    <div class="flex-shrink-0 me-3">
+                                        <div class="avatar-lg bg-white p-1 rounded shadow-sm">
+                                            <img src="~/@item.ProductImage" alt="@item.ProductName" class="img-fluid rounded" style="max-height: 60px; object-fit: contain;">
+                                        </div>
                                     </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h5 class="fs-15"><a href="/ProductMaster/ProductDetails/?ProductId=@item.ProductId" class="link-primary">@item.ProductName</a></h5>
-                                        <p class="text-muted mb-0">Category: <span class="fw-medium">@item.ProductTypeName</span></p>
-                                        <p class="text-muted mb-0">Description: <span class="fw-medium">@item.ProductDescription</span></p>
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">
+                                            <a href="/ProductMaster/ProductDetails/?ProductId=@item.ProductId" class="text-dark hover-primary">
+                                                @item.ProductName
+                                            </a>
+                                        </h6>
+                                        <div class="d-flex flex-wrap text-muted small">
+                                            <div class="me-3">
+                                                <i class="ri-price-tag-2-line me-1"></i> @item.ProductTypeName
+                                            </div>
+                                            <div class="text-truncate" style="max-width: 200px;">
+                                                <i class="ri-information-line me-1"></i> @item.ProductDescription
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </td>
-                            <td class="border">@(ProductAmount?.ToString("N2") ?? "0.00")</td>
-                            <td class="border">@item.Quantity</td>
-                            <td class="border">@(ProductGst?.ToString("N2") ?? "0.00")</td>
-                            <td class="border">@(ProductTotalAmount?.ToString("N2") ?? "0.00")</td>
+                            <td class="text-end">₹@(ProductAmount?.ToString("N2") ?? "0.00")</td>
+                            <td class="text-center">
+                                <span class="badge bg-light text-dark rounded-pill px-3 py-1">@item.Quantity</span>
+                            </td>
+                            <td class="text-end">₹@(ProductGst?.ToString("N2") ?? "0.00")</td>
+                            <td class="text-end pe-4 fw-medium text-dark">₹@(ProductTotalAmount?.ToString("N2") ?? "0.00")</td>
                         </tr>
                         subtotal += ProductAmount;
                         totalGst += ProductGst;
                         totalAmount = subtotal + totalGst;
                     }
-                    <tr class="border-top border-top-dashed">
-                        <td colspan="3"></td>
-                        <td colspan="2" class="fw-medium p-0">
-                            <table class="table table-borderless mb-0 dt-responsive nowrap">
-                                <tbody>
-                                    <tr>
-                                        <td class="border">Sub Total :</td>
-                                        <td class="border" id="subtotal">₹@(subtotal?.ToString("N2") ?? "0.00")</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="border">GST :</td>
-                                        <td class="border" id="totalGst">₹@(totalGst?.ToString("N2") ?? "0.00")</td>
-                                    </tr>
-                                    <tr class="border-top border-top-dashed">
-                                        <th class="border">Total :</th>
-                                        <th class="border">₹@(totalAmount?.ToString("N2") ?? "0.00")</th>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="noresult" style="display: none">
-                                <div class="text-center">
-                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                    </lord-icon>
-                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                    <p class="text-muted mb-0">
-                                        We've searched more than 150+ invoices We did not find any
-                                        invoices for you search.
-                                    </p>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" class="p-0">
+                            <div class="bg-light rounded-bottom p-4">
+                                <div class="row justify-content-end">
+                                    <div class="col-lg-4 col-md-6">
+                                        <div class="table-responsive">
+                                            <table class="table table-borderless mb-0">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="text-muted">Subtotal:</td>
+                                                        <td class="text-end" id="subtotal">₹@(subtotal?.ToString("N2") ?? "0.00")</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="text-muted">Tax (GST):</td>
+                                                        <td class="text-end" id="totalGst">₹@(totalGst?.ToString("N2") ?? "0.00")</td>
+                                                    </tr>
+                                                    <tr class="border-top">
+                                                        <td class="fw-bold fs-5 text-dark">Total:</td>
+                                                        <td class="text-end fw-bold fs-5 text-dark">₹@(totalAmount?.ToString("N2") ?? "0.00")</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </td>
                     </tr>
-                </tbody>
+                </tfoot>
             </table>
+
+            <!-- Empty State -->
             <div class="noresult" style="display: none">
-                <div class="text-center">
-                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                    </lord-icon>
-                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                    <p class="text-muted mb-0">
-                        We've searched more than 150+ invoices We did not find any
-                        invoices for you search.
-                    </p>
+                <div class="text-center py-5">
+                    <div class="avatar-lg mx-auto mb-4">
+                        <div class="avatar-title bg-light text-primary rounded-circle">
+                            <i class="ri-search-eye-line fs-1"></i>
+                        </div>
+                    </div>
+                    <h5 class="mt-3">No Products Found</h5>
+                    <p class="text-muted mb-0">This purchase request doesn't contain any products.</p>
                 </div>
             </div>
         </div>
@@ -155,5 +198,5 @@
             .catch(error => console.error('Error fetching the purchase request details:', error));
     });
 </script>
-@* <script src="~/lib/jquery/dist/jquery.min.js"></script>
-<script src="~/moduls/purchaserequestscript.js"></script> *@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/moduls/purchaserequestscript.js"></script>

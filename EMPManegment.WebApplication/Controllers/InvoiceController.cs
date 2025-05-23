@@ -31,6 +31,8 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.Abstractions;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -294,46 +296,18 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetInvoiceListView()
+        public async Task<IActionResult> GetInvoiceListView([FromBody] AGGridRequestModel InvoiceRequest)
         {
             try
             {
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
+                InvoiceRequest.filters ??= new List<FilterModel>();
 
-                var dataTable = new DataTableRequstModel
+                var InvoiceDetails = await APIServices.AGPostAsync<InvoiceViewModel>(InvoiceRequest, "Invoice/GetInvoiceDetailsList");
+                return new JsonResult(new
                 {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<InvoiceViewModel> InvoiceList = new List<InvoiceViewModel>();
-                var data = new jsonData();
-                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "Invoice/GetInvoiceDetailsList");
-                if (postuser.data != null)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
-                    InvoiceList = JsonConvert.DeserializeObject<List<InvoiceViewModel>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = InvoiceList,
-                };
-                return new JsonResult(jsonData);
+                    rowsThisPage = InvoiceDetails.Data,
+                    totalRowCount = InvoiceDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {

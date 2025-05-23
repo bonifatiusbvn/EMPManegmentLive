@@ -102,12 +102,12 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<JsonResult> GetVendorsNameList()
+        public async Task<JsonResult> GetVendorsNameList(string? search)
         {
             try
             {
                 List<VendorListDetailsView> VendorNameList = new List<VendorListDetailsView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "Vendor/GetVendorsNameList");
+                ApiResponseModel res = await APIServices.GetAsync(search, "Vendor/GetVendorsNameList");
                 if (res.code == 200)
                 {
                     VendorNameList = JsonConvert.DeserializeObject<List<VendorListDetailsView>>(res.data.ToString());

@@ -1,4 +1,6 @@
-﻿function GetInvoiceDetailsByOrderId(OrderId) {
+﻿
+var Formdata = window.userFormPermissions || 0;
+function GetInvoiceDetailsByOrderId(OrderId) {
     $.ajax({
         url: '/Invoice/GetInvoiceDetailsByOrderId/?OrderId=' + OrderId,
         type: 'GET',
@@ -75,8 +77,8 @@ function fn_InsertInvoiceDetails() {
             var Invoicedetails = {
                 ProjectId: $("#textProjectId").val(),
                 InvoiceNo: $("#textInvoiceNo").val(),
-                VandorId: $("#textVendorNameHidden").val(),
-                CompanyId: $("#textCompanyNameHidden").val(),
+                VandorId: $("#ddlVendorName").val(),
+                CompanyId: $("#ddlinvompanyName").val(),
                 TotalGst: $("#totalgst").val(),
                 Cgst: $("#textCGst").val(),
                 Sgst: $("#textSGst").val(),
@@ -91,8 +93,8 @@ function fn_InsertInvoiceDetails() {
                 BuyesOrderDate: dateInput,
                 InvoiceDate: $("#textInvoiceDate").val(),
                 OrderStatus: $("#UnitTypeId").val(),
-                PaymentMethod: $("#txtInvoicepaymentmethod").val(),
-                PaymentStatus: $("#txtInvoicepaymenttype").val(),
+                PaymentMethod: $("#ddlInvoicepaymentmethod").val(),
+                PaymentStatus: $("#ddlInvoicepaymenttype").val(),
                 CreatedBy: $("#textCreatedById").val(),
                 RoundOff: $('#cart-roundOff').val(),
                 TotalDiscount: $('#cart-discount').val(),
@@ -300,101 +302,129 @@ function fn_deleteInvoice(InvoiceId) {
     });
 }
 
-var datas = userPermissions
+let invoiceTableGrid = [];
+
 $(document).ready(function () {
-    function data(datas) {
-        userPermission = datas;
-        AllInvoiceList(userPermission);
+
+    const userPermissionArray = Formdata || [];
+    let canEdit = false;
+    let canDelete = false;
+
+    for (let i = 0; i < userPermissionArray.length; i++) {
+        const permission = userPermissionArray[i];
+        if (permission.formName === "Invoice List") {
+            canEdit = permission.edit;
+            canDelete = permission.delete;
+            break;
+        }
     }
-    function AllInvoiceList(userPermission) {
-        var userPermissionArray = [];
-        userPermissionArray = JSON.parse(userPermission);
 
-        var canEdit = false;
-        var canDelete = false;
-
-        for (var i = 0; i < userPermissionArray.length; i++) {
-            var permission = userPermissionArray[i];
-            if (permission.formName == "InvoiceListView") {
-                canEdit = permission.edit;
-                canDelete = permission.delete;
-                break;
-            }
-        }
-
-        var columns = [
+    invoiceTableGrid = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": "invoiceNo",
-                "name": "InvoiceNo", "className": "text-center",
-                "render": function (data, type, full) {
-                    return '<h5 class="fs-15"><a href="/Invoice/InvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary">' + full.invoiceNo + '</a></h5>';
+                headerName: "Invoice No",
+                field: "invoiceNo",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return `<h5 class="fs-15">
+                        <a href="/Invoice/InvoiceDetails?InvoiceId=${params.data.id}" class="fw-medium link-primary">
+                            ${params.data.invoiceNo}
+                        </a>
+                    </h5>`;
                 }
             },
-            { "data": "vendorName", "name": "VendorName", "className": "text-center" },
-            { "data": "projectName", "name": "ProjectName", "className": "text-center" },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "className": "text-center",
-                "render": function (data, type, full) {
-                    function formatNumberWithCommas(number) {
-                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-                    if (full.dollarPrice != 0) {
-                        return '$' + formatNumberWithCommas(data);
-                    }
-                    else {
-                        return '₹' + formatNumberWithCommas(data);
-                    }
-                    
-                }
-            }
-        ];
-
-        if (canEdit || canDelete) {
-            columns.push({
-                "data": null,
-                "orderable": false,
-                "searchable": false,
-                "className": "text-center",
-                "render": function (data, type, full) {
-                    var buttons = '<ul class="list-inline hstack gap-2 mb-0">';
-
-                    if (canEdit) {
-                        buttons += '<a href="/Invoice/CreateInvoice?Id=' + full.id + '" class="btn text-info btndeletedoc">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a>';
-                    }
-
-                    if (canDelete) {
-                        buttons += '<a onclick="fn_deleteInvoice(\'' + full.id + '\')" class="btn text-danger btndeletedoc">' +
-                            '<i class="fas fa-trash"></i></a>';
-                    }
-
-                    buttons += '</ul>';
-                    return buttons;
-                }
-            });
-        }
-
-        $('#invoiceTable').DataTable({
-            processing: false,
-            serverSide: true,
+            { headerName: "Invoice Date", field: "invoiceDate", sortable: true, filter: true },
+            { headerName: "Vendor Name", field: "vendorName", sortable: true, filter: true },
+            { headerName: "Project Name", field: "projectName", sortable: true, filter: true },
+            { headerName: "Total Amount", field: "totalAmount", sortable: true, filter: true },
+        ],
+        defaultColDef: {
+            sortable: true,
             filter: true,
-            "bDestroy": true,
-            ajax: {
-                type: "POST",
-                url: '/Invoice/GetInvoiceListView',
-                dataType: 'json'
-            },
-            columns: columns,
-            columnDefs: [{
-                "defaultContent": "",
-                "targets": "_all"
-            }]
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            invoiceTableGrid.api = params.api;
+            invoiceTableGrid.columnApi = params.columnApi;
+            invoiceTableGrid.api.sizeColumnsToFit();
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: invoiceTableGrid.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: $('#txtCompanySearch').val() || "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: params.sortModel?.[0]?.colId || "",
+                    SortDirection: params.sortModel?.[0]?.sort || "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    }))
+                };
+
+                $.ajax({
+                    url: '/Invoice/GetInvoiceListView',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+
+    if (canEdit || canDelete) {
+        invoiceTableGrid.columnDefs.push({
+            headerName: "Actions",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) return '';
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `<a href="/Invoice/CreateInvoice?Id=${params.data.id}" class="btn text-info btndeletedoc">
+                        <i class="fa-regular fa-pen-to-square"></i></a>`;
+                }
+                if (canDelete) {
+                    buttons += `<a onclick="fn_deleteInvoice('${params.data.id}')" class="btn text-danger btndeletedoc">
+                        <i class="fas fa-trash"></i></a>`;
+                }
+                return buttons;
+            }
         });
     }
-    data(datas);
+
+    const myGridElement = document.querySelector('#invoiceTable');
+    agGrid.createGrid(myGridElement, invoiceTableGrid);
+
+
+    $('#txtCompanySearch').on('change keyup', function () {
+        invoiceTableGrid.api.onFilterChanged();
+    });
 });
+
+
+
 function createInvoice() {
     if ($("#txtInvoice").val() == "") {
         Swal.fire({
@@ -442,20 +472,114 @@ $(document).ready(function () {
     });
 
 
-
-
-    fn_GetInvoiceVendorNameList()
-    $('#textVendorNameHidden').change(function () {
-        fn_getInvoiceVendorDetail($(this).val());
+    // Initialize Company Dropdown
+    $('#ddlinvompanyName').select2({
+        placeholder: 'Select Company',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Company/GetCompanyNameList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.compnyName
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching company list:", error);
+            }
+        }
     });
 
-    fn_GetInvoiceCompanyNameList()
-    $('#textCompanyNameHidden').change(function () {
-        fn_getInvoiceCompanyDetail($(this).val());
+    // Call function when a company is selected
+    $('#ddlinvompanyName').on('select2:select', function (e) {
+        var companyId = e.params.data.id;
+        fn_getInvoiceCompanyDetail(companyId);
     });
 
-    fn_GetInvoicePaymentMethodList()
-    fn_GetInvoicePaymentTypeList()
+    // Initialize Vendor Dropdown
+    $('#ddlVendorName').select2({
+        placeholder: 'Select Vendor',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ProductMaster/GetVendorsNameList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.vendorCompany
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
+    $('#ddlVendorName').on('select2:select', function (e) {
+        var vendorId = e.params.data.id;
+        fn_getInvoiceVendorDetail(vendorId);
+    });
+
+
+    $('#ddlInvoicepaymentmethod').select2({
+        placeholder: 'Select Vendor',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/PurchaseOrderMaster/GetPaymentMethodList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.paymentMethod
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
+    $('#ddlInvoicepaymenttype').select2({
+        placeholder: 'Select Vendor',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
+
+
     fn_updateInvoiceTotals()
     function handleFocus(event, selector) {
         if (event.keyCode == 13 || event.keyCode == 9) {
@@ -575,39 +699,9 @@ $(document).ready(function () {
     }, 300));
 });
 
-function fn_GetInvoiceVendorNameList() {
-    $.ajax({
-        url: '/ProductMaster/GetVendorsNameList',
-        method: 'GET',
-        success: function (result) {
-            var vendorTypes = result.map(function (data) {
-                return {
-                    label: data.vendorCompany,
-                    value: data.id
-                };
-            });
 
 
-            $("#textVendorName").autocomplete({
-                source: vendorTypes,
-                minLength: 0,
-                select: function (event, ui) {
 
-                    event.preventDefault();
-                    $("#textVendorName").val(ui.item.label);
-                    $("#textVendorNameHidden").val(ui.item.value);
-
-                    $("#textVendorNameHidden").trigger('change');
-                }
-            }).focus(function () {
-                $(this).autocomplete("search");
-            });
-        },
-        error: function (err) {
-            console.error("Failed to fetch vendor types: ", err);
-        }
-    });
-}
 
 
 function fn_getInvoiceVendorDetail(VendorId) {
@@ -628,43 +722,8 @@ function fn_getInvoiceVendorDetail(VendorId) {
     });
 }
 
-
-function fn_GetInvoiceCompanyNameList() {
-    $.ajax({
-        url: '/Company/GetCompanyNameList',
-        method: 'GET',
-        success: function (result) {
-            var companyTypes = result.map(function (data) {
-                return {
-                    label: data.compnyName,
-                    value: data.id
-                };
-            });
-
-
-            $("#textCompanyName").autocomplete({
-                source: companyTypes,
-                minLength: 0,
-                select: function (event, ui) {
-
-                    event.preventDefault();
-                    $("#textCompanyName").val(ui.item.label);
-                    $("#textCompanyNameHidden").val(ui.item.value);
-
-                    $("#textCompanyNameHidden").trigger('change');
-                }
-            }).focus(function () {
-                $(this).autocomplete("search");
-            });
-        },
-        error: function (err) {
-            console.error("Failed to fetch company types: ", err);
-        }
-    });
-}
-
-function fn_getInvoiceCompanyDetail(CompanyName) {
-    var CompanyId = CompanyName;
+function fn_getInvoiceCompanyDetail(CompanyId) {
+    var CompanyId = CompanyId;
     $.ajax({
         url: '/Company/GetCompanyDetailsById',
         type: 'GET',
@@ -681,36 +740,7 @@ function fn_getInvoiceCompanyDetail(CompanyName) {
         },
     });
 }
-function fn_GetInvoicePaymentMethodList() {
 
-    $.ajax({
-        url: '/PurchaseOrderMaster/GetPaymentMethodList',
-        success: function (result) {
-            var selectedValue = $('#txtInvoicepaymentmethod').find('option:first').val();
-            $.each(result, function (i, data) {
-                if (data.id != selectedValue) {
-                    $('#txtInvoicepaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
-                }
-
-            });
-        }
-    });
-}
-function fn_GetInvoicePaymentTypeList() {
-    $.ajax({
-        url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {
-            var selectedValue = $('#txtInvoicepaymenttype').find('option:first').val();
-            $.each(result, function (i, data) {
-                $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                if (data.id != selectedValue) {
-
-                    $('#txtInvoicepaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                }
-            });
-        }
-    });
-}
 function preventInvoiceEmptyValue(input) {
 
     if (input.value === "") {

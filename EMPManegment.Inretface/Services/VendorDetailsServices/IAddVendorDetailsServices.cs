@@ -17,9 +17,8 @@ namespace EMPManegment.Inretface.Services.VendorDetailsServices
         Task<AGGridResponseModel<VendorDetailsView>> GetVendorsList(AGGridRequestModel VendorRequest);
         Task<IEnumerable<VendorTypeView>> GetVendorType();
         Task<VendorDetailsView> GetVendorById(Guid VendorId);
-        Task<IEnumerable<VendorListDetailsView>> GetVendorNameList();
+        Task<IEnumerable<VendorListDetailsView>> GetVendorNameList(string? search);
         Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor);
 
     }
 }
-    

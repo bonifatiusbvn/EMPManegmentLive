@@ -94,9 +94,9 @@ namespace EMPManagment.API.Controllers
 
         [HttpGet]
         [Route("GetVendorsNameList")]
-        public async Task<IActionResult> GetVendorNameList()
+        public async Task<IActionResult> GetVendorNameList(string? search)
         {
-            var getVendorsNameList = await vendorServices.GetVendorNameList();
+            var getVendorsNameList = await vendorServices.GetVendorNameList(search);
             return Ok(new { code = (int)HttpStatusCode.OK, data = getVendorsNameList.ToList() });
         }
 

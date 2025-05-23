@@ -38,9 +38,9 @@ namespace EMPManegment.Services.VendorDetails
         {
             return await details.GetVendorType();
         }
-        public async Task<IEnumerable<VendorListDetailsView>> GetVendorNameList()
+        public async Task<IEnumerable<VendorListDetailsView>> GetVendorNameList(string? search)
         {
-            return await details.GetVendorNameList();
+            return await details.GetVendorNameList(search);
         }
         public async Task<UserResponceModel> UpdateVendorDetails(VendorDetailsView updateVendor)
         {

@@ -313,16 +313,27 @@ namespace EMPManegment.Repository.OrderRepository
             }
         }
 
-        public async Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod()
+        public async Task<IEnumerable<PaymentMethodView>> GetAllPaymentMethod(string? search)
         {
             try
             {
-                IEnumerable<PaymentMethodView> paymentMethod = Context.TblPaymentMethodTypes.ToList().Select(a => new PaymentMethodView
+                var unitType = from a in Context.TblPaymentMethodTypes
+                               orderby a.PaymentMethod
+                               select new PaymentMethodView
+                               {
+                                   Id = a.Id,
+                                   PaymentMethod = a.PaymentMethod,
+                               };
+
+                if (!string.IsNullOrEmpty(search))
                 {
-                    Id = a.Id,
-                    PaymentMethod = a.PaymentMethod,
-                });
-                return paymentMethod;
+                    unitType = unitType.Where(pt => pt.PaymentMethod.Contains(search));
+                }
+
+
+                var unitTypeList = await unitType.ToListAsync();
+                return unitTypeList;
+
             }
             catch (Exception ex)
             {

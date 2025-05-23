@@ -110,17 +110,25 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw ex;
             }
         }
-        public async Task<IEnumerable<PaymentTypeView>> GetAllPaymentType()
+        public async Task<IEnumerable<PaymentTypeView>> GetAllPaymentType(string? search)
         {
             try
             {
-                IEnumerable<PaymentTypeView> paymentType = Context.TblPaymentTypes.ToList().Select(a => new PaymentTypeView
+                var PaymentType = from a in Context.TblPaymentTypes
+                                  orderby a.Type
+                                  select new PaymentTypeView
+                                  {
+                                      Id = a.Id,
+                                      Type = a.Type,
+                                  };
+
+                if (!string.IsNullOrEmpty(search))
                 {
-                    Id = a.Id,
-                    Type = a.Type,
-                    CreatedOn = a.CreatedOn,
-                });
-                return paymentType;
+                    PaymentType = PaymentType.Where(pt => pt.Type.Contains(search));
+                }
+                var PaymentTypeList = await PaymentType.ToListAsync();
+                return PaymentTypeList;
+
             }
             catch (Exception ex)
             {
@@ -509,10 +517,10 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                         switch (filterType.ToLower())
                         {
                             case "credit":
-                                UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "credit" && expense.Date.Year == selectedYear&& expense.Date.Month == selectedMonth).ToList();
+                                UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "credit" && expense.Date.Year == selectedYear && expense.Date.Month == selectedMonth).ToList();
                                 break;
                             case "debit":
-                                UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "debit" && expense.IsApproved == true&& expense.Date.Year == selectedYear&& expense.Date.Month == selectedMonth).ToList();
+                                UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "debit" && expense.IsApproved == true && expense.Date.Year == selectedYear && expense.Date.Month == selectedMonth).ToList();
                                 break;
                             default:
                                 break;

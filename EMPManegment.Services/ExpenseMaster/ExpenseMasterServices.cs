@@ -50,9 +50,9 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetAllExpensType();
         }
 
-        public async Task<IEnumerable<PaymentTypeView>> GetAllPaymentType()
+        public async Task<IEnumerable<PaymentTypeView>> GetAllPaymentType(string? search)
         {
-            return await expenseMaster.GetAllPaymentType();
+            return await expenseMaster.GetAllPaymentType(search);
         }
 
         public async Task<UserResponceModel> GetExpenseById(int ExpenseId)
@@ -72,7 +72,7 @@ namespace EMPManegment.Services.ExpenseMaster
 
         public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable, bool? unapprove = null, DateTime? TodayDate = null)
         {
-            return await expenseMaster.GetExpenseDetailList(dataTable,unapprove,TodayDate);
+            return await expenseMaster.GetExpenseDetailList(dataTable, unapprove, TodayDate);
         }
 
         public async Task<UserResponceModel> GetPaymentById(int PaymentId)
