@@ -139,38 +139,48 @@ namespace EMPManegment.Repository.OrderRepository
         {
             try
             {
-                var LastOrder = Context.TblPurchaseOrderMasters.OrderByDescending(e => e.CreatedOn).FirstOrDefault();
-                var currentYear = DateTime.Now.Year;
-                var lastYear = currentYear - 1;
+                var lastOrder = Context.TblPurchaseOrderMasters
+                                       .OrderByDescending(e => e.CreatedOn)
+                                       .FirstOrDefault();
+
+                int currentYear = DateTime.Now.Year;
+                int lastYear = currentYear - 1;
+
 
                 int startIndex = projectname.IndexOf('(');
                 int endIndex = projectname.IndexOf(')');
 
-                var Projectsubparts = projectname.Substring(startIndex + 1, endIndex - startIndex - 1);
-                string UserOrderId;
-                if (LastOrder == null)
+                if (startIndex < 0 || endIndex <= startIndex)
+                    throw new Exception("Invalid project name format. Expected text within parentheses.");
+
+                var projectSubpart = projectname.Substring(startIndex + 1, endIndex - startIndex - 1);
+
+                string userOrderId;
+                if (lastOrder == null || string.IsNullOrWhiteSpace(lastOrder.OrderId))
                 {
-                    UserOrderId = $"BTPL/PO/{Projectsubparts}/{lastYear % 100}-{currentYear % 100}-001";
+                    userOrderId = $"BTPL/PO/{projectSubpart}/{lastYear % 100}-{currentYear % 100}-001";
                 }
                 else
                 {
-                    if (LastOrder.OrderId.Length >= 25)
-                    {
-                        int orderNumber = int.Parse(LastOrder.OrderId.Substring(24)) + 1;
-                        UserOrderId = $"BTPL/PO/{Projectsubparts}/{lastYear % 100}-{currentYear % 100}-" + orderNumber.ToString("D3");
-                    }
-                    else
+
+                    string[] parts = lastOrder.OrderId.Split('-');
+                    if (parts.Length < 3 || !int.TryParse(parts.Last(), out int lastNumber))
                     {
                         throw new Exception("OrderId does not have the expected format.");
                     }
+
+                    int nextNumber = lastNumber + 1;
+                    userOrderId = $"BTPL/PO/{projectSubpart}/{lastYear % 100}-{currentYear % 100}-{nextNumber:D3}";
                 }
-                return UserOrderId;
+
+                return userOrderId;
             }
-            catch (Exception ex)
+            catch
             {
-                throw ex;
+                throw;
             }
         }
+
 
 
         public async Task<ApiResponseModel> InsertMultiplePurchaseOrder(PurchaseOrderMasterView InsertPurchaseOrder)

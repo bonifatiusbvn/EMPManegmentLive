@@ -22,6 +22,8 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
         public string? UserFilter { get; set; }
         public string? ProductTypeFilter { get; set; }
         public string? CompanyFilter { get; set; }
+        public Guid? UserId { get; set; }
+        public Guid? RoleId { get; set; }
     }
 
     public class SortModel
@@ -40,6 +42,8 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
     {
         public List<T> Data { get; set; }
         public int RecordsTotal { get; set; }
+
+        public string ErrorMessage { get; set; }
 
     }
 }

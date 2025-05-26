@@ -1,4 +1,6 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.UserModels;
@@ -27,30 +29,26 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetRolewiseFormListById")]
-        public async Task<IActionResult> GetRolewiseFormListById(Guid RoleId)
+        public async Task<AGGridResponseModel<RolewiseFormPermissionModel>> GetRolewiseFormListById(AGGridRequestModel RoleRequest)
         {
-            ApiResponseModel response = new ApiResponseModel();
             try
             {
-                List<RolewiseFormPermissionModel> RolewiseFormList = await RolewisePermissionMaster.GetRolewiseFormListById(RoleId);
-
-                if (RolewiseFormList.Count == 0)
+                var GetCompanyList = await RolewisePermissionMaster.GetRolewiseFormListById(RoleRequest);
+                return new AGGridResponseModel<RolewiseFormPermissionModel>
                 {
-                    response.code = (int)HttpStatusCode.NotFound;
-                    response.message = "Error in getting FormList.";
-                }
-                else
-                {
-                    response.code = (int)HttpStatusCode.OK;
-                    response.data = RolewiseFormList.ToList();
-                }
+                    Data = GetCompanyList.Data,
+                    RecordsTotal = GetCompanyList.RecordsTotal,
+                };
             }
             catch (Exception ex)
             {
-                response.code = (int)HttpStatusCode.InternalServerError;
-                response.message = "An error occurred while processing the request.";
+                return new AGGridResponseModel<RolewiseFormPermissionModel>
+                {
+                    Data = null,
+                    RecordsTotal = 0,
+                    ErrorMessage = "An error occurred while processing your request"
+                };
             }
-            return StatusCode(response.code, response);
         }
 
         [HttpPost]

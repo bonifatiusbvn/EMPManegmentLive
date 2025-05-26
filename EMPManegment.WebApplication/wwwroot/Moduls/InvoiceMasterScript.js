@@ -336,7 +336,14 @@ $(document).ready(function () {
                     </h5>`;
                 }
             },
-            { headerName: "Invoice Date", field: "invoiceDate", sortable: true, filter: true },
+            {
+                headerName: "Invoice Date", field: "invoiceDate", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.date);
+                }
+            },
+
             { headerName: "Vendor Name", field: "vendorName", sortable: true, filter: true },
             { headerName: "Project Name", field: "projectName", sortable: true, filter: true },
             { headerName: "Total Amount", field: "totalAmount", sortable: true, filter: true },

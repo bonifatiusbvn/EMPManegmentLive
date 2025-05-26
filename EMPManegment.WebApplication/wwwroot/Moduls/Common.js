@@ -1,5 +1,5 @@
 ﻿function getCommonDateformat(date) {
-    return moment(date).format('DD MMM YY');
+    return moment(date).format('DD MMM YYYY');
 }
 
 function getCommonDatetime(date, time) {

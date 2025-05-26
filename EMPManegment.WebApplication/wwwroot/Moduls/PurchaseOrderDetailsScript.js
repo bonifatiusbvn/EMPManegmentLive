@@ -12,7 +12,7 @@ $(document).ready(function () {
                 headerName: "Order Id", field: "firstName", sortable: true, filter: true,
                 cellRenderer: function (params) {
                     if (!params.data || !params.data.id) return '';
-                    return `<a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=${params.data.orderId}"><span style="color: #16989A !important;">` + params.data.orderId +`</span></a>`;
+                    return `<a href="/PurchaseOrderMaster/PurchaseOrderDetails/?OrderId=${params.data.orderId}"><span style="color: #16989A !important;">` + params.data.orderId + `</span></a>`;
                 }
             },
             { headerName: "Company Name", field: "companyName", sortable: true, filter: true },
@@ -1040,7 +1040,8 @@ function fn_InsertPurchaseOrderDetails() {
     }
 }
 function createPO() {
-    if ($("#txtPOId").val() == "") {
+
+    if ($("#drpProjectName").val() == "") {
         Swal.fire({
             title: "Kindly select project on dashboard.",
             icon: 'warning',
