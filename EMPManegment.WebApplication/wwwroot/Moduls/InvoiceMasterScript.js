@@ -409,11 +409,11 @@ $(document).ready(function () {
 
                 let buttons = '';
                 if (canEdit) {
-                    buttons += `<a href="/Invoice/CreateInvoice?Id=${params.data.id}" class="btn text-info btndeletedoc">
+                    buttons += `<a href="/Invoice/CreateInvoice?Id=${params.data.id}" class="btn text-info editbtn">
                         <i class="fa-regular fa-pen-to-square"></i></a>`;
                 }
                 if (canDelete) {
-                    buttons += `<a onclick="fn_deleteInvoice('${params.data.id}')" class="btn text-danger btndeletedoc">
+                    buttons += `<a onclick="fn_deleteInvoice('${params.data.id}')" class="btn text-danger">
                         <i class="fas fa-trash"></i></a>`;
                 }
                 return buttons;

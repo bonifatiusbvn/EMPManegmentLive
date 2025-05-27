@@ -69,7 +69,7 @@
                     <div class="col-12 col-lg-auto">
                         <div class="d-flex">
                             <button class="btn button-teal px-3" id="AttendanceMonthFiltertoggle" title="Filter by Month">
-                                <i class="fa fa-calendar me-1" aria-hidden="true"></i>  <span class="d-none d-sm-inline" >Month</span>
+                                <i class="fa fa-calendar me-1" aria-hidden="true"></i>  <span class="d-none d-sm-inline">Month</span>
                             </button>
                             <div id="AttendanceMonthFilterContainer" class="date-filter-container"
                                  style="display: none; position: absolute; z-index: 1000; background: white;">
@@ -88,9 +88,9 @@
                         <div id="dateFilterContainer" class="date-filter-container" style="display: none;">
                             <div class="p-2 bg-light border">
                                 <label for="txtstartdatebox">From Date</label>
-                                <input type="date" id="txtstartdatebox" class="form-control mb-3" style="font-size: 15px;">
+                                <input type="date" id="txtstartdatebox" class="form-control mb-3 datepicker" style="font-size: 15px;">
                                 <label for="txtenddatebox">To Date</label>
-                                <input type="date" id="txtenddatebox" class="form-control mb-3" style="font-size: 15px;">
+                                <input type="date" id="txtenddatebox" class="form-control mb-3 datepicker" style="font-size: 15px;">
                                 <button class="btn button-teal btn-block" id="applyFilters">Apply</button>
                             </div>
                         </div>
@@ -104,7 +104,7 @@
             <div class="card-body">
                 <div id="MyAttendanceTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
             </div>
-            
+
             <div class="card-body">
                 <!--Partail View-->
                 <div id="GetMyAttendanceList"></div>

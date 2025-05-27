@@ -146,7 +146,6 @@ namespace EMPManegment.Repository.OrderRepository
                 int currentYear = DateTime.Now.Year;
                 int lastYear = currentYear - 1;
 
-
                 int startIndex = projectname.IndexOf('(');
                 int endIndex = projectname.IndexOf(')');
 
@@ -162,7 +161,6 @@ namespace EMPManegment.Repository.OrderRepository
                 }
                 else
                 {
-
                     string[] parts = lastOrder.OrderId.Split('-');
                     if (parts.Length < 3 || !int.TryParse(parts.Last(), out int lastNumber))
                     {
@@ -175,9 +173,9 @@ namespace EMPManegment.Repository.OrderRepository
 
                 return userOrderId;
             }
-            catch
+            catch (Exception ex)
             {
-                throw;
+                throw ex;
             }
         }
 
@@ -256,7 +254,7 @@ namespace EMPManegment.Repository.OrderRepository
                 string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
                 var sqlPar = new SqlParameter[]
                 {
-                      new SqlParameter("@OrderId", OrderId),
+                  new SqlParameter("@OrderId", OrderId),
                 };
                 var DS = DbHelper.GetDataSet("[GetPurchaseOrderDetailsByOrderId]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 

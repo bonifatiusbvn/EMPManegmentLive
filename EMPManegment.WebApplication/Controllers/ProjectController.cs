@@ -25,7 +25,7 @@ using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using Microsoft.Build.Evaluation;
 using Microsoft.AspNetCore.Authorization;
 using X.PagedList.Extensions;
-
+#nullable disable
 namespace EMPManegment.Web.Controllers
 {
     [Authorize]
@@ -86,31 +86,32 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> GetAllUserProjectList(string? searchby, string? searchfor, int? page)
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllUserProjectList([FromBody] ProjectRequest projectRequest)
         {
             try
             {
+
                 ApiResponseModel postuser = await APIServices.GetAsync("", "UserHome/GetAllUserTaskDetails");
                 List<TaskDetailsView> TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(postuser.data.ToString());
 
-                ApiResponseModel response = await APIServices.GetAsync("", "ProjectDetails/GetProjectList?searchby=" + searchby + "&searchfor=" + searchfor);
+
+                ApiResponseModel response = await APIServices.PostAsync(projectRequest, "ProjectDetails/GetProjectList");
                 List<ProjectDetailView> projectlist = JsonConvert.DeserializeObject<List<ProjectDetailView>>(response.data.ToString());
 
-                Dictionary<Guid?, int> taskCountByProject = new Dictionary<Guid?, int>();
 
-                foreach (var project in projectlist)
-                {
-                    var totaltask = TaskList.Count(e => e.ProjectId == project.ProjectId);
-
-                    taskCountByProject.Add(project.ProjectId, totaltask);
-                }
+                Dictionary<Guid?, int> taskCountByProject = TaskList
+               .Where(t => t.ProjectId != null)
+               .GroupBy(t => t.ProjectId)
+               .ToDictionary(g => g.Key, g => g.Count());
 
                 List<ProjectDetailView> projectViews = projectlist.Select(p => new ProjectDetailView
                 {
                     ProjectId = p.ProjectId,
                     ProjectImage = p.ProjectImage,
                     ProjectTitle = p.ProjectTitle,
-                    TaskCount = taskCountByProject.ContainsKey(p.ProjectId) ? taskCountByProject[p.ProjectId] : 0,
+                    TaskCount = taskCountByProject.TryGetValue(p.ProjectId, out int count) ? count : 0,
                     ProjectDescription = p.ProjectDescription,
                     ProjectStatus = p.ProjectStatus,
                     ProjectDeadline = p.ProjectDeadline,
@@ -118,10 +119,12 @@ namespace EMPManegment.Web.Controllers
                     ShortName = p.ShortName,
                 }).ToList();
 
-                int pageSize = 6;
-                var pageNumber = page ?? 1;
 
+                int pageSize = 6;
+                int pageNumber = projectRequest.Page ?? 1;
                 var pagedList = projectViews.ToPagedList(pageNumber, pageSize);
+
+
                 return PartialView("~/Views/Project/_GetAllUserProjectList.cshtml", pagedList);
             }
             catch (Exception ex)
@@ -129,6 +132,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
 
         public async Task<IActionResult> GetTaskTotal()
         {
@@ -157,6 +161,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         public async Task<IActionResult> GetUserProjectList()
         {
             try

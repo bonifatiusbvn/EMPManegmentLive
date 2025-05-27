@@ -16,7 +16,7 @@
             <h4 class="fm-header mb-sm-0">Project List</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">Projects</a></li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User</a></li>
                     <li class="breadcrumb-item active">Project List</li>
                 </ol>
             </div>
@@ -24,24 +24,96 @@
     </div>
 </div>
 <!-- end page title -->
-<!--- Partial View --->
-<div class="tab-pane" id="project" role="tabpanel">
-    <div class="card" fm-card>
-        <div class="card-header">
-            <div class="d-flex align-items-center">
-                <h5 class="card-title mb-0 flex-grow-1">Create Project</h5>
-                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Project" && (a.Add == true)))
-                {
-                    <div class="flex-shrink-0">
-                        <div class="d-flex gap-2 flex-wrap">
-                            <a href="/Project/CreateProject" class="btn button-teal btn-md"><i class="fa-solid fa-circle-plus me-1"></i>Project</a>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card" id="project">
+                <div class="card-header">
+                    <!-- Added position-relative here -->
+                    <div class="row align-items-center">
+                        <!-- Search Input -->
+                        <div class="col-12 col-lg-3">
+                            <div class="position-relative">
+                                <input class="form-control"
+                                       id="txtProjectSearch"
+                                       placeholder="Search projects..."
+                                       aria-label="Search projects" />
+                                <i class="fa fa-search position-absolute end-0 top-50 translate-middle-y me-3 text-muted"></i>
+                            </div>
                         </div>
+
+                        <!-- Status Filter -->
+                        <div class="col-12 col-lg-2">
+                            <select class="form-control select2 select2-teal"
+                                    data-dropdown-css-class="select2-teal"
+                                    id="ddlProjectStatus">
+                                <option value="">-- Select Status --</option>
+                                <option value="">All</option>
+                                <option value="Pending">Pending</option>
+                                <option value="InProgress">InProgress</option>
+                                <option value="Completed">Completed</option>
+                            </select>
+                        </div>
+
+                        <!-- Priority Filter -->
+                        <div class="col-12 col-lg-2">
+                            <select class="form-control select2 select2-teal"
+                                    data-dropdown-css-class="select2-teal"
+                                    id="ddlProjectPriority">
+                                <option value="">-- Select Priority --</option>
+                                <option value="">All</option>
+                                <option value="Low">Low</option>
+                                <option value="Medium">Medium</option>
+                                <option value="High">High</option>
+                            </select>
+                        </div>
+
+                        <!-- Date Filter -->
+                        <div class="col-12 col-lg-2">
+                            <button class="btn button-teal" id="toggleDateFilter">
+                                <i class="fa fa-calendar me-1"></i>
+                                <span class="d-none d-sm-inline">Date</span>
+                            </button>
+                            <div id="dateFilterContainer" class="date-filter-container position-absolute start-0 mt-2" style="display: none; min-width: 280px;">
+                                <div class="p-3 bg-white border rounded shadow-sm">
+                                    <div class="mb-2">
+                                        <label for="txtStartDate" class="form-label">From Date</label>
+                                        <input type="date" id="txtStartDate" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="txtEndDate" class="form-label">To Date</label>
+                                        <input type="date" id="txtEndDate" class="form-control">
+                                    </div>
+                                    <button class="btn button-teal w-100" id="applyDateFilters">
+                                        <i class="fa fa-filter me-1"></i> Apply
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Reset Button -->
+                        <div class="col-12 col-lg-1">
+                            <button class="btn button-rest" id="btnResetFilters">
+                                <i class="fa fa-refresh me-1"></i> Reset
+                            </button>
+                        </div>
+                        <!-- Create Project Button (Conditional) -->
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Project" && a.Add))
+                        {
+                            <div class="col-12 col-lg-2 text-lg-end">
+                                <a href="/Project/CreateProject" class="btn button-teal">
+                                    <i class="fa-solid fa-circle-plus me-1"></i> Project
+                                </a>
+                            </div>
+                        }
                     </div>
-                }
+                </div>
+                <!-- Project List Container -->
+                <div class="card-body">
+                    <div id="projectListContainer" class="table-responsive">
+                        <div id="getallprojectlist"></div>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="card-body">
-            <div id="getallprojectlist"></div>
         </div>
     </div>
 </div>

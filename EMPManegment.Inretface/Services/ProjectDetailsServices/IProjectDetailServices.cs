@@ -12,7 +12,7 @@ namespace EMPManegment.Inretface.Services.ProjectDetailsServices
     public interface IProjectDetailServices
     {
         Task<UserResponceModel> CreateProject(ProjectDetailView CreateProject);
-        Task<IEnumerable<ProjectDetailView>> GetProjectList(string? searchby, string? searchfor);
+        Task<IEnumerable<ProjectDetailView>> GetProjectList(ProjectRequest projectRequest);
         Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId);
         Task<List<ProjectView>> GetUserProjectList(Guid UserId);
         Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId);

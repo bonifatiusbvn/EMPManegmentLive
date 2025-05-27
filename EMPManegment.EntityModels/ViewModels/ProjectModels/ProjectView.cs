@@ -92,4 +92,15 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
     {
         public string? Fullname { get; set; }
     }
+
+    public class ProjectRequest
+    {
+        public string? ProjectStatus { get; set; }
+        public string? Projectpriority { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public string? SearchValue { get; set; }
+        public int? Page { get; set; }
+
+    }
 }

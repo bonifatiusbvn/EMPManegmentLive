@@ -374,44 +374,81 @@ function showuploadDocuments(ProjectId) {
 }
 
 function GetAllUserProjectDetailsList(page) {
+    const projectStatus = $("#ddlProjectStatus").val();
+    const projectpriority = $("#ddlProjectPriority").val();
+    const fromDate = $("#txtStartDate").val();
+    const toDate = $("#txtEndDate").val();
+    const searchValue = $("#txtProjectSearch").val();
 
-    var searchBy = $("#inputSearch").val();
-    var searchFor = $("#inputsearch").val();
+    const requestData = {
+        ProjectStatus: (projectStatus === "-- Status --" || projectStatus === "All" || projectStatus === "") ? null : projectStatus,
+        Projectpriority: (projectpriority === "-- Priority --" || projectpriority === "All" || projectpriority === "") ? null : projectpriority,
+        FromDate: fromDate || null,
+        ToDate: toDate || null,
+        SearchValue: searchValue?.trim() || null,
+        Page: page || 1
+    };
 
-    $.get("/Project/GetAllUserProjectList", { searchby: searchBy, searchfor: searchFor, page: page })
-        .done(function (result) {
-
+    $.ajax({
+        url: '/Project/GetAllUserProjectList',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(requestData),
+        success: function (result) {
             $("#getallprojectlist").html(result);
-        })
-        .fail(function (error) {
-            toastr.error(error);
-        });
+        },
+        error: function () {
+            toastr.error("Failed to load project list.");
+        }
+    });
 }
 
-GetAllUserProjectDetailsList(1);
+// Trigger on filter changes
+$('#ddlProjectStatus').change(() => GetAllUserProjectDetailsList(1));
+$('#ddlProjectPriority').change(() => GetAllUserProjectDetailsList(1));
 
+// Trigger on search (Enter key)
+$(document).on("keyup", "#txtProjectSearch", function (e) {
+    if (e.key === "Enter") {
+        GetAllUserProjectDetailsList(1);
+    }
+});
+
+// Trigger on pagination
 $(document).on("click", ".pagination a", function (e) {
     e.preventDefault();
-    var page = $(this).text();
-    GetAllUserProjectDetailsList(page);
-    var ProjectId = $("#projectid").val();
-    showTeams(ProjectId, page);
+    const page = $(this).data("page") || $(this).text();
+    GetAllUserProjectDetailsList(parseInt(page));
 });
 
-
-$(document).on("click", "#backButton", function (e) {
+// Apply date filters
+$(document).on("click", "#applyDateFilters", function (e) {
     e.preventDefault();
-    var page = $(this).text();
-    GetAllUserProjectDetailsList(page);
-    var ProjectId = $("#projectid").val();
-    showTeams(ProjectId, page);
+    GetAllUserProjectDetailsList(1);
+});
+
+// Toggle date filter container
+$(document).on("click", "#toggleDateFilter", function (e) {
+    e.preventDefault();
+    $("#dateFilterContainer").toggle();
+});
+
+// Reset all filters
+$(document).on("click", "#btnResetFilters", function () {
+    $("#ddlProjectStatus").val("-- Status --").trigger('change');
+    $("#ddlProjectPriority").val("-- Priority --").trigger('change');
+    $("#txtStartDate").val("");
+    $("#txtEndDate").val("");
+    $("#txtProjectSearch").val("");
+    GetAllUserProjectDetailsList(1);
+});
+
+// Initial load
+$(document).ready(function () {
+    GetAllUserProjectDetailsList(1);
 });
 
 
-function searchproject() {
-
-    GetAllUserProjectDetailsList(1);
-}
 
 $(document).ready(function () {
     $(document).on('click', '.btndeletedoc', function () {
@@ -424,7 +461,6 @@ $(document).ready(function () {
         deleteProjectMember(userId);
     });
 });
-
 
 function opendeletpop(userId) {
     $("#delete-product").data("user-id", userId);
