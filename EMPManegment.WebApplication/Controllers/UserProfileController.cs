@@ -906,21 +906,19 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetRolewiseFormListById(Guid RoleId)
+        public async Task<IActionResult> GetRolewiseFormListById([FromBody] AGGridRequestModel RoleRequest)
         {
             try
             {
-                List<RolewiseFormPermissionModel> RolewiseFormList = new List<RolewiseFormPermissionModel>();
-                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetRolewiseFormListById?RoleId=" + RoleId);
-                if (response.code == 200)
+                RoleRequest.filters ??= new List<FilterModel>();
+
+                var CompanyDetails = await APIServices.AGPostAsync<RolewiseFormPermissionModel>(RoleRequest, "FormPermissionMaster/GetRolewiseFormListById?RoleId");
+
+                return new JsonResult(new
                 {
-                    RolewiseFormList = JsonConvert.DeserializeObject<List<RolewiseFormPermissionModel>>(response.data.ToString());
-                    return PartialView("~/Views/UserProfile/_editRolewiseFormPartial.cshtml", RolewiseFormList);
-                }
-                else
-                {
-                    return Ok(new { response.code });
-                }
+                    rowsThisPage = CompanyDetails.Data,
+                    totalRowCount = CompanyDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {

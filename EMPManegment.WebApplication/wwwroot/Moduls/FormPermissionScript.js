@@ -1,74 +1,10 @@
-﻿$(document).ready(function () {
-    // User dropdown functionality
-    //$('#userdropdownButton').click(function () {
-    //    var dropdown = $('#usercustomDropdown');
-    //    if (dropdown.is(':visible')) {
-    //        dropdown.hide();
-    //    } else {
-    //        dropdown.show();
-    //    }
-    //});
+﻿
+var Formdata = window.userFormPermissions || 0;
 
-    //$(document).on('click', '.User-dropdown-item-custom', function () {
-    //    var selectedText = $(this).text();
-    //    var selectedValue = $(this).data('value');
-    //    $('#userdropdownButton').text(selectedText).attr('data-selected-value', selectedValue);
-    //    $('#usercustomDropdown').hide();
-    //    EditUserFormDetails(selectedValue);
-    //});
+let RolePermissionGridOptions = [];
+let currentRoleId = null;
 
-    //$(document).click(function (event) {
-    //    if (!$(event.target).closest('#userdropdownButton').length &&
-    //        !$(event.target).closest('#usercustomDropdown').length) {
-    //        $('#usercustomDropdown').hide();
-    //    }
-    //});
-    
-    $('#ddlRoleWiseFormPermission').select2({
-        placeholder: 'Select Role',
-        width: '100%',
-        dropdownAutoWidth: true,
-        allowClear: true,
-        ajax: {
-            url: '/UserProfile/RolewisePermissionListAction',
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-                return {
-                    results: data.map(item => ({
-                        id: item.roleId,
-                        text: item.role
-                    }))
-                };
-            }
-        }
-    }).on('select2:open', function () {
-        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
-    });
-
-    $('#ddlRoleWiseFormPermission').on('select2:select', function (e) {
-        var selectedValue = e.params.data.id;
-        EditRoleWiseFormDetails(selectedValue);
-    });
-
-    function EditRoleWiseFormDetails(roleId) {
-        var RoleId = roleId
-        $.ajax({
-            url: '/UserProfile/GetRolewiseFormListById?RoleId=' + RoleId,
-            type: 'post',
-            dataType: 'json',
-            processData: false,
-            contentType: false,
-            complete: function (Result) {
-                if (Result.responseText != "{\"code\":400}") {
-                    document.getElementById("updatebtn").style.display = "block";
-                    $('#dveditRolePermissionForm').html(Result.responseText).show();
-                } else {
-                    toastr.error(Result.message);
-                }
-            },
-        });
-    }
+$(document).ready(function () {
 
     $('#usercustomDropdown').select2({
         placeholder: 'Select User',
@@ -97,28 +33,211 @@
         EditUserFormDetails(selectedValue);
     });
 
+    $('#ddlRoleWiseFormPermission').select2({
+        placeholder: 'Select Role',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/UserProfile/RolewisePermissionListAction',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data?.map(item => ({
+                        id: item.roleId,
+                        text: item.role
+                    })) || []
+                };
+            }
+        }
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    });
+
+    $('#ddlRoleWiseFormPermission').on('select2:select', function (e) {
+        currentRoleId = e.params.data.id;
+        RolePermissionGridOptions.api.onFilterChanged();
+    });
+
+    $('#ddlRoleWiseFormPermission').on('select2:unselect', function () {
+        currentRoleId = null;
+        if (RolePermissionGridOptions.api) {
+            RolePermissionGridOptions.api.showNoRowsOverlay();
+        }
+    });
+
+
+    RolePermissionGridOptions = {
+        rowHeight: 60,
+        columnDefs: [
+            {
+                headerName: "Form Name",
+                field: "formName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    debugger
+                    if (!params.data || !params.data.formId) {
+                        return '';
+                    }
+                    return `
+                        <h6 class="pt-1" style="color:#16989A; font-weight:600;">${params.data.formName}</h6>
+                        <input type="hidden" data-role-id="${params.data.roleId}" />
+                        <input type="hidden" data-form-id="${params.data.formId}" />
+                    `;
+                }
+            },
+            ...['Add', 'View', 'Edit', 'Delete'].map(type => ({
+                headerName: type,
+                field: `is${type}Allow`,
+                sortable: false,
+                filter: false,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.formId) {
+                        return '';
+                    }
+                    const key = type.toLowerCase();
+                    return `
+                        <div class="custom-control custom-switch">
+                            <input class="custom-control-input toggle-checkbox" type="checkbox" 
+                                id="${key}_${params.data.formId}" name="${key}" 
+                                ${params.value ? 'checked' : ''} 
+                                onchange="updateSelectAll('${params.data.formId}')">
+                            <label class="custom-control-label" for="${key}_${params.data.formId}"></label>
+                        </div>
+                    `;
+                }
+            })),
+            {
+                headerName: "Select All",
+                field: "selectAll",
+                sortable: false,
+                filter: false,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.formId) {
+                        return '';
+                    }
+                    const allChecked = params.data.isAddAllow && params.data.isViewAllow &&
+                        params.data.isEditAllow && params.data.isDeleteAllow;
+                    return `
+                        <div class="custom-control custom-switch">
+                            <input class="custom-control-input form-check-input-all" type="checkbox" 
+                                id="checkboxAll_${params.data.formId}" 
+                                onclick="toggleCheckboxes('${params.data.formId}')" 
+                                ${allChecked ? 'checked' : ''}>
+                            <label class="custom-control-label" for="checkboxAll_${params.data.formId}"></label>
+                        </div>
+                    `;
+                }
+            }
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            resizable: true,
+            cellClass: 'ag-cell-default-style',
+            flex: 1
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            RolePermissionGridOptions.api = params.api;
+            RolePermissionGridOptions.columnApi = params.columnApi;
+            RolePermissionGridOptions.api.showNoRowsOverlay();
+            params.api.sizeColumnsToFit();
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 100,
+        datasource: {
+            getRows: function (params) {
+                if (!currentRoleId) {
+                    RolePermissionGridOptions.api.showNoRowsOverlay();
+                    params.successCallback([], 0);
+                    return;
+                }
+
+                const sortModel = params.sortModel?.[0] || {};
+                const request = {
+                    RoleId: currentRoleId,
+                    StartRow: params.startRow,
+                    PageSize: RolePermissionGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: Array.isArray(params.sortModel) ? params.sortModel : [],
+                    SortColumn: sortModel.colId || "",
+                    SortDirection: sortModel.sort || "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    }))
+                };
+
+                $.ajax({
+                    url: '/UserProfile/GetRolewiseFormListById',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        debugger
+                        if (response.data?.length > 0) {
+                            const mappedData = response.data.map(item => ({
+                                formName: item.formName,
+                                formId: item.formId,
+                                roleId: item.roleId,
+                                isAddAllow: item.isAddAllow,
+                                isViewAllow: item.isViewAllow,
+                                isEditAllow: item.isEditAllow,
+                                isDeleteAllow: item.isDeleteAllow
+                            }));
+                            params.successCallback(mappedData, response.recordsTotal);
+                            RolePermissionGridOptions.api.hideOverlay();
+                        } else {
+                            RolePermissionGridOptions.api.showNoRowsOverlay();
+                            params.successCallback([], 0);
+                        }
+                    },
+                    error: function () {
+                        RolePermissionGridOptions.api.showNoRowsOverlay();
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const gridElement = document.querySelector('#RolePermissionGrid');
+    agGrid.createGrid(gridElement, RolePermissionGridOptions);
 });
 
-function EditUserFormDetails(userId) {
-    var UserId = userId
-    $.ajax({
-        url: '/UserProfile/GetUserFormListById?UserId=' + UserId,
-        type: 'post',
-        dataType: 'json',
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
-            if (Result.responseText == "") {
-                toastr.warning("No data found");
-                $('#dveditUserForm').html(Result.responseText).show();
-                $('#userupdatebtn').hide();
-            } else {
-                document.getElementById("userupdatebtn").style.display = "block";
-                $('#dveditUserForm').html(Result.responseText).show();
-            }
+
+function toggleCheckboxes(formId) {
+    const isChecked = document.getElementById(`checkboxAll_${formId}`).checked;
+    ['add', 'view', 'edit', 'delete'].forEach(action => {
+        const checkbox = document.getElementById(`${action}_${formId}`);
+        if (checkbox) checkbox.checked = isChecked;
+
+
+        const rowNode = RolePermissionGridOptions.api.getRowNode(formId);
+        if (rowNode) {
+            rowNode.setDataValue(`is${action.charAt(0).toUpperCase() + action.slice(1)}Allow`, isChecked);
         }
     });
 }
+
+function updateSelectAll(formId) {
+    const allChecked = ['add', 'view', 'edit', 'delete'].every(action => {
+        const checkbox = document.getElementById(`${action}_${formId}`);
+        return checkbox && checkbox.checked;
+    });
+    const selectAllCheckbox = document.getElementById(`checkboxAll_${formId}`);
+    if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+}
+
+
+
 
 $('#drpAttusername').change(function () {
     var Text = $("#drpAttusername Option:Selected").text();

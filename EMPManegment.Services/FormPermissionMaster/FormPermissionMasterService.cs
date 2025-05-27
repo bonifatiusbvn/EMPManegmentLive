@@ -1,4 +1,5 @@
 ﻿using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.UserModels;
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace EMPManegment.Services.FormPermissionMaster
 {
-    public class FormPermissionMasterService: IFormPermissionMasterServices
+    public class FormPermissionMasterService : IFormPermissionMasterServices
     {
         public FormPermissionMasterService(IFormPermissionMaster formPermissionMaster)
         {
@@ -22,9 +23,9 @@ namespace EMPManegment.Services.FormPermissionMaster
         }
 
         public IFormPermissionMaster FormPermissionMaster { get; }
-        public async Task<List<RolewiseFormPermissionModel>> GetRolewiseFormListById(Guid RoleId)
+        public async Task<AGGridResponseModel<RolewiseFormPermissionModel>> GetRolewiseFormListById(AGGridRequestModel RoleRequest)
         {
-            return await FormPermissionMaster.GetRolewiseFormListById(RoleId);
+            return await FormPermissionMaster.GetRolewiseFormListById(RoleRequest);
         }
         public async Task<ApiResponseModel> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions)
         {
@@ -42,12 +43,12 @@ namespace EMPManegment.Services.FormPermissionMaster
 
         public async Task<ApiResponseModel> CreateRolewisePermissionForm(int FormId, Guid userId)
         {
-            return await FormPermissionMaster.CreateRolewisePermissionForm(FormId,userId);
+            return await FormPermissionMaster.CreateRolewisePermissionForm(FormId, userId);
         }
 
         public async Task<ApiResponseModel> CreateUserForm(Guid UserId)
         {
-           return await FormPermissionMaster.CreateUserForm(UserId);
+            return await FormPermissionMaster.CreateUserForm(UserId);
         }
 
         public async Task<List<UserPermissionModel>> GetUserFormListById(Guid UserId)
