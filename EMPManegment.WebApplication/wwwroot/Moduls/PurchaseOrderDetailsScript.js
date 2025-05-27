@@ -302,6 +302,16 @@ $(document).ready(function () {
     });
 });
 
+function ResetPurchaseOrderData() {
+    $('#txtPOCompanyName').empty();
+    $('#txtstartdatebox').val('');
+    $('#txtenddatebox').val('');
+    startDate = null;
+    endDate = null;
+    $('#dateFilterContainer').hide();
+    PurchaseOrderGridOptions.api.setFilterModel(null);
+    PurchaseOrderGridOptions.api.onFilterChanged();
+}
 
 $(document).ready(function () {
 
