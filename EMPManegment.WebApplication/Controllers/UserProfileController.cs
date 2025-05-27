@@ -912,17 +912,20 @@ namespace EMPManegment.Web.Controllers
             {
                 RoleRequest.filters ??= new List<FilterModel>();
 
-                var CompanyDetails = await APIServices.AGPostAsync<RolewiseFormPermissionModel>(RoleRequest, "FormPermissionMaster/GetRolewiseFormListById?RoleId");
+                var FOrmPermissionDetails = await APIServices.AGPostAsync<RolewiseFormPermissionModel>(
+                    RoleRequest,
+                    "FormPermissionMaster/GetRolewiseFormListById?RoleId"
+                );
 
                 return new JsonResult(new
                 {
-                    rowsThisPage = CompanyDetails.Data,
-                    totalRowCount = CompanyDetails.RecordsTotal
+                    data = FOrmPermissionDetails.Data,            
+                    recordsTotal = FOrmPermissionDetails.RecordsTotal  
                 });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(new { error = ex.Message });
             }
         }
 

@@ -53,6 +53,12 @@ $(document).ready(function () {
         }
     }).on('select2:open', function () {
         document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    }).on('change', function () {
+        if ($(this).val()) {
+            $('#updatebtn').show();
+        } else {
+            $('#updatebtn').hide();
+        }
     });
 
     $('#ddlRoleWiseFormPermission').on('select2:select', function (e) {
@@ -67,8 +73,7 @@ $(document).ready(function () {
         }
     });
 
-
-    RolePermissionGridOptions = {
+    const RolePermissionGridOptionsLocal = {
         rowHeight: 60,
         columnDefs: [
             {
@@ -77,7 +82,6 @@ $(document).ready(function () {
                 sortable: true,
                 filter: true,
                 cellRenderer: function (params) {
-                    debugger
                     if (!params.data || !params.data.formId) {
                         return '';
                     }
@@ -94,17 +98,27 @@ $(document).ready(function () {
                 sortable: false,
                 filter: false,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.formId) {
-                        return '';
-                    }
+                    if (!params.data || !params.data.formId) return '';
+
                     const key = type.toLowerCase();
+                    const checkboxId = `${key}_${params.data.formId}`;
+                    const checked = params.value ? 'checked' : '';
+
+                    setTimeout(() => {
+                        const checkbox = document.getElementById(checkboxId);
+                        if (checkbox) {
+                            checkbox.onchange = function () {
+                                params.data[`is${type}Allow`] = checkbox.checked;
+                                updateSelectAll(params.data.formId);
+                            };
+                        }
+                    }, 0);
+
                     return `
                         <div class="custom-control custom-switch">
                             <input class="custom-control-input toggle-checkbox" type="checkbox" 
-                                id="${key}_${params.data.formId}" name="${key}" 
-                                ${params.value ? 'checked' : ''} 
-                                onchange="updateSelectAll('${params.data.formId}')">
-                            <label class="custom-control-label" for="${key}_${params.data.formId}"></label>
+                                id="${checkboxId}" name="${key}" ${checked}>
+                            <label class="custom-control-label" for="${checkboxId}"></label>
                         </div>
                     `;
                 }
@@ -115,18 +129,32 @@ $(document).ready(function () {
                 sortable: false,
                 filter: false,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.formId) {
-                        return '';
-                    }
+                    if (!params.data || !params.data.formId) return '';
+
+                    const checkboxId = `checkboxAll_${params.data.formId}`;
                     const allChecked = params.data.isAddAllow && params.data.isViewAllow &&
                         params.data.isEditAllow && params.data.isDeleteAllow;
+
+                    setTimeout(() => {
+                        const checkbox = document.getElementById(checkboxId);
+                        if (checkbox) {
+                            checkbox.onchange = function () {
+                                const checked = checkbox.checked;
+                                ['isAddAllow', 'isViewAllow', 'isEditAllow', 'isDeleteAllow'].forEach(key => {
+                                    params.data[key] = checked;
+                                    const field = key.toLowerCase().replace('is', '');
+                                    const subCheckbox = document.getElementById(`${field}_${params.data.formId}`);
+                                    if (subCheckbox) subCheckbox.checked = checked;
+                                });
+                            };
+                        }
+                    }, 0);
+
                     return `
                         <div class="custom-control custom-switch">
-                            <input class="custom-control-input form-check-input-all" type="checkbox" 
-                                id="checkboxAll_${params.data.formId}" 
-                                onclick="toggleCheckboxes('${params.data.formId}')" 
-                                ${allChecked ? 'checked' : ''}>
-                            <label class="custom-control-label" for="checkboxAll_${params.data.formId}"></label>
+                            <input class="custom-control-input form-check-input-all" type="checkbox" onclick="toggleCheckboxes('${params.data.formId}')" 
+                                id="${checkboxId}" ${allChecked ? 'checked' : ''}>
+                            <label class="custom-control-label" for="${checkboxId}"></label>
                         </div>
                     `;
                 }
@@ -144,9 +172,9 @@ $(document).ready(function () {
             'selected-row': params => params.node.isSelected()
         },
         onGridReady: function (params) {
-            RolePermissionGridOptions.api = params.api;
-            RolePermissionGridOptions.columnApi = params.columnApi;
-            RolePermissionGridOptions.api.showNoRowsOverlay();
+            RolePermissionGridOptionsLocal.api = params.api;
+            RolePermissionGridOptionsLocal.columnApi = params.columnApi;
+            RolePermissionGridOptionsLocal.api.showNoRowsOverlay();
             params.api.sizeColumnsToFit();
         },
         rowModelType: 'infinite',
@@ -154,7 +182,7 @@ $(document).ready(function () {
         datasource: {
             getRows: function (params) {
                 if (!currentRoleId) {
-                    RolePermissionGridOptions.api.showNoRowsOverlay();
+                    RolePermissionGridOptionsLocal.api.showNoRowsOverlay();
                     params.successCallback([], 0);
                     return;
                 }
@@ -163,7 +191,7 @@ $(document).ready(function () {
                 const request = {
                     RoleId: currentRoleId,
                     StartRow: params.startRow,
-                    PageSize: RolePermissionGridOptions.cacheBlockSize || 10,
+                    PageSize: RolePermissionGridOptionsLocal.cacheBlockSize || 10,
                     SearchType: "",
                     SearchValue: "",
                     SortModel: Array.isArray(params.sortModel) ? params.sortModel : [],
@@ -181,7 +209,6 @@ $(document).ready(function () {
                     contentType: 'application/json',
                     data: JSON.stringify(request),
                     success: function (response) {
-                        debugger
                         if (response.data?.length > 0) {
                             const mappedData = response.data.map(item => ({
                                 formName: item.formName,
@@ -193,14 +220,14 @@ $(document).ready(function () {
                                 isDeleteAllow: item.isDeleteAllow
                             }));
                             params.successCallback(mappedData, response.recordsTotal);
-                            RolePermissionGridOptions.api.hideOverlay();
+                            RolePermissionGridOptionsLocal.api.hideOverlay();
                         } else {
-                            RolePermissionGridOptions.api.showNoRowsOverlay();
+                            RolePermissionGridOptionsLocal.api.showNoRowsOverlay();
                             params.successCallback([], 0);
                         }
                     },
                     error: function () {
-                        RolePermissionGridOptions.api.showNoRowsOverlay();
+                        RolePermissionGridOptionsLocal.api.showNoRowsOverlay();
                         params.failCallback();
                     }
                 });
@@ -208,36 +235,51 @@ $(document).ready(function () {
         }
     };
 
+    RolePermissionGridOptions = RolePermissionGridOptionsLocal;
+
     const gridElement = document.querySelector('#RolePermissionGrid');
     agGrid.createGrid(gridElement, RolePermissionGridOptions);
 });
 
-
 function toggleCheckboxes(formId) {
-    const isChecked = document.getElementById(`checkboxAll_${formId}`).checked;
-    ['add', 'view', 'edit', 'delete'].forEach(action => {
-        const checkbox = document.getElementById(`${action}_${formId}`);
-        if (checkbox) checkbox.checked = isChecked;
 
+    const selectAllCheckbox = document.getElementById(`checkboxAll_${formId}`);
+    const isChecked = selectAllCheckbox.checked;
 
-        const rowNode = RolePermissionGridOptions.api.getRowNode(formId);
-        if (rowNode) {
-            rowNode.setDataValue(`is${action.charAt(0).toUpperCase() + action.slice(1)}Allow`, isChecked);
+    const checkboxes = [
+        document.getElementById(`add_${formId}`),
+        document.getElementById(`view_${formId}`),
+        document.getElementById(`edit_${formId}`),
+        document.getElementById(`delete_${formId}`)
+    ];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox) {
+            checkbox.checked = isChecked;
+
+            const event = new Event('change');
+            checkbox.dispatchEvent(event);
         }
     });
 }
 
 function updateSelectAll(formId) {
-    const allChecked = ['add', 'view', 'edit', 'delete'].every(action => {
-        const checkbox = document.getElementById(`${action}_${formId}`);
-        return checkbox && checkbox.checked;
-    });
+
+    const checkboxes = [
+        document.getElementById(`add_${formId}`),
+        document.getElementById(`view_${formId}`),
+        document.getElementById(`edit_${formId}`),
+        document.getElementById(`delete_${formId}`)
+    ];
+
     const selectAllCheckbox = document.getElementById(`checkboxAll_${formId}`);
-    if (selectAllCheckbox) selectAllCheckbox.checked = allChecked;
+
+    const allChecked = checkboxes.every(checkbox => checkbox && checkbox.checked);
+
+    if (selectAllCheckbox) {
+        selectAllCheckbox.checked = allChecked;
+    }
 }
-
-
-
 
 $('#drpAttusername').change(function () {
     var Text = $("#drpAttusername Option:Selected").text();
@@ -245,25 +287,30 @@ $('#drpAttusername').change(function () {
 });
 
 function UpdateRolewiseFormPermission() {
+    if (!RolePermissionGridOptions.api) return;
 
-    var formPermissions = [];
-    $(".forms").each(function () {
-
-        var rolewiseformRow = $(this);
-        var objData = {
-            RoleId: rolewiseformRow.find('#txtRoleId').val(),
+    const formPermissions = [];
+    RolePermissionGridOptions.api.forEachNode(node => {
+        const data = node.data;
+        if (!data || !data.formId) return;
+        
+        formPermissions.push({
+            RoleId: data.roleId,
             CreatedBy: $("#txtUserId").val(),
-            FormId: rolewiseformRow.find('#formId').val(),
-            IsAddAllow: rolewiseformRow.find('#isAdd_' + rolewiseformRow.data('product-id')).prop('checked'),
-            IsViewAllow: rolewiseformRow.find('#isView_' + rolewiseformRow.data('product-id')).prop('checked'),
-            IsEditAllow: rolewiseformRow.find('#isEdit_' + rolewiseformRow.data('product-id')).prop('checked'),
-            IsDeleteAllow: rolewiseformRow.find('#isDelete_' + rolewiseformRow.data('product-id')).prop('checked'),
-        };
-
-        formPermissions.push(objData);
+            FormId: data.formId,
+            IsAddAllow: data.isAddAllow,
+            IsViewAllow: data.isViewAllow,
+            IsEditAllow: data.isEditAllow,
+            IsDeleteAllow: data.isDeleteAllow
+        });
     });
 
-    var form_data = new FormData();
+    if (formPermissions.length === 0) {
+        toastr.warning("No permission data found to update.");
+        return;
+    }
+
+    const form_data = new FormData();
     form_data.append("RolewisePermissionDetails", JSON.stringify(formPermissions));
 
     $.ajax({
@@ -274,14 +321,13 @@ function UpdateRolewiseFormPermission() {
         contentType: false,
         dataType: 'json',
         success: function (Result) {
-
             if (Result.code == 200) {
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
-                })
+                });
             } else {
                 toastr.error(Result.message);
             }
@@ -291,6 +337,7 @@ function UpdateRolewiseFormPermission() {
         }
     });
 }
+
 function UpdateUserFormPermission() {
     var formPermissions = [];
 
@@ -515,26 +562,26 @@ function validateAndCreateUser() {
     }
 }
 
-function toggleCheckboxes(formId) {
-    var isChecked = document.getElementById("checkboxAll_" + formId).checked;
-    document.getElementById("isAdd_" + formId).checked = isChecked;
-    document.getElementById("isView_" + formId).checked = isChecked;
-    document.getElementById("isEdit_" + formId).checked = isChecked;
-    document.getElementById("isDelete_" + formId).checked = isChecked;
+//function toggleCheckboxes(formId) {
+//    var isChecked = document.getElementById("checkboxAll_" + formId).checked;
+//    document.getElementById("isAdd_" + formId).checked = isChecked;
+//    document.getElementById("isView_" + formId).checked = isChecked;
+//    document.getElementById("isEdit_" + formId).checked = isChecked;
+//    document.getElementById("isDelete_" + formId).checked = isChecked;
 
 
-}
-function updateSelectAll(formId) {
-    const isAdd = document.getElementById(`isAdd_${formId}`);
-    const isView = document.getElementById(`isView_${formId}`);
-    const isEdit = document.getElementById(`isEdit_${formId}`);
-    const isDelete = document.getElementById(`isDelete_${formId}`);
-    const checkboxAll = document.getElementById(`checkboxAll_${formId}`);
+//}
+//function updateSelectAll(formId) {
+//    const isAdd = document.getElementById(`isAdd_${formId}`);
+//    const isView = document.getElementById(`isView_${formId}`);
+//    const isEdit = document.getElementById(`isEdit_${formId}`);
+//    const isDelete = document.getElementById(`isDelete_${formId}`);
+//    const checkboxAll = document.getElementById(`checkboxAll_${formId}`);
 
-    const allChecked = isAdd.checked && isView.checked && isEdit.checked && isDelete.checked;
+//    const allChecked = isAdd.checked && isView.checked && isEdit.checked && isDelete.checked;
 
-    checkboxAll.checked = allChecked;
-}
+//    checkboxAll.checked = allChecked;
+//}
 
 function toggleAllCheckboxes(masterCheckbox) {
     var checkboxes = document.querySelectorAll('.form-check-input-all, .toggle-checkbox');
