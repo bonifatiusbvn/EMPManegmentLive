@@ -322,46 +322,61 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             }
             return response;
         }
-        public async Task<List<UserPermissionModel>> GetUserFormListById(Guid UserId)
+        public async Task<AGGridResponseModel<UserPermissionModel>> GetUserFormListById(AGGridRequestModel UserPermissionRequest)
         {
             try
             {
-                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                string filterConditions = UserPermissionRequest.filters != null && UserPermissionRequest.filters.Any()
+                    ? string.Join(" AND ", UserPermissionRequest.filters.Select(f => $"{f.ColId} LIKE '%{f.FilterValue}%'"))
+                    : null;
 
-                var sqlPar = new SqlParameter[]
+                string sortColumn = UserPermissionRequest.SortModel?.FirstOrDefault()?.ColId ?? "FormName";
+                string sortDirection = UserPermissionRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
+
+                var parameters = new List<SqlParameter>
+        {
+            new SqlParameter("@UserId", SqlDbType.UniqueIdentifier) { Value = UserPermissionRequest.UserId },
+            new SqlParameter("@SearchValue", string.IsNullOrEmpty(UserPermissionRequest.SearchValue) ? DBNull.Value : (object)UserPermissionRequest.SearchValue),
+            new SqlParameter("@SortColumn", sortColumn),
+            new SqlParameter("@SortDirection", sortDirection),
+            new SqlParameter("@PageSize", UserPermissionRequest.PageSize),
+            new SqlParameter("@Skip", UserPermissionRequest.StartRow),
+            new SqlParameter("@FilterConditions", string.IsNullOrEmpty(filterConditions) ? DBNull.Value : (object)filterConditions),
+            new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
+        };
+
+                var dataSet = DbHelper.GetDataSet(
+                 "GetUserFormListById",
+                 CommandType.StoredProcedure,
+                 parameters.ToArray(),
+                 _configuration.GetConnectionString("EMPDbconn")
+             );
+
+                var formPermissions = dataSet.Tables[0].AsEnumerable().Select(row => new UserPermissionModel
                 {
-                   new SqlParameter("@UserId", UserId),
+                    Id = row["Id"] != DBNull.Value ? Convert.ToInt32(row["Id"]) : 0,
+                    UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                    FormId = row["FormId"] != DBNull.Value ? Convert.ToInt32(row["FormId"]) : 0,
+                    FormName = row["FormName"]?.ToString(),
+                    IsViewAllow = row["IsViewAllow"] != DBNull.Value && (bool)row["IsViewAllow"],
+                    IsEditAllow = row["IsEditAllow"] != DBNull.Value && (bool)row["IsEditAllow"],
+                    IsDeleteAllow = row["IsDeleteAllow"] != DBNull.Value && (bool)row["IsDeleteAllow"],
+                    IsAddAllow = row["IsAddAllow"] != DBNull.Value && (bool)row["IsAddAllow"],
+                    CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
+                    CreatedOn = row["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(row["CreatedOn"]) : DateTime.MinValue
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<UserPermissionModel>
+                {
+                    Data = formPermissions,
+                    RecordsTotal = totalRecords
                 };
-
-                var DS = DbHelper.GetDataSet("GetUserFormListById", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
-
-                List<UserPermissionModel> UserData = new List<UserPermissionModel>();
-
-                if (DS != null && DS.Tables.Count > 0)
-                {
-                    foreach (DataRow row in DS.Tables[0].Rows)
-                    {
-                        var formDetails = new UserPermissionModel
-                        {
-                            Id = row["Id"] != DBNull.Value ? (int)row["Id"] : 0,
-                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
-                            FormId = row["FormId"] != DBNull.Value ? (int)row["FormId"] : 0,
-                            FormName = row["FormName"]?.ToString(),
-                            IsViewAllow = (bool)row["IsViewAllow"],
-                            IsEditAllow = (bool)row["IsEditAllow"],
-                            IsDeleteAllow = (bool)row["IsDeleteAllow"],
-                            IsAddAllow = (bool)row["IsAddAllow"],
-                            CreatedBy = row["CreatedBy"] != DBNull.Value ? (Guid)row["CreatedBy"] : Guid.Empty,
-                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue
-                        };
-                        UserData.Add(formDetails);
-                    }
-                }
-                return UserData;
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the rolewise form permissions list.", ex);
             }
         }
         public async Task<ApiResponseModel> UpdateMultipleUserFormPermission(List<UserPermissionModel> UpdatedUserFormPermissions)

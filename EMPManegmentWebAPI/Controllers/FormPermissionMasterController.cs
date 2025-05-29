@@ -172,32 +172,29 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.code, response);
         }
+
         [HttpPost]
         [Route("GetUserFormListById")]
-        public async Task<IActionResult> GetUserFormListById(Guid UserId)
+        public async Task<AGGridResponseModel<UserPermissionModel>> GetUserFormListById(AGGridRequestModel UserPermissionRequest)
         {
-            ApiResponseModel response = new ApiResponseModel();
             try
             {
-                List<UserPermissionModel> UserFormList = await RolewisePermissionMaster.GetUserFormListById(UserId);
-
-                if (UserFormList.Count == 0)
+                var GetCompanyList = await RolewisePermissionMaster.GetUserFormListById(UserPermissionRequest);
+                return new AGGridResponseModel<UserPermissionModel>
                 {
-                    response.code = (int)HttpStatusCode.NotFound;
-                    response.message = "No data found.";
-                }
-                else
-                {
-                    response.code = (int)HttpStatusCode.OK;
-                    response.data = UserFormList.ToList();
-                }
+                    Data = GetCompanyList.Data,
+                    RecordsTotal = GetCompanyList.RecordsTotal,
+                };
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                response.code = (int)HttpStatusCode.InternalServerError;
-                response.message = "An error occurred while processing the request.";
+                return new AGGridResponseModel<UserPermissionModel>
+                {
+                    Data = null,
+                    RecordsTotal = 0,
+                    ErrorMessage = "An error occurred while processing your request"
+                };
             }
-            return StatusCode(response.code, response);
         }
         [HttpPost]
         [Route("UpdateMultipleUserFormPermission")]

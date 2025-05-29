@@ -6,33 +6,6 @@ let currentRoleId = null;
 
 $(document).ready(function () {
 
-    $('#usercustomDropdown').select2({
-        placeholder: 'Select User',
-        width: '100%',
-        dropdownAutoWidth: true,
-        allowClear: true,
-        ajax: {
-            url: '/Task/GetUserName',
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-                return {
-                    results: data.map(item => ({
-                        id: item.id,
-                        text: item.firstName + ' ' + item.lastName
-                    }))
-                };
-            }
-        }
-    }).on('select2:open', function () {
-        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
-    });
-
-    $('#usercustomDropdown').on('select2:select', function (e) {
-        var selectedValue = e.params.data.id;
-        EditUserFormDetails(selectedValue);
-    });
-
     $('#ddlRoleWiseFormPermission').select2({
         placeholder: 'Select Role',
         width: '100%',
@@ -293,7 +266,7 @@ function UpdateRolewiseFormPermission() {
     RolePermissionGridOptions.api.forEachNode(node => {
         const data = node.data;
         if (!data || !data.formId) return;
-        
+
         formPermissions.push({
             RoleId: data.roleId,
             CreatedBy: $("#txtUserId").val(),
@@ -338,54 +311,357 @@ function UpdateRolewiseFormPermission() {
     });
 }
 
-function UpdateUserFormPermission() {
-    var formPermissions = [];
+let UserPermissionGridOptions = [];
+let currentUserId = null;
 
-    // Loop through each row with class 'forms'
-    $(".forms").each(function () {
-        var $row = $(this);
-        var formId = $row.data('product-id'); // safer to cache this
+$(document).ready(function () {
 
-        var objData = {
-            UserId: $row.find(`#textUserId_${formId}`).val(),
-            CreatedBy: $("#textuserId").val(),
-            FormId: $row.find(`#textFormId_${formId}`).val(),
-            IsAddAllow: $(`#txtIsAdd_${formId}`).prop('checked'),
-            IsViewAllow: $(`#txtIsView_${formId}`).prop('checked'),
-            IsEditAllow: $(`#txtIsEdit_${formId}`).prop('checked'),
-            IsDeleteAllow: $(`#txtIsDelete_${formId}`).prop('checked')
-        };
-
-        formPermissions.push(objData);
+    $('#usercustomDropdown').select2({
+        placeholder: 'Select User',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Task/GetUserName',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.firstName + ' ' + item.lastName
+                    }))
+                };
+            }
+        }
+    }).on('select2:open', function () {
+        document.querySelector('.select2-container--open .select2-dropdown').style.marginTop = '5px';
+    }).on('change', function () {
+        if ($(this).val()) {
+            $('#userupdatebtn').show();
+        } else {
+            $('#userupdatebtn').hide();
+        }
     });
 
-    var form_data = new FormData();
-    form_data.append("UserPermissionDetails", JSON.stringify(formPermissions));
+    $('#usercustomDropdown').on('select2:select', function (e) {
+        currentUserId = e.params.data.id;
+        UserPermissionGridOptions.api.onFilterChanged();
+    });
+
+    $('#usercustomDropdown').on('select2:unselect', function () {
+        currentUserId = null;
+        if (UserPermissionGridOptions.api) {
+            UserPermissionGridOptions.api.showNoRowsOverlay();
+        }
+    });
+
+    const UserPermissionGridOptionsLocal = {
+        rowHeight: 60,
+        columnDefs: [
+            {
+                headerName: "Form Name",
+                field: "formName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.formId) {
+                        return '';
+                    }
+                    return `
+                        <h6 class="pt-1" style="color:#16989A; font-weight:600;">${params.data.formName}</h6>
+                        <input type="hidden" data-role-id="${params.data.roleId}" />
+                        <input type="hidden" data-form-id="${params.data.formId}" />
+                    `;
+                }
+            },
+            ...['Add', 'View', 'Edit', 'Delete'].map(type => ({
+                headerName: type,
+                field: `is${type}Allow`,
+                sortable: false,
+                filter: false,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.formId) return '';
+
+                    const key = type.toLowerCase();
+                    const checkboxId = `${key}_${params.data.formId}`;
+                    const checked = params.value ? 'checked' : '';
+
+                    setTimeout(() => {
+                        const checkbox = document.getElementById(checkboxId);
+                        if (checkbox) {
+                            checkbox.onchange = function () {
+                                params.data[`is${type}Allow`] = checkbox.checked;
+                                updateUserFormSelectAll(params.data.formId);
+                            };
+                        }
+                    }, 0);
+
+                    return `
+                        <div class="custom-control custom-switch">
+                            <input class="custom-control-input toggle-checkbox" type="checkbox" 
+                                id="${checkboxId}" name="${key}" ${checked}>
+                            <label class="custom-control-label" for="${checkboxId}"></label>
+                        </div>
+                    `;
+                }
+            })),
+            {
+                headerName: "Select All",
+                field: "selectAll",
+                sortable: false,
+                filter: false,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.formId) return '';
+
+                    const checkboxId = `checkboxAll_${params.data.formId}`;
+                    const allChecked = params.data.isAddAllow && params.data.isViewAllow &&
+                        params.data.isEditAllow && params.data.isDeleteAllow;
+
+                    setTimeout(() => {
+                        const checkbox = document.getElementById(checkboxId);
+                        if (checkbox) {
+                            checkbox.onchange = function () {
+                                const checked = checkbox.checked;
+                                ['isAddAllow', 'isViewAllow', 'isEditAllow', 'isDeleteAllow'].forEach(key => {
+                                    params.data[key] = checked;
+                                    const field = key.toLowerCase().replace('is', '');
+                                    const subCheckbox = document.getElementById(`${field}_${params.data.formId}`);
+                                    if (subCheckbox) subCheckbox.checked = checked;
+                                });
+                            };
+                        }
+                    }, 0);
+
+                    return `
+                        <div class="custom-control custom-switch">
+                            <input class="custom-control-input form-check-input-all" type="checkbox" onclick="toggleUserFormCheckboxes('${params.data.formId}')" 
+                                id="${checkboxId}" ${allChecked ? 'checked' : ''}>
+                            <label class="custom-control-label" for="${checkboxId}"></label>
+                        </div>
+                    `;
+                }
+            }
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            resizable: true,
+            cellClass: 'ag-cell-default-style',
+            flex: 1
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            UserPermissionGridOptionsLocal.api = params.api;
+            UserPermissionGridOptionsLocal.columnApi = params.columnApi;
+            UserPermissionGridOptionsLocal.api.showNoRowsOverlay();
+            params.api.sizeColumnsToFit();
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 100,
+        datasource: {
+            getRows: function (params) {
+                if (!currentUserId) {
+                    UserPermissionGridOptionsLocal.api.showNoRowsOverlay();
+                    params.successCallback([], 0);
+                    return;
+                }
+
+                const sortModel = params.sortModel?.[0] || {};
+                const request = {
+                    UserId: currentUserId,
+                    StartRow: params.startRow,
+                    PageSize: UserPermissionGridOptionsLocal.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: Array.isArray(params.sortModel) ? params.sortModel : [],
+                    SortColumn: sortModel.colId || "",
+                    SortDirection: sortModel.sort || "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    }))
+                };
+
+                $.ajax({
+                    url: '/UserProfile/GetUserFormListById',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        if (response.data?.length > 0) {
+                            const mappedData = response.data.map(item => ({
+                                formName: item.formName,
+                                formId: item.formId,
+                                userId: item.userId,
+                                isAddAllow: item.isAddAllow,
+                                isViewAllow: item.isViewAllow,
+                                isEditAllow: item.isEditAllow,
+                                isDeleteAllow: item.isDeleteAllow
+                            }));
+                            params.successCallback(mappedData, response.recordsTotal);
+                            UserPermissionGridOptionsLocal.api.hideOverlay();
+                        } else {
+                            UserPermissionGridOptionsLocal.api.showNoRowsOverlay();
+                            params.successCallback([], 0);
+                        }
+                    },
+                    error: function () {
+                        UserPermissionGridOptionsLocal.api.showNoRowsOverlay();
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    UserPermissionGridOptions = UserPermissionGridOptionsLocal;
+
+    const gridElement = document.querySelector('#UserPermissionTable');
+    agGrid.createGrid(gridElement, UserPermissionGridOptions);
+});
+function toggleUserFormCheckboxes(formId) {
+
+    const selectAllCheckbox = document.getElementById(`checkboxAll_${formId}`);
+    const isChecked = selectAllCheckbox.checked;
+
+    const checkboxes = [
+        document.getElementById(`add_${formId}`),
+        document.getElementById(`view_${formId}`),
+        document.getElementById(`edit_${formId}`),
+        document.getElementById(`delete_${formId}`)
+    ];
+
+    checkboxes.forEach(checkbox => {
+        if (checkbox) {
+            checkbox.checked = isChecked;
+
+            const event = new Event('change');
+            checkbox.dispatchEvent(event);
+        }
+    });
+}
+
+function updateUserFormSelectAll(formId) {
+
+    const checkboxes = [
+        document.getElementById(`add_${formId}`),
+        document.getElementById(`view_${formId}`),
+        document.getElementById(`edit_${formId}`),
+        document.getElementById(`delete_${formId}`)
+    ];
+
+    const selectAllCheckbox = document.getElementById(`checkboxAll_${formId}`);
+
+    const allChecked = checkboxes.every(checkbox => checkbox && checkbox.checked);
+
+    if (selectAllCheckbox) {
+        selectAllCheckbox.checked = allChecked;
+    }
+}
+
+function UpdateUserFormPermission() {
+    if (!UserPermissionGridOptions.api) return;
+
+    const UserFormPermissions = [];
+    UserPermissionGridOptions.api.forEachNode(node => {
+        const data = node.data;
+        if (!data || !data.formId) return;
+
+        UserFormPermissions.push({
+            UserId: data.userId,
+            CreatedBy: $("#txtUserId").val(),
+            FormId: data.formId,
+            IsAddAllow: data.isAddAllow,
+            IsViewAllow: data.isViewAllow,
+            IsEditAllow: data.isEditAllow,
+            IsDeleteAllow: data.isDeleteAllow
+        });
+    });
+
+    if (UserFormPermissions.length === 0) {
+        toastr.warning("No permission data found to update.");
+        return;
+    }
+
+    const form_data = new FormData();
+    form_data.append("UserPermissionDetails", JSON.stringify(UserFormPermissions));
 
     $.ajax({
         url: '/UserProfile/UpdateUserPermission',
-        type: 'POST',
+        type: 'post',
         data: form_data,
         processData: false,
         contentType: false,
         dataType: 'json',
-        success: function (result) {
-            if (result.code === 200) {
+        success: function (Result) {
+            if (Result.code == 200) {
                 Swal.fire({
-                    title: result.message,
+                    title: Result.message,
                     icon: 'success',
                     confirmButtonColor: '#3085d6',
                     confirmButtonText: 'OK'
                 });
             } else {
-                toastr.error(result.message || 'An error occurred while updating permissions.');
+                toastr.error(Result.message);
             }
         },
         error: function (xhr, status, error) {
-            toastr.error(error || 'Unexpected error occurred.');
+            toastr.error(error);
         }
     });
 }
+
+//function UpdateUserFormPermission() {
+//    var formPermissions = [];
+
+//    $(".forms").each(function () {
+//        var $row = $(this);
+//        var formId = $row.data('product-id'); // safer to cache this
+
+//        var objData = {
+//            UserId: $row.find(`#textUserId_${formId}`).val(),
+//            CreatedBy: $("#textuserId").val(),
+//            FormId: $row.find(`#textFormId_${formId}`).val(),
+//            IsAddAllow: $(`#txtIsAdd_${formId}`).prop('checked'),
+//            IsViewAllow: $(`#txtIsView_${formId}`).prop('checked'),
+//            IsEditAllow: $(`#txtIsEdit_${formId}`).prop('checked'),
+//            IsDeleteAllow: $(`#txtIsDelete_${formId}`).prop('checked')
+//        };
+
+//        formPermissions.push(objData);
+//    });
+
+//    var form_data = new FormData();
+//    form_data.append("UserPermissionDetails", JSON.stringify(formPermissions));
+
+//    $.ajax({
+//        url: '/UserProfile/UpdateUserPermission',
+//        type: 'POST',
+//        data: form_data,
+//        processData: false,
+//        contentType: false,
+//        dataType: 'json',
+//        success: function (result) {
+//            if (result.code === 200) {
+//                Swal.fire({
+//                    title: result.message,
+//                    icon: 'success',
+//                    confirmButtonColor: '#3085d6',
+//                    confirmButtonText: 'OK'
+//                });
+//            } else {
+//                toastr.error(result.message || 'An error occurred while updating permissions.');
+//            }
+//        },
+//        error: function (xhr, status, error) {
+//            toastr.error(error || 'Unexpected error occurred.');
+//        }
+//    });
+//}
 
 function createRole() {
     if ($("#addUserRole").valid()) {
