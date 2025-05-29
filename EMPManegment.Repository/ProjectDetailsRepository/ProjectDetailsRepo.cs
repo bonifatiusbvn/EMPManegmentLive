@@ -80,21 +80,30 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             }
             return response;
         }
-        public async Task<IEnumerable<ProjectDetailView>> GetProjectList(string? searchby, string? searchfor)
+
+        public async Task<IEnumerable<ProjectDetailView>> GetProjectList(ProjectRequest projectRequest)
         {
             try
             {
                 string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
 
-                var DS = DbHelper.GetDataSet("GetProjectList", CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
-
-                List<ProjectDetailView> projectList = new List<ProjectDetailView>();
-
-                if (DS != null && DS.Tables.Count > 0)
+                var parameters = new SqlParameter[]
                 {
-                    foreach (DataRow row in DS.Tables[0].Rows)
+            new SqlParameter("@SearchValue", string.IsNullOrWhiteSpace(projectRequest.SearchValue) ? DBNull.Value : projectRequest.SearchValue),
+            new SqlParameter("@ProjectStatus", string.IsNullOrWhiteSpace(projectRequest.ProjectStatus) ? DBNull.Value : projectRequest.ProjectStatus),
+            new SqlParameter("@ProjectPriority", string.IsNullOrWhiteSpace(projectRequest.Projectpriority) ? DBNull.Value : projectRequest.Projectpriority),
+            new SqlParameter("@FromDate", projectRequest.FromDate.HasValue ? projectRequest.FromDate.Value : (object)DBNull.Value),
+            new SqlParameter("@ToDate", projectRequest.ToDate.HasValue ? projectRequest.ToDate.Value : (object)DBNull.Value)
+                };
+
+                var ds = DbHelper.GetDataSet("GetProjectList", CommandType.StoredProcedure, parameters, dbConnectionStr);
+                var projectList = new List<ProjectDetailView>();
+
+                if (ds?.Tables.Count > 0)
+                {
+                    foreach (DataRow row in ds.Tables[0].Rows)
                     {
-                        var projectDetails = new ProjectDetailView
+                        var project = new ProjectDetailView
                         {
                             ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
                             ProjectType = row["ProjectType"]?.ToString(),
@@ -104,31 +113,23 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                             ProjectDescription = row["ProjectDescription"]?.ToString(),
                             BuildingName = row["BuildingName"]?.ToString(),
                             Area = row["Area"]?.ToString(),
-                            City = row["City"] != DBNull.Value ? (int)row["City"] : 0,
-                            State = row["State"] != DBNull.Value ? (int)row["State"] : 0,
-                            Country = row["Country"] != DBNull.Value ? (int)row["Country"] : 0,
+                            City = row["City"] != DBNull.Value ? Convert.ToInt32(row["City"]) : 0,
+                            State = row["State"] != DBNull.Value ? Convert.ToInt32(row["State"]) : 0,
+                            Country = row["Country"] != DBNull.Value ? Convert.ToInt32(row["Country"]) : 0,
                             ProjectImage = row["ProjectImage"]?.ToString(),
                             ProjectPath = row["ProjectPath"]?.ToString(),
-                            ProjectPriority = row["ProjectPath"]?.ToString(),
+                            ProjectPriority = row["ProjectPriority"]?.ToString(),
                             ProjectStatus = row["ProjectStatus"]?.ToString(),
-                            ProjectStartDate = row["ProjectStartDate"] != DBNull.Value ? (DateTime)row["ProjectStartDate"] : DateTime.MinValue,
-                            ProjectEndDate = row["ProjectEndDate"] != DBNull.Value ? (DateTime)row["ProjectEndDate"] : DateTime.MinValue,
-                            ProjectDeadline = row["ProjectDeadline"] != DBNull.Value ? (DateTime)row["ProjectDeadline"] : DateTime.MinValue,
-                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
-
+                            ProjectStartDate = row["ProjectStartDate"] != DBNull.Value ? Convert.ToDateTime(row["ProjectStartDate"]) : DateTime.MinValue,
+                            ProjectEndDate = row["ProjectEndDate"] != DBNull.Value ? Convert.ToDateTime(row["ProjectEndDate"]) : DateTime.MinValue,
+                            ProjectDeadline = row["ProjectDeadline"] != DBNull.Value ? Convert.ToDateTime(row["ProjectDeadline"]) : DateTime.MinValue,
+                            CreatedOn = row["CreatedOn"] != DBNull.Value ? Convert.ToDateTime(row["CreatedOn"]) : (DateTime?)null
                         };
-                        projectList.Add(projectDetails);
+
+                        projectList.Add(project);
                     }
                 }
 
-                if (searchby == "ProjectTitle" && searchfor != null)
-                {
-                    projectList = projectList.Where(ser => ser.ProjectTitle.ToLower().Contains(searchfor.ToLower())).ToList();
-                }
-                if (searchby == "ProjectStatus" && searchfor != null)
-                {
-                    projectList = projectList.Where(ser => ser.ProjectStatus.ToLower().Contains(searchfor.ToLower())).ToList();
-                }
                 return projectList;
             }
             catch (Exception ex)
@@ -136,6 +137,8 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 throw ex;
             }
         }
+
+
 
         public async Task<List<ProjectView>> GetUserProjectList(Guid UserId)
         {

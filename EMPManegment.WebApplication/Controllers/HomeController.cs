@@ -50,7 +50,6 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-
         [HttpPost]
         public async Task<IActionResult> EnterUserInTime(UserAttendanceModel userAttendance)
         {
@@ -78,7 +77,6 @@ namespace EMPManegment.Web.Controllers
         {
             try
             {
-
                 ApiResponseModel postuser = await APIServices.PostAsync(userAttendance, "UserHome/InsertOutTime");
                 if (postuser.code == 200)
                 {
@@ -94,7 +92,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> GetUserAttendanceInTime()
@@ -124,8 +121,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
-
 
         [HttpGet]
         public async Task<IActionResult> UserBirsthDayWish()
@@ -223,7 +218,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetWeatherinfo(string city)
         {
@@ -285,8 +279,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
-
         [HttpGet]
         public async Task<IActionResult> GetChateConversation()
         {
@@ -308,7 +300,6 @@ namespace EMPManegment.Web.Controllers
             }
         }
 
-
         [HttpGet]
         public async Task<IActionResult> GetChatConversation(Guid id)
         {
@@ -328,6 +319,7 @@ namespace EMPManegment.Web.Controllers
                 return StatusCode(500, "Internal server error.");
             }
         }
+
         [HttpPost]
         public async Task<IActionResult> SendMessage(ChatMessagesView ChatMessage)
         {
@@ -406,6 +398,7 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> GetUserTaskNotification()
         {

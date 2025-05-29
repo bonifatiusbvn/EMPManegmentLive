@@ -49,23 +49,23 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 string sortDirection = RoleRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
 
                 var parameters = new List<SqlParameter>
-        {
-            new SqlParameter("@RoleId", SqlDbType.UniqueIdentifier) { Value = RoleRequest.RoleId },
-            new SqlParameter("@SearchValue", string.IsNullOrEmpty(RoleRequest.SearchValue) ? DBNull.Value : (object)RoleRequest.SearchValue),
-            new SqlParameter("@SortColumn", sortColumn),
-            new SqlParameter("@SortDirection", sortDirection),
-            new SqlParameter("@PageSize", RoleRequest.PageSize),
-            new SqlParameter("@Skip", RoleRequest.StartRow),
-            new SqlParameter("@FilterConditions", string.IsNullOrEmpty(filterConditions) ? DBNull.Value : (object)filterConditions),
-            new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
-        };
+                {
+                   new SqlParameter("@RoleId", SqlDbType.UniqueIdentifier) { Value = RoleRequest.RoleId },
+                   new SqlParameter("@SearchValue", string.IsNullOrEmpty(RoleRequest.SearchValue) ? DBNull.Value : (object)RoleRequest.SearchValue),
+                   new SqlParameter("@SortColumn", sortColumn),
+                   new SqlParameter("@SortDirection", sortDirection),
+                   new SqlParameter("@PageSize", RoleRequest.PageSize),
+                   new SqlParameter("@Skip", RoleRequest.StartRow),
+                   new SqlParameter("@FilterConditions", string.IsNullOrEmpty(filterConditions) ? DBNull.Value : (object)filterConditions),
+                   new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
+                };
 
                 var dataSet = DbHelper.GetDataSet(
-                 "GetRolewiseFormListById",
-                 CommandType.StoredProcedure,
-                 parameters.ToArray(),
-                 _configuration.GetConnectionString("EMPDbconn")
-             );
+                "GetRolewiseFormListById",
+                CommandType.StoredProcedure,
+                parameters.ToArray(),
+                _configuration.GetConnectionString("EMPDbconn")
+                );
 
                 var formPermissions = dataSet.Tables[0].AsEnumerable().Select(row => new RolewiseFormPermissionModel
                 {
@@ -95,8 +95,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 throw new Exception("An error occurred while retrieving the rolewise form permissions list.", ex);
             }
         }
-
-
         public async Task<ApiResponseModel> UpdateMultipleRolewiseFormPermission(List<RolewiseFormPermissionModel> UpdatedRolewiseFormPermissions)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -139,7 +137,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             }
             return response;
         }
-
         public async Task<ApiResponseModel> CreateUserRole(UserRoleModel roleDetails)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -209,7 +206,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
             }
             return response;
         }
-
         public async Task<IEnumerable<FormMasterModel>> FormList()
         {
             try
@@ -226,7 +222,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 throw ex;
             }
         }
-
         public async Task<ApiResponseModel> CreateRolewisePermissionForm(int FormId, Guid userId)
         {
             ApiResponseModel response = new ApiResponseModel();
@@ -384,7 +379,6 @@ namespace EMPManegment.Repository.FormPermissionMasterRepository
                 throw new Exception("An error occurred while retrieving the rolewise form permissions list.", ex);
             }
         }
-
         public async Task<ApiResponseModel> UpdateMultipleUserFormPermission(List<UserPermissionModel> UpdatedUserFormPermissions)
         {
             ApiResponseModel response = new ApiResponseModel();

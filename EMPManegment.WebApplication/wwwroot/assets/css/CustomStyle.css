@@ -222,6 +222,9 @@
     color: #16989A !important;
 }
 
+.txt-teal {
+    color: #16989A;
+}
 /* ==================== */
 /* ROUNDED BOTTOM EDGE */
 /* ==================== */
@@ -557,7 +560,6 @@
     }
 
     .ag-theme-teal .ag-cell-value .editbtn,
-    .ag-theme-teal .ag-cell-value .deletebtn,
     .ag-theme-teal .ag-cell-value .printbtn,
     .ag-theme-teal .ag-cell-value .pdfbtn,
     .ag-theme-teal .ag-cell-value .whatsappbtn,
@@ -575,13 +577,11 @@
 
     /* Specific Button Colors */
     .ag-theme-teal .ag-cell-value .editbtn,
-    .ag-theme-teal .ag-cell-value .deletebtn,
     .ag-theme-teal .ag-cell-value .pdfbtn {
         color: #16989A !important;
     }
 
         .ag-theme-teal .ag-cell-value .editbtn:hover,
-        .ag-theme-teal .ag-cell-value .deletebtn:hover,
         .ag-theme-teal .ag-cell-value .pdfbtn:hover {
             color: #b61651;
             transform: scale(1.1);

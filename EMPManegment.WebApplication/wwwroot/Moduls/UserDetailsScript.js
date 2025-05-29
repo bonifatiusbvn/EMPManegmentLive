@@ -1,13 +1,19 @@
-﻿$(document).ready(function () {
-    GetUserAttendanceInTime();
-    UserBirsthDayWish();
-    clearSelectedBox();
-    GetUserRoleList();
-});
+﻿var formData = Array.isArray(window.userFormPermissions) ? window.userFormPermissions : [];
 
-let UserGridOptions = [];
+let UserGridOptions = {};
 
 $(document).ready(function () {
+    let canEdit = false;
+    let canDelete = false;
+
+
+
+    const userPermission = formData.find(p => p.formName === "Users");
+    if (userPermission) {
+
+        canEdit = !!userPermission.edit;
+        canDelete = !!userPermission.delete;
+    }
 
     UserGridOptions = {
         rowHeight: 50,
@@ -18,10 +24,8 @@ $(document).ready(function () {
                 sortable: true,
                 filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.id) {
-                        return '';
-                    }
-                    return '<div><a href="/UserProfile/UserInfo/?Id=' + params.data.id + '" class="fw-medium" style="color: #16989A !important;"><strong>' + params.data.userName + '</strong></a></div>';
+                    if (!params.data?.id) return '';
+                    return `<div><a href="/UserProfile/UserInfo/?Id=${params.data.id}" class="fw-medium" style="color: #16989A !important;"><strong>${params.data.userName}</strong></a></div>`;
                 }
             },
             {
@@ -30,10 +34,8 @@ $(document).ready(function () {
                 sortable: true,
                 filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.id) {
-                        return '';
-                    }
-                    return '<div class="d-flex"><div class="flex-grow-1 tasks_name">' + params.data.departmentName + '</div></div>';
+                    if (!params.data?.id) return '';
+                    return `<div class="d-flex"><div class="flex-grow-1 tasks_name">${params.data.departmentName}</div></div>`;
                 }
             },
             { headerName: "Role", field: "roleName", sortable: true, filter: true },
@@ -43,54 +45,53 @@ $(document).ready(function () {
                 sortable: true,
                 filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.id) {
-                        return '';
-                    }
-                    var colorClasses = [
-                        { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
-                        { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
-                        { bgClass: 'bg-success-subtle', textClass: 'text-success' },
-                        { bgClass: 'bg-info-subtle', textClass: 'text-info' },
-                        { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
-                        { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
-                        { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
+                    if (!params.data?.id) return '';
+                    const colors = [
+                        { bg: 'bg-primary-subtle', text: 'text-primary' },
+                        { bg: 'bg-secondary-subtle', text: 'text-secondary' },
+                        { bg: 'bg-success-subtle', text: 'text-success' },
+                        { bg: 'bg-info-subtle', text: 'text-info' },
+                        { bg: 'bg-warning-subtle', text: 'text-warning' },
+                        { bg: 'bg-danger-subtle', text: 'text-danger' },
+                        { bg: 'bg-dark-subtle', text: 'text-dark' }
                     ];
-                    var profileImageHtml;
-                    if (params.data.image && params.data.image.trim() !== '') {
-                        profileImageHtml = '<img src="/' + params.data.image + '" style="height: 40px; width: 40px; border-radius: 50%;">';
+
+                    let profileHtml;
+                    if (params.data.image?.trim()) {
+                        profileHtml = `<img src="/${params.data.image}" style="height: 40px; width: 40px; border-radius: 50%;">`;
                     } else {
-                        var initials = (params.data.firstName ? params.data.firstName[0] : '') + (params.data.lastName ? params.data.lastName[0] : '');
-                        var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
-                        profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
-                            '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass + ' rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
+                        const initials = `${params.data.firstName?.[0] || ''}${params.data.lastName?.[0] || ''}`.toUpperCase();
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        profileHtml = `<div class="flex-shrink-0 avatar-xs me-2">
+                            <div class="avatar-title ${color.bg} ${color.text} rounded-circle fs-13" style="height: 40px; width: 40px;">${initials}</div>
+                        </div>`;
                     }
 
-                    return '<div class="d-flex align-items-center">' +
-                        profileImageHtml +
-                        '<div class="flex-grow-1 tasks_name ml-2" style="color: #16989A !important;margin-left: 10px">' + params.data.firstName + ' ' + params.data.lastName + '</div>' +
-                        '</div>';
+                    return `<div class="d-flex align-items-center">${profileHtml}
+                        <div class="flex-grow-1 tasks_name ml-2" style="color: #16989A !important; margin-left: 10px">${params.data.firstName} ${params.data.lastName}</div>
+                    </div>`;
                 }
             },
             {
-                headerName: "Active", field: "isActive", sortable: true, filter: true,
+                headerName: "Active",
+                field: "isActive",
+                sortable: true,
+                filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.id) {
-                        return '';
-                    }
-                    if (params.data.isActive) {
-                        return '<span class="badge bg-success text-uppercase">Active</span>';
-                    } else {
-                        return '<span class="badge bg-danger text-uppercase">Deactive</span>';
-                    }
+                    if (!params.data?.id) return '';
+                    return params.data.isActive
+                        ? '<span class="badge bg-success text-uppercase">Active</span>'
+                        : '<span class="badge bg-danger text-uppercase">Deactive</span>';
                 }
             },
             { headerName: "Gender", field: "gender", sortable: true, filter: true },
             {
-                headerName: "Date Of Birth", field: "dateOfBirth", sortable: true, filter: true,
+                headerName: "Date Of Birth",
+                field: "dateOfBirth",
+                sortable: true,
+                filter: true,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.id) {
-                        return '';
-                    }
+                    if (!params.data?.id) return '';
                     return getCommonDateformat(params.data.dateOfBirth);
                 }
             },
@@ -102,9 +103,8 @@ $(document).ready(function () {
             sortable: true,
             filter: true,
             cellClass: 'ag-cell-default-style',
-            width: 175,
+            width: 175
         },
-
         rowSelection: 'single',
         rowClassRules: {
             'selected-row': params => params.node.isSelected()
@@ -112,9 +112,8 @@ $(document).ready(function () {
         onGridReady: function (params) {
             UserGridOptions.api = params.api;
             UserGridOptions.columnApi = params.columnApi;
-            UserGridOptions.api.sizeColumnsToFit();
+            params.api.sizeColumnsToFit();
         },
-
         rowModelType: 'infinite',
         cacheBlockSize: 10,
         datasource: {
@@ -123,15 +122,14 @@ $(document).ready(function () {
                     StartRow: params.startRow,
                     PageSize: UserGridOptions.cacheBlockSize || 10,
                     SearchType: "",
-                    SearchValue: "",
                     SortModel: params.sortModel || [],
-                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
-                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    SortColumn: params.sortModel?.[0]?.colId || "",
+                    SortDirection: params.sortModel?.[0]?.sort || "",
                     filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
                         colId: key,
                         filterValue: value.filter
                     })),
-                    SearchValue: $('#txtUserSearch').val(),
+                    SearchValue: $('#txtUserSearch').val() || ""
                 };
 
                 $.ajax({
@@ -150,12 +148,45 @@ $(document).ready(function () {
         }
     };
 
-    const myGridElement = document.querySelector('#UserTable');
-    agGrid.createGrid(myGridElement, UserGridOptions);
+    if (canEdit || canDelete) {
+        UserGridOptions.columnDefs.push({
+            headerName: "Actions",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data?.id) return '';
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `<a title="Edit" href="/UserProfile/UserInfo/?Id=${params.data.id}" aria-label="Edit">
+                        <i class="fa-solid fa-pen-to-square"></i></a>`;
+                }
+
+
+                return buttons;
+            }
+        });
+    }
+
+    const gridElement = document.querySelector('#UserTable');
+    agGrid.createGrid(gridElement, UserGridOptions);
 
     $('#txtUserSearch').on('change keyup', function () {
-        UserGridOptions.api.onFilterChanged();
+        if (UserGridOptions.api) {
+            UserGridOptions.api.onFilterChanged();
+        }
     });
+});
+
+
+
+
+$(document).ready(function () {
+    GetUserAttendanceInTime();
+    UserBirsthDayWish();
+    clearSelectedBox();
+    GetUserRoleList();
 });
 
 $(document).ready(function () {

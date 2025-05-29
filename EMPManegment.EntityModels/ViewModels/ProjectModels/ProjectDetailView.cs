@@ -126,6 +126,6 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
 
         public IFormFile? ProjectImage { get; set; }
 
-        public string? ProjectImageName { get; set;}
+        public string? ProjectImageName { get; set; }
     }
 }

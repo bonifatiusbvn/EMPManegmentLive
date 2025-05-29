@@ -34,9 +34,6 @@ namespace EMPManegment.Web.Controllers
             return View();
         }
 
-
-
-
         [HttpGet]
         public async Task<JsonResult> GetCompanyNameList()
         {
@@ -74,7 +71,6 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
         public async Task<IActionResult> CreateCompany(Guid? CompanyId, bool viewMode = false)
         {
             try
@@ -218,6 +214,7 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> GetCompanyList([FromBody] AGGridRequestModel CompanyRequest)
         {
