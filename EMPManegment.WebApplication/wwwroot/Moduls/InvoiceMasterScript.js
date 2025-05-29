@@ -303,6 +303,8 @@ function fn_deleteInvoice(InvoiceId) {
 }
 
 let invoiceTableGrid = [];
+let startDate = null;
+let endDate = null;
 
 $(document).ready(function () {
 
@@ -329,11 +331,7 @@ $(document).ready(function () {
                 filter: true,
                 cellRenderer: function (params) {
                     if (!params.data || !params.data.id) return '';
-                    return `<h5 class="fs-15">
-                        <a href="/Invoice/InvoiceDetails?InvoiceId=${params.data.id}" class="fw-medium link-primary">
-                            ${params.data.invoiceNo}
-                        </a>
-                    </h5>`;
+                    return `<a href="/Invoice/InvoiceDetails?InvoiceId=${params.data.id}"><span style="color: #16989A !important;">` + params.data.invoiceNo + `</span></a>`;
                 }
             },
             {
@@ -362,23 +360,35 @@ $(document).ready(function () {
             invoiceTableGrid.api = params.api;
             invoiceTableGrid.columnApi = params.columnApi;
             invoiceTableGrid.api.sizeColumnsToFit();
+            createEnhancedPagination(params.api);
         },
         rowModelType: 'infinite',
-        cacheBlockSize: 10,
-        datasource: {
+        cacheBlockSize: 20,
+        pagination: true,
+        paginationPageSize: 20,
+        suppressPaginationPanel: true,
+        datasource: getInvoiceDatasource()
+    };
+    function getInvoiceDatasource() {
+        return {
             getRows: function (params) {
                 const request = {
                     StartRow: params.startRow,
-                    PageSize: invoiceTableGrid.cacheBlockSize || 10,
+                    PageSize: params.endRow - params.startRow,
                     SearchType: "",
-                    SearchValue: $('#txtCompanySearch').val() || "",
+                    SearchValue: "",
                     SortModel: params.sortModel || [],
-                    SortColumn: params.sortModel?.[0]?.colId || "",
-                    SortDirection: params.sortModel?.[0]?.sort || "",
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
                     filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
                         colId: key,
                         filterValue: value.filter
-                    }))
+                    })),
+                    searchValue: $('#txtInvoiceSearch').val(),
+                    ComapnyFilter: $('#txtInvoiceCompanyName').val(),
+                    VendorFilter: $('#txtInvoiceVendorName').val(),
+                    StartDate: startDate,
+                    EndDate: endDate,
                 };
 
                 $.ajax({
@@ -388,15 +398,139 @@ $(document).ready(function () {
                     data: JSON.stringify(request),
                     success: function (response) {
                         params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#invoiceTable .range-display');
+                        if (rangeDisplay) updateEnhancedPagination(invoiceTableGrid.api, rangeDisplay);
                     },
                     error: function () {
                         params.failCallback();
                     }
                 });
             }
-        }
-    };
+        };
+    }
+       
+    function createEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
 
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#invoiceTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+            // Destroy and recreate grid with new block size
+            const gridDiv = document.querySelector('#invoiceTable');
+
+            invoiceTableGrid = {
+                ...invoiceTableGrid,
+                cacheBlockSize: newPageSize,
+                paginationPageSize: newPageSize,
+                datasource: getInvoiceDatasource(),
+            };
+
+            // Clear old grid and re-init
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, invoiceTableGrid);
+        });
+
+        updateEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = invoiceTableGrid.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
+        }
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
 
     if (canEdit || canDelete) {
         invoiceTableGrid.columnDefs.push({
@@ -425,13 +559,40 @@ $(document).ready(function () {
     agGrid.createGrid(myGridElement, invoiceTableGrid);
 
 
-    $('#txtCompanySearch').on('change keyup', function () {
+    $('#txtInvoiceSearch').on('change keyup', function () {
         invoiceTableGrid.api.onFilterChanged();
     });
+    $('#txtInvoiceCompanyName').change(() => {
+        const companyText = $("#txtInvoiceCompanyName option:selected").text();
+        $("#txtCompanyName").val(companyText === 'All Company' ? '' : companyText);
+        if (invoiceTableGrid.api) {
+            invoiceTableGrid.api.onFilterChanged();
+        }
+    });
+
+    $('#txtInvoiceVendorName').change(() => {
+        const vendorText = $("#txtInvoiceVendorName option:selected").text();
+        $("#txtVendorName").val(vendorText === 'All Vendor' ? '' : vendorText);
+        if (invoiceTableGrid.api) {
+            invoiceTableGrid.api.onFilterChanged();
+        }
+    });
+    $('#toggleDateFilter').click(e => {
+        e.stopPropagation();
+        $('#dateFilterContainer').toggle();
+    });
+
+    $('#applyFilters').click(() => {
+        startDate = $('#txtstartdatebox').val() || null;
+        endDate = $('#txtenddatebox').val() || null;
+        if (invoiceTableGrid.api) {
+            invoiceTableGrid.api.onFilterChanged();
+        }
+    });
 });
-
-
-
+function ResetInvoiceFilters() {
+    window.location = '/Invoice/Invoices';
+}
 function createInvoice() {
     if ($("#txtInvoice").val() == "") {
         Swal.fire({
@@ -480,7 +641,7 @@ $(document).ready(function () {
 
 
     // Initialize Company Dropdown
-    $('#ddlinvompanyName').select2({
+    $('#ddlinvompanyName,#txtInvoiceCompanyName').select2({
         placeholder: 'Select Company',
         width: '100%',
         dropdownAutoWidth: true,
@@ -510,7 +671,7 @@ $(document).ready(function () {
     });
 
     // Initialize Vendor Dropdown
-    $('#ddlVendorName').select2({
+    $('#ddlVendorName,#txtInvoiceVendorName').select2({
         placeholder: 'Select Vendor',
         width: '100%',
         dropdownAutoWidth: true,
@@ -540,7 +701,7 @@ $(document).ready(function () {
 
 
     $('#ddlInvoicepaymentmethod').select2({
-        placeholder: 'Select Vendor',
+        placeholder: 'Select Payment Method',
         width: '100%',
         dropdownAutoWidth: true,
         allowClear: true,
@@ -563,7 +724,7 @@ $(document).ready(function () {
     });
 
     $('#ddlInvoicepaymenttype').select2({
-        placeholder: 'Select Vendor',
+        placeholder: 'Select Payment type',
         width: '100%',
         dropdownAutoWidth: true,
         allowClear: true,

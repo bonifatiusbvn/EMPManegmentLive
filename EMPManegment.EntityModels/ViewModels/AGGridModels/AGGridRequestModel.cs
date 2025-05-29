@@ -24,6 +24,7 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
         public string? CompanyFilter { get; set; }
         public Guid? UserId { get; set; }
         public Guid? RoleId { get; set; }
+        public Guid? VendorFilter { get; set; }
     }
 
     public class SortModel

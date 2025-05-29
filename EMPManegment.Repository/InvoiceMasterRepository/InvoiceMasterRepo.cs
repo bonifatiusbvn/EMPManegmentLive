@@ -258,6 +258,10 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 new SqlParameter("@PageSize", InvoiceRequest.PageSize),
                 new SqlParameter("@Skip", InvoiceRequest.StartRow),
                 new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                  new SqlParameter("@StartDate", InvoiceRequest.StartDate),
+                new SqlParameter("@EndDate", InvoiceRequest.EndDate),
+                new SqlParameter("@CompanyFilter", InvoiceRequest.CompanyFilter),
+                new SqlParameter("@VendorFilter", InvoiceRequest.VendorFilter),
                 new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
@@ -270,6 +274,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     InvoiceDate = row["InvoiceDate"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["InvoiceDate"]),
                     VendorName = row["VendorName"]?.ToString() ?? string.Empty,
                     VandorId = Guid.Parse(row["VandorId"]?.ToString() ?? Guid.Empty.ToString()),
+                    CompanyId = Guid.Parse(row["CompanyId"]?.ToString() ?? Guid.Empty.ToString()),
                     ProjectId = Guid.Parse(row["ProjectId"]?.ToString() ?? Guid.Empty.ToString()),
                     ProjectName = row["ProjectName"]?.ToString() ?? string.Empty,
                     DispatchThrough = row["DispatchThrough"]?.ToString() ?? string.Empty,

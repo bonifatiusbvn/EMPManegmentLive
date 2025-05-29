@@ -223,17 +223,6 @@
                                                 }
 
                                             </table>
-                                            <div class="noresult" style="display: none">
-                                                <div class="text-center">
-                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                                    </lord-icon>
-                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                    <p class="text-muted mb-0">
-                                                        We've searched more than 150+ invoices We did not find any
-                                                        invoices for you search.
-                                                    </p>
-                                                </div>
-                                            </div>
                                         </div>
                                         <div class="card-footer">
                                             <table class="table align-middle mb-0 dt-responsive nowrap">
@@ -255,112 +244,92 @@
                                                     </tr>
                                                 </thead>
                                             </table>
-                                            <div class="noresult" style="display: none">
-                                                <div class="text-center">
-                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                                    </lord-icon>
-                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                    <p class="text-muted mb-0">
-                                                        We've searched more than 150+ invoices We did not find any
-                                                        invoices for you search.
-                                                    </p>
-                                                </div>
-                                            </div>
                                         </div>
-                                        <div class="card fm-card">
-                                            <div class="row card-body">
-                                                <div class="col-lg-6 col-sm-12">
-                                                    <div class="row">
-                                                        <div class="col-lg-12 col-sm-12">
-                                                            <div class="mb-3">
-                                                                <div class="input-group">
-                                                                    <label class="input-group-text required-field" for="textDeliveryStatus">Delivery Status</label>
-                                                                    <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" value="@Model.DeliveryStatus" placeholder="Enter Delivery Status">
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="mb-3">
-                                                                <div class="input-group">
-                                                                    <label for="txtPOpaymentmethod" class="input-group-text required-field">Payment Method </label>
-                                                                    @if (Model.PaymentMethod != null)
-                                                                    {
-                                                                        <select class="form-control form-select valid" id="txtPOpaymentmethod" name="txtPOpaymentmethod">
-                                                                            <option selected value="@Model.PaymentMethod">@Model.PaymentMethodName</option>
-                                                                        </select>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <select class="form-control form-select valid" id="txtPOpaymentmethod" name="txtPOpaymentmethod">
-                                                                            <option selected value="">--Select Payment Method--</option>
-                                                                        </select>
-                                                                    }
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-12 col-sm-12 mt-2">
-                                                            <div class="mb-3">
-                                                                <div class="input-group mb-3">
-                                                                    <label for="txtPOpaymenttype" class="input-group-text ">Payment Status</label>
-                                                                    @if (Model.PaymentStatus != null)
-                                                                    {
-                                                                        <select class="form-control form-select valid" id="txtPOpaymenttype" name="txtPOpaymenttype">
-                                                                            <option selected value="@Model.PaymentStatus">@Model.PaymentStatusName</option>
-                                                                        </select>
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        <select class="form-control form-select valid" id="txtPOpaymenttype" name="txtPOpaymenttype">
-                                                                            <option selected value="">--Select Payment Status--</option>
-                                                                        </select>
-                                                                    }
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
+                                       
+                                    </div>
+                                </div>
+                                <div class="card fm-card">
+                                    <div class="row card-body">
+                                        <div class="col-lg-6">
+                                            <div class="card fm-card">
+                                                <h5 class="card-header fm-card-header">Additional Information</h5>
+                                                <div class="card-body">
+                                                    <div class="col-lg-12">
+                                                        <label class="form-label required-field">Delivery Status</label>
+                                                        <input type="text" class="form-control" id="textDeliveryStatus" name="textDeliveryStatus" value="@Model.DeliveryStatus" placeholder="Enter Delivery Status">
                                                     </div>
-                                                </div>
-
-                                                <div class="col-lg-6 col-sm-12 ac-invoice-total">
-                                                    <div class="table">
-                                                        <table class="table table-borderless table-sm dt-responsive nowrap align-middle mb-0">
-                                                            <tbody>
-                                                                <tr>
-                                                                    <th>Sub Total</th>
-                                                                    <td style="width:150px;">
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" value="@Model.SubTotal" placeholder="₹0.00" readonly />
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th>Total GST</th>
-                                                                    <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGst" readonly />
-                                                                    </td>
-                                                                </tr>
-                                                                <tr class="border-top border-top-dashed">
-                                                                    <th>Total Amount</th>
-                                                                    <td>
-                                                                        <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                        <div class="noresult" style="display: none">
-                                                            <div class="text-center">
-                                                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                                                </lord-icon>
-                                                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                                <p class="text-muted mb-0">
-                                                                    We've searched more than 150+ invoices We did not find any
-                                                                    invoices for you search.
-                                                                </p>
-                                                            </div>
-                                                        </div>
+                                                    <div class="col-lg-12 mt-3">
+                                                        <label class="form-label required-field">Payment Method</label>
+                                                        @if (Model.PaymentMethod != null)
+                                                        {
+                                                            <select class="form-control select2 select2-teal"
+                                                                    data-dropdown-css-class="select2-teal" id="txtPOpaymentmethod" name="txtPOpaymentmethod">
+                                                                <option selected value="@Model.PaymentMethod">@Model.PaymentMethodName</option>
+                                                            </select>
+                                                        }
+                                                        else
+                                                        {
+                                                            <select class="form-control select2 select2-teal"
+                                                                    data-dropdown-css-class="select2-teal" id="txtPOpaymentmethod" name="txtPOpaymentmethod">
+                                                            </select>
+                                                        }
+                                                    </div>
+                                                    <div class="col-lg-12 mt-3">
+                                                        <label class="form-label required-field">Payment Status</label>
+                                                        @if (Model.PaymentStatus != null)
+                                                        {
+                                                            <select class="form-control select2 select2-teal"
+                                                                    data-dropdown-css-class="select2-teal" id="txtPOpaymenttype" name="txtPOpaymenttype">
+                                                                <option selected value="@Model.PaymentStatus">@Model.PaymentStatusName</option>
+                                                            </select>
+                                                        }
+                                                        else
+                                                        {
+                                                            <select class="form-control select2 select2-teal"
+                                                                    data-dropdown-css-class="select2-teal" id="txtPOpaymenttype" name="txtPOpaymenttype">
+                                                            </select>
+                                                        }
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="col-lg-6">
+                                            <div class="card fm-card">
+                                                <h5 class="card-header fm-card-header">Invoice Summary</h5>
+                                                <div class="card-body">
+                                                    <table class="table table-borderless">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="p-2">
+                                                                    <label class="form-label mb-1">Sub Total</label>
+                                                                </td>
+                                                                <td class="p-2">
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-subtotal" value="@Model.SubTotal" placeholder="₹0.00" readonly />
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td class="p-2">
+                                                                    <label class="form-label mb-1">Total GST</label>
+                                                                </td>
+                                                                <td class="p-2">
+                                                                    <input type="text" class="form-control bg-light border-0" id="totalgst" placeholder="₹0.00" value="@Model.TotalGst" readonly />
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="border-top">
+                                                                <td class="p-2 pt-2">
+                                                                    <label class="form-label mb-0 fw-bold">Total Amount</label>
+                                                                </td>
+                                                                <td class="p-2 pt-2">
+                                                                    <input type="text" class="form-control bg-light border-0" id="cart-total" placeholder="₹0.00" value="@Model.TotalAmount" readonly />
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="row">
@@ -373,8 +342,10 @@
                                                 </a>
                                             </h5>
                                             <div class="card-body">
-                                                <input type="checkbox" id="hideShippingAddress" name="hideShippingAddress" onchange="fn_POtoggleShippingAddress()" checked>
-                                                <label for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input custom-control-input-teal" id="hideShippingAddress" name="hideShippingAddress" onchange="fn_POtoggleShippingAddress()" checked>
+                                                    <label class="custom-control-label" for="hideShippingAddress"><b>Is Your Billing Address is same as Shipping Address?</b></label>
+                                                </div>
                                                 <div id="shippingAddressFields" style="display:none;">
                                                     <textarea type="text" id="textShippingAddress" name="textShippingAddress" class="form-control" placeholder="Shipping Address"></textarea>
                                                 </div>
