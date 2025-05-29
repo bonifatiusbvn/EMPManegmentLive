@@ -3,8 +3,10 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.EntityModels.ViewModels.UserModels;
@@ -253,58 +255,25 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllTaskList()
+        public async Task<IActionResult> GetAllTaskList([FromBody] AGGridRequestModel TaskRequest)
         {
             try
             {
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
-                var dataTable = new DataTableRequstModel
-                {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<TaskDetailsView> TaskList = new List<TaskDetailsView>();
-                var data = new jsonData();
-                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "UserHome/GetAllTaskList");
-                if (postuser.data != null)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
-                    TaskList = JsonConvert.DeserializeObject<List<TaskDetailsView>>(data.data.ToString());
-                }
+                TaskRequest.filters ??= new List<FilterModel>();
 
-                else
+                var TaskDetails = await APIServices.AGPostAsync<TaskDetailsView>(TaskRequest, "UserHome/GetAllTaskList");
+
+                return new JsonResult(new
                 {
-                    TaskList = new List<TaskDetailsView>();
-                    ViewBag.Error = "not found";
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = TaskList,
-                };
-                return new JsonResult(jsonData);
+                    rowsThisPage = TaskDetails.Data,
+                    totalRowCount = TaskDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
-
 
         [FormPermissionAttribute("Tasks List-Edit")]
         [HttpPost]

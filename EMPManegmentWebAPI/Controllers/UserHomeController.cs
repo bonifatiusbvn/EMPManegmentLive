@@ -2,6 +2,7 @@
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Chat;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -21,6 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Newtonsoft.Json;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 #nullable disable
@@ -251,10 +253,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAllTaskList")]
-        public async Task<IActionResult> GetAllTaskList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<TaskDetailsView>> GetAllTaskList(AGGridRequestModel TaskRequest)
         {
-            var AllTaskList = await TaskServices.GetAllTaskList(dataTable);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = AllTaskList });
+            var AllTaskList = await TaskServices.GetAllTaskList(TaskRequest);
+            return new AGGridResponseModel<TaskDetailsView>
+            {
+                Data = AllTaskList.Data,
+                RecordsTotal = AllTaskList.RecordsTotal
+            };
         }
 
         [HttpPost]

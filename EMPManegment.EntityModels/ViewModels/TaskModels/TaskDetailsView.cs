@@ -22,6 +22,7 @@ namespace EMPManegment.EntityModels.ViewModels.TaskModels
 
         public DateTime? TaskDate { get; set; }
         public Guid? ProjectId { get; set; }
+        public string? ProjectName { get; set; }
 
         public Guid? UserId { get; set; }
         public DateTime? CreatedOn { get; set; }
