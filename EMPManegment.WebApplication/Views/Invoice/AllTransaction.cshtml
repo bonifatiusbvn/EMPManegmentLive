@@ -29,41 +29,73 @@
 <div class="row" id="contactList">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-header d-flex align-items-center border-0">
-                <h5 class="card-title mb-0 flex-grow-1">Vendor Transactions</h5>
-            </div>
-            <div class="card-body border border-dashed border-end-0 border-start-0">
-                <div class="row g-2">
-                    <div class="col-xl-4 col-md-6">
-                        <div class="search-box">
-                            <input type="text" class="form-control search" id="searchcreditdebitlist" placeholder="Search...">
-                            <i class="ri-search-line search-icon"></i>
-                        </div>
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-12 col-lg-2">
+                        <input class="form-control"
+                               id="txtoutwardSearch"
+                               placeholder="Search" />
                     </div>
-                    <!--end col-->
-                    <div class="col-xl-3 col-md-6">
-                        <select class="form-control" id="textTransactionCompanyName">
-                            <option value="AllCompany">All Company</option>
+                    <div class="col-12 col-lg-2">
+                        <select class="form-control select2 select2-maroon"
+                                data-dropdown-css-class="select2-maroon"
+                                id="ddlsearchtype"
+                                placeholder="Search">
+                            <option value="">All</option>
+                            <option value="InvoiceNo">Invoice No</option>
+                            <option value="CompanyChallanNo">Company ChallanNo</option>
+                            <option value="PartyChallanNo">Party ChallanNo</option>
+                            <option value="Clear">Clear Invoice</option>
+                            <option value="Pending">Pending Invoice</option>
                         </select>
                     </div>
-                    <!--end col-->
-                    <div class="col-xl-2 col-md-4">
-                        <div class="input-group">
-                            <input type="date" class="form-control" id="vendorstartdate">
+                    <div class="col-12 col-lg-2">
+                        <select class="form-control select2 select2-maroon"
+                                data-dropdown-css-class="select2-maroon"
+                                id="ddlTransactionCompanyName"
+                                name="ddlTransactionCompanyName">
+                        </select>
+                        <input type="hidden" id="txtCompanyname" />
+                    </div>
+                    <input type="hidden" id="txtuserid" value="@_userSession.UserId" />
+                    <div class="col-12 col-lg-2">
+                        <select class="form-control select2 select2-maroon" data-dropdown-css-class="select2-maroon" id="ddlInvoicetype">
+                            <option value=""></option>
+                            <option value="Sales">Sales</option>
+                            <option value="Purchase">Purchase</option>
+                            <option value="Sales Return">Sales Return</option>
+                            <option value="Purchase Return">Purchase Return</option>
+                        </select>
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <select class="form-control select2 select2-maroon"
+                                data-dropdown-css-class="select2-maroon"
+                                id="ddlPartySearchBy"
+                                name="ddlPartySearchBy">
+                        </select>
+                        <input type="hidden" id="txtpartyname" />
+                    </div>
+                    <div class="col-12 col-lg-1">
+                        <button class="btn  button-bg-maroon" id="toggleDateFilter">
+                            <i class="fa fa-calendar" aria-hidden="true"></i><span class="d-none d-sm-inline" style="margin-left: 10px;">Date</span>
+                        </button>
+                        <div id="dateFilterContainer" class="date-filter-container" style="display: none;">
+                            <div class="p-2 bg-light border">
+                                <label for="fromDate">From Date</label>
+                                <input type="text" id="fromDate" class="form-control mb-3 datepicker" style="font-size: 15px;">
+                                <label for="toDate">To Date</label>
+                                <input type="text" id="toDate" class="form-control mb-3 datepicker" style="font-size: 15px;">
+                                <label for="InvoiceYearDropdown">Year</label>
+                                <select id="InvoiceYearDropdown" class="form-control mb-3 select2 select2-maroon "
+                                        data-dropdown-css-class="select2-maroon">
+                                </select>
+                                <button class="btn button-bg-maroon btn-block" id="applyFilters" style="margin-top: 10px;">Apply</button>
+                                <button class="btn btn-secondary btn-block" id="resetInvoiceDateFilters">Reset</button>
+                            </div>
                         </div>
                     </div>
-                    <!--end col-->
-                    <div class="col-xl-2 col-md-4">
-                        <div class="input-group">
-                            <input type="date" class="form-control" id="vendorenddate">
-                        </div>
-                    </div>
-                    <!--end col-->
-                    <div class="col-xl-1 col-md-4">
-                        <button class="btn button-teal w-100" onclick="SearchDatesInVendorCreditDebitList();">Search</button>
-                    </div>
+
                 </div>
-                <!--end row-->
             </div>
             <div class="card-body p-0">
                 <div class="card-body">

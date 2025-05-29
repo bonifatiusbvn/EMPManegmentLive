@@ -4354,8 +4354,8 @@ textarea.form-control-lg {
 .nav {
     --vz-nav-link-padding-x: 1rem;
     --vz-nav-link-padding-y: 0.5rem;
-    --vz-nav-link-color: var(--vz-link-color);
-    --vz-nav-link-hover-color: var(--vz-link-hover-color);
+    --vz-nav-link-color: #16989A;
+    --vz-nav-link-hover-color: #138486;
     --vz-nav-link-disabled-color: var(--vz-secondary-color);
     display: -webkit-box;
     display: -ms-flexbox;
@@ -4372,7 +4372,7 @@ textarea.form-control-lg {
     padding: var(--vz-nav-link-padding-y) var(--vz-nav-link-padding-x);
     font-size: var(--vz-nav-link-font-size);
     font-weight: var(--vz-nav-link-font-weight);
-    color: var(--vz-nav-link-color);
+    color: #16989A;
     background: 0 0;
     border: 0;
     -webkit-transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out;
@@ -4387,7 +4387,7 @@ textarea.form-control-lg {
 }
 
 .nav-link:focus, .nav-link:hover {
-    color: var(--vz-nav-link-hover-color)
+    color: #138486
 }
 
 .nav-link:focus-visible {
@@ -4581,8 +4581,8 @@ textarea.form-control-lg {
 .navbar-nav {
     --vz-nav-link-padding-x: 0;
     --vz-nav-link-padding-y: 0.5rem;
-    --vz-nav-link-color: var(--vz-navbar-color);
-    --vz-nav-link-hover-color: var(--vz-navbar-hover-color);
+    --vz-nav-link-color: #16989A;
+    --vz-nav-link-hover-color: #138486;
     --vz-nav-link-disabled-color: var(--vz-navbar-disabled-color);
     display: -webkit-box;
     display: -ms-flexbox;

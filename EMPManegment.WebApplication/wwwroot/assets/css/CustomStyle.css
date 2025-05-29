@@ -106,7 +106,7 @@
     .table .editbtn:hover,
     .table .deletebtn:hover,
     .table .pdfbtn:hover {
-        color: #b61651 !important;
+        color: #138486 !important;
         transform: scale(1.1);
     }
 
@@ -145,7 +145,7 @@
 }
 
     .table .text-teal:hover {
-        color: #b61651 !important;
+        color: #138486 !important;
         text-decoration: underline;
     }
 
@@ -382,12 +382,12 @@
 }
 
 .card-teal.card-outline-tabs > .card-header a:hover {
-    border-top: 3px solid #b61651;
+    border-top: 3px solid #138486;
 }
 
 .card-teal.card-outline-tabs > .card-header a.active,
 .card-teal.card-outline-tabs > .card-header a.active:hover {
-    border-top: 3px solid #b61651;
+    border-top: 3px solid #138486;
 }
 
 /* Tool Button Styles */
@@ -421,7 +421,7 @@
 .card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.hour:hover,
 .card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.minute:hover,
 .card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.second:hover {
-    background-color: #b61651;
+    background-color: #138486;
     color: #fff;
 }
 
@@ -434,7 +434,7 @@
 .card.bg-teal .bootstrap-datetimepicker-widget table td.active:hover,
 .card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.active,
 .card.bg-gradient-teal .bootstrap-datetimepicker-widget table td.active:hover {
-    background-color: #b61651;
+    background-color: #138486;
     color: #fff;
 }
 
@@ -583,7 +583,7 @@
 
         .ag-theme-teal .ag-cell-value .editbtn:hover,
         .ag-theme-teal .ag-cell-value .pdfbtn:hover {
-            color: #b61651;
+            color: #138486;
             transform: scale(1.1);
         }
 
@@ -622,7 +622,7 @@
     }
 
         .ag-theme-teal .ag-cell-value .text-teal:hover {
-            color: #b61651;
+            color: #138486;
             text-decoration: underline;
         }
 

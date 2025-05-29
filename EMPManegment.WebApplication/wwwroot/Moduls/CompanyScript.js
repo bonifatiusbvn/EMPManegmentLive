@@ -12,7 +12,7 @@ $(document).ready(function () {
                 sortable: true,
                 filter: true,
                 cellRenderer: function (params) {
-                    debugger
+
                     if (!params.data || !params.data.id) {
                         return '';
                     }
