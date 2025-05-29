@@ -27,6 +27,10 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
         public int? PaymentType { get; set; }
         public Guid? UserId { get; set; }
         public Guid? RoleId { get; set; }
+        public Guid? VendorFilter { get; set; }
+        public string? ProjectFilter { get; set; }
+        public string? TaskTypeFilter { get; set; }
+        public string? TaskStatusFilter { get; set; }
     }
 
     public class SortModel

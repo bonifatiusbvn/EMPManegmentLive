@@ -13,6 +13,7 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
         public string InvoiceType { get; set; } = null!;
 
         public Guid VandorId { get; set; }
+        public Guid? CompanyId { get; set; }
 
         public string? InvoiceNo { get; set; }
 

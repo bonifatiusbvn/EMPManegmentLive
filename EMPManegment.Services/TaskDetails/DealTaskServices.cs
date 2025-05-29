@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.TaskDetails;
@@ -55,9 +56,9 @@ namespace EMPManegment.Services.TaskDetails
             return await TaskDetails.GetTaskDetails(Taskid, ProjectId);
         }
 
-        public async Task<jsonData> GetAllTaskList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<TaskDetailsView>> GetAllTaskList(AGGridRequestModel TaskRequest)
         {
-            return await TaskDetails.GetAllTaskList(dataTable);
+            return await TaskDetails.GetAllTaskList(TaskRequest);
         }
 
         public async Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails()

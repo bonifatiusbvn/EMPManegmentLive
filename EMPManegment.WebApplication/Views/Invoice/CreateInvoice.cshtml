@@ -13,409 +13,381 @@
         border: 2px solid red;
     }
 
-    .card-header {
-        background-color: #f8f9fa;
-        border-bottom: 1px solid #e9ecef;
-    }
-
-    .form-label {
-        font-weight: 500;
-    }
-
-    .ac-invoice-total {
-        background-color: #f8f9fa;
-        border-radius: 0.5rem;
-        padding: 1.5rem;
-    }
-
-    .table-container {
-        border-radius: 0.5rem;
-        overflow: hidden;
-    }
-
-    .content-header {
-        padding: 1rem 0;
-    }
 </style>
 
-<div class="container-fluid">
-    <!-- Page Header -->
-    <div class="row content-header">
-        <div class="col-12">
-            <div class="d-flex align-items-center justify-content-between">
-                <h4 class="mb-0 text-primary">Create Invoice</h4>
-                <nav aria-label="breadcrumb">
-                    <ol class="breadcrumb mb-0">
-                        <li class="breadcrumb-item"><a href="javascript:void(0);">Invoices</a></li>
-                        <li class="breadcrumb-item active">Create Invoice</li>
-                    </ol>
-                </nav>
+<div class="row" style="margin-top:80px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">Create Invoice</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Invoices</a></li>
+                    <li class="breadcrumb-item active">Create Invoice</li>
+                </ol>
             </div>
         </div>
     </div>
-
-    <!-- Main Form -->
-    <form id="CreateInvoiceForm">
-        <div class="row g-3">
-            <!-- Vendor and Invoice Details -->
-            <div class="col-lg-6">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Vendor Details (To:)</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label for="ddlVendorName" class="form-label">Vendor Name <span class="text-danger">*</span></label>
-                                @if (Model?.Id != Guid.Empty)
-                                {
-                                    <input type="text" id="txtEditVendorCompanyName" name="txtEditVendorCompanyName" class="form-control" value="@Model.VendorCompanyName" readonly />
-                                }
-                                else
-                                {
-                                    <select class="form-control select2 select2-teal"
-                                            data-dropdown-css-class="select2-teal"
-                                            id="ddlVendorName">
-                                    </select>
-                                }
-                                <input type="hidden" id="txtVendorName" />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="textVendorMobile" class="form-label">Mobile No</label>
-                                <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" value="@Model.VendorCompanyNumber" readonly />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="textVendorAddress" class="form-label">Billing Address</label>
-                                <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" value="@Model.VendorAddress" readonly />
-                            </div>
-                            <div class="col-md-6">
-                                <label for="textVendorGSTNumber" class="form-label">GST NO</label>
-                                <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" value="@Model.VendorGstnumber" readonly />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-lg-6">
-                <div class="card h-100">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Invoice Details (From:)</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-4">
-                                <label for="ddlinvompanyName" class="form-label">Company Name <span class="text-danger">*</span></label>
-                                @if (Model?.Id != Guid.Empty)
-                                {
-                                    <input type="text" id="txtEditCompanyName" name="txtEditCompanyName" class="form-control" value="@Model.CompnyName" readonly />
-                                }
-                                else
-                                {
-                                    <select class="form-control select2 select2-teal"
-                                            data-dropdown-css-class="select2-teal"
-                                            id="ddlinvompanyName">
-                                    </select>
-                                }
-                                <input type="hidden" id="txtCompanyName" />
-                            </div>
-                            <div class="col-md-5">
-                                <label for="textPoId" class="form-label">Invoice No</label>
-                                <input type="text" class="form-control" id="textInvoiceNo" value="@ViewBag.InvoiceNo" readonly />
-                            </div>
-                            <div class="col-md-3">
-                                <label for="textInvoiceDate" class="form-label">Invoice Date</label>
-                                @{
-                                    DateTime invoiceDate = Model.InvoiceDate != DateTime.MinValue ? Model.InvoiceDate : DateTime.Now;
-                                    string formattedDate = invoiceDate.ToString("yyyy-MM-dd");
-                                }
-                                <input type="date" id="textInvoiceDate" class="form-control" name="textInvoiceDate" value="@formattedDate">
-                            </div>
-                            <div class="col-md-6">
-                                <label for="textCompanyBillingAddress" class="form-label">Address</label>
-                                <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="@Model.CompanyAddress" readonly />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">GST NO</label>
-                                <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="@Model.CompanyGst" readonly />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Hidden Fields -->
-            <input type="text" id="textProjectId" class="form-control" hidden value="@UserSession.ProjectId" />
-            <input type="text" id="textCreatedById" class="form-control" hidden value="@_userSession.UserId" />
-            <input type="text" id="textInvoiceId" class="form-control" hidden value="@Model.Id" />
-            <input type="text" id="InvoiceDollarAmount" hidden />
-            @{
-                DateTime? CreatedOn = Model.CreatedOn;
-                string formattedCreatedOn = CreatedOn.HasValue ? CreatedOn.Value.ToString("yyyy-MM-dd") : "";
-            }
-            <input type="text" id="txtCreatedOn" class="form-control" hidden value="@formattedCreatedOn" />
-            <input type="text" id="textinvoiceProjectId" class="form-control" hidden value="@Model.ProjectId" />
-
-            <!-- Product Details -->
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-header d-flex justify-content-between align-items-center">
-                        <h5 class="card-title mb-0 flex-grow-1">Product Details</h5>
-                        <div class="flex-shrink-0">
-                            <div class="d-flex flex-wrap gap-2">
-                                <a class="btn btn-block button-teal" style="margin-left: 665px;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="fa-solid fa-circle-plus me-1"></i>Add Product</a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="table-responsive">
-                            <table class="table table-hover mb-0">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Products</th>
-                                        <th>HSN Code</th>
-                                        <th>Quantity</th>
-                                        <th>Qty Type</th>
-                                        <th>
-                                            Price
-                                            <select class="form-select border-0 bg-light" id="Invoicecurrency-select" onchange="checkInvoiceCurrencySelection()">
-                                                @if (Model.DollarPrice != 0)
-                                                {
-                                                    <option value="₹">(₹)</option>
-                                                    <option value="$" selected>($)</option>
-                                                }
-                                                else
-                                                {
-                                                    <option value="₹" selected>(₹)</option>
-                                                    <option value="$">($)</option>
-                                                }
-                                            </select>
-                                        </th>
-                                        <th>Discount</th>
-                                        <th>Discount(%)</th>
-                                        <th>GST (%)</th>
-                                        <th>IGST (%)</th>
-                                        <th>GST Amt (₹)</th>
-                                        <th>Amount (₹)</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="addnewproductlink" class="table-body">
-                                    @if (Model.InvoiceDetails != null)
-                                    {
-                                        @Html.Partial("_DisplayInvoiceProductDetailsPartial.cshtml", Model.InvoiceDetails)
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Additional Information -->
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Additional Information</h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label">Buys Order No</label>
-                                <input type="text" id="textBuysOrderNo" class="form-control" placeholder="Buys OrderNo" value="@Model.BuyesOrderNo" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Buys Order Date</label>
-                                @{
-                                    string Dateformat = Model?.BuyesOrderDate.HasValue ?? false ? Model.BuyesOrderDate.Value.ToString("yyyy-MM-dd") : string.Empty;
-                                }
-                                <input type="date" id="@(Model.BuyesOrderDate != null ? "textBuysOrderDate1" : "textBuysOrderDate")"
-                                       class="form-control" value="@Dateformat" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Dispatch Doc No.</label>
-                                <input type="text" class="form-control" id="textDispatchDocNo" value="@Model.DispatchDocNo" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Motor Vehicle No.</label>
-                                <input type="text" class="form-control" id="textMotorVehicleNo" value="@Model.MotorVehicleNo" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Dispatch Through</label>
-                                <input type="text" class="form-control" id="textDispatchThrough" value="@Model.DispatchThrough" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Destination</label>
-                                <input type="text" class="form-control" id="textDestination" value="@Model.Destination" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Payment Method <span class="text-danger">*</span></label>
-                                <select class="form-control select2 select2-teal"
-                                        data-dropdown-css-class="select2-teal"
-                                        id="ddlInvoicepaymentmethod">
-                                </select>
-                                <input type="hidden" id="txtCompanyName" />
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label">Payment Status<span class="text-danger">*</span></label>
-                                <select class="form-control select2 select2-teal"
-                                        data-dropdown-css-class="select2-teal"
-                                        id="ddlInvoicepaymenttype">
-                                </select>
-                                <input type="hidden" id="txtCompanyName" />
-
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Shipping Address -->
-                <div class="col-lg-6">
-                    <div class="card">
-                        <div class="card-header">
-                            <h5 class="card-title mb-0">Additional Information</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" id="hideShippingAddress"
-                                @(Model.ShippingAddress == Model.VendorAddress ? "checked" : "")
-                                       onchange="tn_toggleInvoiceShippingAddress()" />
-                                <label class="form-check-label" for="hideShippingAddress">
-                                    Same as billing address
-                                </label>
-                            </div>
-                            <div id="shippingAddressFields" @(Model.ShippingAddress == Model.VendorAddress ? "style=display:none;" : "")>
-                                <textarea class="form-control" id="textShippingAddress" rows="3">@Model.ShippingAddress</textarea>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-            <!-- Invoice Summary -->
-
-            <div class="col-lg-6">
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">Invoice Summary</h5>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-borderless">
-                            <tbody>
-                                <tr>
-                                    <td class="p-2">
-                                        <label class="form-label mb-1">Sub Total</label>
-                                    </td>
-                                    <td class="p-2">
-                                        <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2">
-                                        <label class="form-label mb-1">Total GST</label>
-                                    </td>
-                                    <td class="p-2">
-                                        <input type="text" class="form-control bg-light border-0" id="totalgst" value="@Model.TotalGst" placeholder="₹0.00" readonly />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2">
-                                        <label class="form-label mb-1">Discount</label>
-                                    </td>
-                                    <td class="p-2">
-                                        <input type="text" class="form-control border-0" id="cart-discount" value="@Model.TotalDiscount" placeholder="₹0.00" readonly />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="p-2">
-                                        <label class="form-label mb-1">Roundoff</label>
-                                    </td>
-                                    <td class="p-2">
-                                        @if (Model.RoundOff != null)
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="" id="invoiceList">
+            <!-- Main Form -->
+            <form id="CreateInvoiceForm">
+                <div class="row g-3">
+                    <!-- Vendor and Invoice Details -->
+                    <div class="col-lg-6">
+                        <div class="card fm-card">
+                            <h5 class="card-header fm-card-header">Vendor Details (To:)</h5>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label for="ddlVendorName" class="form-label">Vendor Name <span class="text-danger">*</span></label>
+                                        @if (Model?.Id != Guid.Empty)
                                         {
-                                            <input type="text" class="form-control bg-light border-0" id="cart-roundOff" value="@Model.RoundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+                                            <input type="text" id="txtEditVendorCompanyName" name="txtEditVendorCompanyName" class="form-control" value="@Model.VendorCompanyName" readonly />
                                         }
                                         else
                                         {
-                                            <input type="text" class="form-control bg-light border-0" name="txtroundOff" id="cart-roundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+                                            <select class="form-control select2 select2-teal"
+                                                    data-dropdown-css-class="select2-teal"
+                                                    id="ddlVendorName">
+                                            </select>
                                         }
-                                    </td>
-                                </tr>
-                                <tr class="border-top">
-                                    <td class="p-2 pt-2">
-                                        <label class="form-label mb-0 fw-bold">Total Amount</label>
-                                    </td>
-                                    <td class="p-2 pt-2">
-                                        <input type="text" class="form-control bg-light border-0 fw-bold" id="cart-total" value="@Model.TotalAmount" placeholder="₹0.00" readonly />
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                        <input type="hidden" id="txtVendorName" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="textVendorMobile" class="form-label">Mobile No</label>
+                                        <input type="text" id="textVendorMobile" class="form-control" placeholder="Mobile No" value="@Model.VendorCompanyNumber" readonly />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="textVendorAddress" class="form-label">Billing Address</label>
+                                        <input type="text" id="textVendorAddress" class="form-control" placeholder="Address" value="@Model.VendorAddress" readonly />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="textVendorGSTNumber" class="form-label">GST NO</label>
+                                        <input type="text" id="textVendorGSTNumber" class="form-control" placeholder="GST No" value="@Model.VendorGstnumber" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </div>
 
-
-
-            <!-- Action Buttons -->
-            <div class="col-12">
-                <div class="text-end">
-                    @if (Model.InvoiceDetails != null)
-                    {
-                        <button type="button" class="btn button-teal btn-lg px-4" id="UpdateInvoiceButton" onclick="fn_UpdateInvoiceDetails()">
-                            <i class="ri-save-line me-1"></i> Update Invoice
-                        </button>
-                    }
-                    else
-                    {
-                        <button type="button" class="btn button-teal btn-lg px-4" id="SavePOButton" onclick="fn_InsertInvoiceDetails()">
-                            <i class="ri-file-add-line me-1"></i> Create Invoice
-                        </button>
-                    }
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-<!-- Dollar Modal (keep this at the bottom) -->
-<div id="InvoiceDollarModal" class="modal fade" tabindex="-1">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form id="AddPODollarAmountForm">
-                <div class="modal-header bg-primary-subtle">
-                    <h5 class="modal-title">$Price</h5>
-                    <button type="button" class="btn-close" onclick="CloseInvoiceDollarModel()"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label class="form-label">1$ = <span class="text-danger">*</span></label>
-                        <input type="text" class="form-control" id="txtInvoiceDollarAmount" value="@Model.DollarPrice" placeholder="(₹)" />
+                    <div class="col-lg-6">
+                        <div class="card fm-card">
+                            <h5 class="card-header fm-card-header">Invoice Details (From:)</h5>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-4">
+                                        <label for="ddlinvompanyName" class="form-label">Company Name <span class="text-danger">*</span></label>
+                                        @if (Model?.Id != Guid.Empty)
+                                        {
+                                            <input type="text" id="txtEditCompanyName" name="txtEditCompanyName" class="form-control" value="@Model.CompnyName" readonly />
+                                        }
+                                        else
+                                        {
+                                            <select class="form-control select2 select2-teal"
+                                                    data-dropdown-css-class="select2-teal"
+                                                    id="ddlinvompanyName">
+                                            </select>
+                                        }
+                                        <input type="hidden" id="txtCompanyName" />
+                                    </div>
+                                    <div class="col-md-5">
+                                        <label for="textPoId" class="form-label">Invoice No</label>
+                                        <input type="text" class="form-control" id="textInvoiceNo" value="@ViewBag.InvoiceNo" readonly />
+                                    </div>
+                                    <div class="col-md-3">
+                                        <label for="textInvoiceDate" class="form-label">Invoice Date</label>
+                                        @{
+                                            DateTime invoiceDate = Model.InvoiceDate != DateTime.MinValue ? Model.InvoiceDate : DateTime.Now;
+                                            string formattedDate = invoiceDate.ToString("yyyy-MM-dd");
+                                        }
+                                        <input type="date" id="textInvoiceDate" class="form-control" name="textInvoiceDate" value="@formattedDate">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label for="textCompanyBillingAddress" class="form-label">Address</label>
+                                        <input type="text" id="textCompanyBillingAddress" name="textCompanyBillingAddress" class="form-control" placeholder="Billing Address" value="@Model.CompanyAddress" readonly />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">GST NO</label>
+                                        <input type="text" id="textCompanyGstNo" class="form-control" placeholder="GST No" value="@Model.CompanyGst" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" onclick="CloseInvoiceDollarModel()">Close</button>
-                    <button type="button" class="btn button-teal" onclick="SaveInvoiceDollarAmount()">Save</button>
+
+                    <!-- Hidden Fields -->
+                    <input type="text" id="textProjectId" class="form-control" hidden value="@UserSession.ProjectId" />
+                    <input type="text" id="textCreatedById" class="form-control" hidden value="@_userSession.UserId" />
+                    <input type="text" id="textInvoiceId" class="form-control" hidden value="@Model.Id" />
+                    <input type="text" id="InvoiceDollarAmount" hidden />
+                    @{
+                        DateTime? CreatedOn = Model.CreatedOn;
+                        string formattedCreatedOn = CreatedOn.HasValue ? CreatedOn.Value.ToString("yyyy-MM-dd") : "";
+                    }
+                    <input type="text" id="txtCreatedOn" class="form-control" hidden value="@formattedCreatedOn" />
+                    <input type="text" id="textinvoiceProjectId" class="form-control" hidden value="@Model.ProjectId" />
+
+                    <!-- Product Details -->
+                    <div class="col-12">
+                        <div class="card fm-card">
+                            <div class="card-header">
+                                <div class="d-flex align-items-center">
+                                    <h5 class="card-title mb-0 flex-grow-1" style="font-size:20px;font-weight:600;color:#16989A;">Product Details</h5>
+                                    <div class="flex-shrink-0">
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <a class="btn button-teal" style="text-align:end;" id="AddVendorModelButton" onclick="fn_OpenAddproductmodal()"><i class="fa-solid fa-circle-plus me-1"></i> Product</a>
+                                            <span id="spnitembutton" class="text-danger"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body pt-0">
+                                <div class="table-wrapper">
+                                    <table class="table fixed-header-table table-bordered table-striped">
+                                        <thead class="table-secondary">
+                                            <tr class="text-uppercase">
+                                                <th>#</th>
+                                                <th>Products</th>
+                                                <th>HSN Code</th>
+                                                <th>Quantity</th>
+                                                <th>Qty Type</th>
+                                                <th>
+                                                    Price
+                                                    <select class="form-select border-0 bg-light" id="Invoicecurrency-select" onchange="checkInvoiceCurrencySelection()">
+                                                        @if (Model.DollarPrice != 0)
+                                                        {
+                                                            <option value="₹">(₹)</option>
+                                                            <option value="$" selected>($)</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="₹" selected>(₹)</option>
+                                                            <option value="$">($)</option>
+                                                        }
+                                                    </select>
+                                                </th>
+                                                <th>Discount</th>
+                                                <th>Discount(%)</th>
+                                                <th>GST (%)</th>
+                                                <th>IGST (%)</th>
+                                                <th>GST Amt (₹)</th>
+                                                <th>Amount (₹)</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="addnewproductlink" class="table-body">
+                                            @if (Model.InvoiceDetails != null)
+                                            {
+                                                @Html.Partial("_DisplayInvoiceProductDetailsPartial.cshtml", Model.InvoiceDetails)
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Information -->
+                    <div class="col-lg-6">
+                        <div class="card fm-card">
+                            <h5 class="card-header fm-card-header">Additional Information</h5>
+                            <div class="card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label">Buys Order No</label>
+                                        <input type="text" id="textBuysOrderNo" class="form-control" placeholder="Buys OrderNo" value="@Model.BuyesOrderNo" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Buys Order Date</label>
+                                        @{
+                                            string Dateformat = Model?.BuyesOrderDate.HasValue ?? false ? Model.BuyesOrderDate.Value.ToString("yyyy-MM-dd") : string.Empty;
+                                        }
+                                        <input type="date" id="@(Model.BuyesOrderDate != null ? "textBuysOrderDate1" : "textBuysOrderDate")"
+                                               class="form-control" value="@Dateformat" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Dispatch Doc No.</label>
+                                        <input type="text" class="form-control" id="textDispatchDocNo" value="@Model.DispatchDocNo" placeholder="Dispatch Doc No." />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Motor Vehicle No.</label>
+                                        <input type="text" class="form-control" id="textMotorVehicleNo" value="@Model.MotorVehicleNo" placeholder="Motor Vehicle No." />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Dispatch Through</label>
+                                        <input type="text" class="form-control" id="textDispatchThrough" value="@Model.DispatchThrough" placeholder="Dispatch Through" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Destination</label>
+                                        <input type="text" class="form-control" id="textDestination" value="@Model.Destination" placeholder="Destination" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Payment Method <span class="text-danger">*</span></label>
+                                        <select class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal"
+                                                id="ddlInvoicepaymentmethod">
+                                        </select>
+                                        <input type="hidden" id="txtCompanyName" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">Payment Status<span class="text-danger">*</span></label>
+                                        <select class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal"
+                                                id="ddlInvoicepaymenttype">
+                                        </select>
+                                        <input type="hidden" id="txtCompanyName" />
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="col-lg-6">
+                            <div class="card fm-card">
+                                <h5 class="card-header fm-card-header">Additional Information</h5>
+                                <div class="card-body">
+                                    <div class="custom-control custom-checkbox">
+                                        <input class="custom-control-input custom-control-input-teal" type="checkbox" id="hideShippingAddress"
+                                               @(Model.ShippingAddress == Model.VendorAddress ? "checked" : "")
+                                               onchange="tn_toggleInvoiceShippingAddress()" />
+                                        <label class="custom-control-label" for="hideShippingAddress">
+                                            Same as billing address
+                                        </label>
+                                    </div>
+                                    <div id="shippingAddressFields" @(Model.ShippingAddress == Model.VendorAddress ? "style=display:none;" : "")>
+                                        <textarea class="form-control" id="textShippingAddress" rows="3">@Model.ShippingAddress</textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Invoice Summary -->
+
+                    <div class="col-lg-6">
+                        <div class="card fm-card">
+                            <h5 class="card-header fm-card-header">Invoice Summary</h5>
+                            <div class="card-body">
+                                <table class="table table-borderless">
+                                    <tbody>
+                                        <tr>
+                                            <td class="p-2">
+                                                <label class="form-label mb-1">Sub Total</label>
+                                            </td>
+                                            <td class="p-2">
+                                                <input type="text" class="form-control bg-light border-0" id="cart-subtotal" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2">
+                                                <label class="form-label mb-1">Total GST</label>
+                                            </td>
+                                            <td class="p-2">
+                                                <input type="text" class="form-control bg-light border-0" id="totalgst" value="@Model.TotalGst" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2">
+                                                <label class="form-label mb-1">Discount</label>
+                                            </td>
+                                            <td class="p-2">
+                                                <input type="text" class="form-control border-0" id="cart-discount" value="@Model.TotalDiscount" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="p-2">
+                                                <label class="form-label mb-1">Roundoff</label>
+                                            </td>
+                                            <td class="p-2">
+                                                @if (Model.RoundOff != null)
+                                                {
+                                                    <input type="text" class="form-control bg-light border-0" id="cart-roundOff" value="@Model.RoundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+                                                }
+                                                else
+                                                {
+                                                    <input type="text" class="form-control bg-light border-0" name="txtroundOff" id="cart-roundOff" placeholder="₹0.00" min="-0.99" max="0.99" />
+                                                }
+                                            </td>
+                                        </tr>
+                                        <tr class="border-top">
+                                            <td class="p-2 pt-2">
+                                                <label class="form-label mb-0 fw-bold">Total Amount</label>
+                                            </td>
+                                            <td class="p-2 pt-2">
+                                                <input type="text" class="form-control bg-light border-0 fw-bold" id="cart-total" value="@Model.TotalAmount" placeholder="₹0.00" readonly />
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Action Buttons -->
+                    <div class="col-12">
+                        <div class="text-end">
+                            @if (Model.InvoiceDetails != null)
+                            {
+                                <button type="button" class="btn button-teal" id="UpdateInvoiceButton" onclick="fn_UpdateInvoiceDetails()">
+                                    <i class="ri-save-line me-1"></i> Update
+                                </button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn button-teal" id="SavePOButton" onclick="fn_InsertInvoiceDetails()">
+                                    <i class="ri-file-add-line me-1"></i>Create
+                                </button>
+                            }
+                        </div>
+                    </div>
                 </div>
             </form>
         </div>
-    </div>
-</div>
 
-<div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary-subtle p-3">
-                <h5 class="modal-title">Select Product</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearProductListSearchText()"></button>
+        <!-- Dollar Modal (keep this at the bottom) -->
+        <div id="InvoiceDollarModal" class="modal fade" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form id="AddPODollarAmountForm">
+                        <div class="modal-header bg-primary-subtle">
+                            <h5 class="modal-title">$Price</h5>
+                            <button type="button" class="btn-close" onclick="CloseInvoiceDollarModel()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label class="form-label">1$ = <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="txtInvoiceDollarAmount" value="@Model.DollarPrice" placeholder="(₹)" />
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-light" onclick="CloseInvoiceDollarModel()">Close</button>
+                            <button type="button" class="btn button-teal" onclick="SaveInvoiceDollarAmount()">Save</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="modal-header">
-                <label class="form-label">Search Product</label>
-                <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallProducts()" />
-            </div>
-            <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+        </div>
+
+        <div class="modal fade show" tabindex="-1" id="mdPoproductModal" role="dialog" aria-labelledby="myLargeModalLabel" aria-modal="true" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary-subtle p-3">
+                        <h5 class="modal-title">Select Product</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" onclick="clearProductListSearchText()"></button>
+                    </div>
+                    <div class="modal-header">
+                        <label class="form-label">Search Product</label>
+                        <input class="form-control" id="mdProductSearch" onkeyup="fn_filterallProducts()" />
+                    </div>
+                    <div class="modal-body" id="mdlistofItem" style="overflow-x: hidden">
+                    </div>
+                </div>
             </div>
         </div>
     </div>

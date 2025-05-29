@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -18,7 +19,7 @@ namespace EMPManegment.Inretface.Services.TaskServices
         Task<UserResponceModel> UpdateTaskStatus(TaskDetailsView updatetask);
         Task<TaskDetailsView> GetTaskDetailsById(Guid Taskid);
         Task<IEnumerable<TaskDetailsView>> GetAllUserTaskDetails();
-        Task<jsonData> GetAllTaskList(DataTableRequstModel dataTable);
+        Task<AGGridResponseModel<TaskDetailsView>> GetAllTaskList(AGGridRequestModel TaskRequest);
         Task<IEnumerable<TaskDetailsView>> GetTaskDetails(Guid Taskid, Guid ProjectId);
         Task<IEnumerable<TaskDetailsView>> GetUserTotalTask(Guid UserId);
         Task<UserResponceModel> UpdateTaskDetails(TaskDetailsView updateTaskDetails);

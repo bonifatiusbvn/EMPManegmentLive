@@ -300,6 +300,52 @@ $(document).ready(function () {
             }
         }
     });
+
+    $('#txtPOpaymentmethod').select2({
+        placeholder: 'Select Payment Method',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/PurchaseOrderMaster/GetPaymentMethodList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.paymentMethod
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
+    $('#txtPOpaymenttype').select2({
+        placeholder: 'Select Payment type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
 });
 
 function ResetPurchaseOrderData() {
@@ -315,10 +361,8 @@ function ResetPurchaseOrderData() {
 
 $(document).ready(function () {
 
-    fn_GetPOPaymentTypeList();
     fn_GetPOVendorNameList();
     fn_GetPOCompanyNameList();
-    fn_GetPOPaymentMethodList();
     fn_updatePOTotals();
     $('#txtvendorname').change(function () {
         var Text = $("#txtvendorname Option:Selected").text();
@@ -617,36 +661,7 @@ function fn_GetPOProductsList() {
         }
     });
 }
-function fn_GetPOPaymentTypeList() {
-    $.ajax({
-        url: '/ExpenseMaster/GetPaymentTypeList',
-        success: function (result) {
-            var selectedValue = $('#txtPOpaymenttype').find('option:first').val();
-            $.each(result, function (i, data) {
-                $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                if (data.id != selectedValue) {
 
-                    $('#txtPOpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                }
-            });
-        }
-    });
-}
-function fn_GetPOPaymentMethodList() {
-
-    $.ajax({
-        url: '/PurchaseOrderMaster/GetPaymentMethodList',
-        success: function (result) {
-            var selectedValue = $('#txtPOpaymentmethod').find('option:first').val();
-            $.each(result, function (i, data) {
-                if (data.id != selectedValue) {
-                    $('#txtPOpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
-                }
-
-            });
-        }
-    });
-}
 function fn_POProductTypeDropdown(productId) {
 
     if ($('#txtPOProductType_' + productId + ' option').length > 1) {

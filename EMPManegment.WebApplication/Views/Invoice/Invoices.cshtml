@@ -28,26 +28,53 @@
     <div class="col-lg-12">
         <div class="card" id="invoiceList">
             <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Invoices</h5>
-                    <input hidden id="txtInvoice" type="text" value="@UserSession.ProjectId" />
+                <div class="row align-items-center">
+                    <div class="col-12 col-lg-3">
+                        <input class="form-control"
+                               id="txtInvoiceSearch"
+                               placeholder="Search..." />
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <select class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
+                                id="txtInvoiceCompanyName">
+                        </select>
+                        <input type="hidden" id="txtCompanyName" />
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <select class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
+                                id="txtInvoiceVendorName">
+                        </select>
+                        <input type="hidden" id="txtVendorName" />
+                    </div>
+                    <div class="col-12 col-lg-1">
+                        <button class="btn button-teal" id="toggleDateFilter">
+                            <i class="fa fa-calendar" aria-hidden="true"></i><span class="d-none d-sm-inline" style="margin-left: 10px;">Date</span>
+                        </button>
+                        <div id="dateFilterContainer" class="date-filter-container" style="display: none;">
+                            <div class="p-2 bg-light border">
+                                <label for="txtstartdatebox">From Date</label>
+                                <input type="date" id="txtstartdatebox" class="form-control mb-3" style="font-size: 15px;">
+                                <label for="txtenddatebox">To Date</label>
+                                <input type="date" id="txtenddatebox" class="form-control mb-3" style="font-size: 15px;">
+                                <button class="btn button-teal btn-block" id="applyFilters">Apply</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <button class="btn button-rest" style="margin-left: -30px;" onclick="ResetInvoiceFilters()"> Reset</button>
+                    </div>
                     @if (UserSession.FormPermisionData.Any(a => a.FormName == "Create Invoice" && (a.Add == true)))
                     {
-                        <div class="flex-shrink-0">
-                            <div class="d-flex gap-2 flex-wrap">
-                                <button class="btn button-teal" onclick="createInvoice()"><i class="fa-solid fa-circle-plus me-1"></i>Invoice</button>
-                            </div>
+                        <div class="col-12 col-lg-2" style="text-align:end">
+                            <button class="btn button-teal" onclick="createInvoice()"><i class="fa-solid fa-circle-plus"></i> Invoice</button>
                         </div>
                     }
                 </div>
             </div>
             <div class="card-body">
-                <div class="listjs-table">
-                    <div class="table-responsive">
-                        <div id="invoiceTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
-                    </div>
-                </div>
-                <!-- container-fluid -->
+                <div id="invoiceTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
             </div>
         </div>
         <!--Update Invoice Modal -->
