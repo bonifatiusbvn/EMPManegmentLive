@@ -1051,27 +1051,25 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
+
         [HttpPost]
-        public async Task<IActionResult> GetUserFormListById(Guid UserId)
+        public async Task<IActionResult> GetUserFormListById([FromBody] AGGridRequestModel UserPermissionRequest)
         {
             try
             {
-                List<UserPermissionModel> UserFormList = new List<UserPermissionModel>();
-                ApiResponseModel response = await APIServices.PostAsync("", "FormPermissionMaster/GetUserFormListById?UserId=" + UserId);
+                UserPermissionRequest.filters ??= new List<FilterModel>();
 
-                if (response.code == 200)
+                var UserPermissionDetails = await APIServices.AGPostAsync<UserPermissionModel>(UserPermissionRequest,"FormPermissionMaster/GetUserFormListById");
+
+                return new JsonResult(new
                 {
-                    UserFormList = JsonConvert.DeserializeObject<List<UserPermissionModel>>(response.data.ToString());
-                    return PartialView("~/Views/UserProfile/_UserFormPermissionPartial.cshtml", UserFormList);
-                }
-                else
-                {
-                    return Ok();
-                }
+                    data = UserPermissionDetails.Data,
+                    recordsTotal = UserPermissionDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return BadRequest(new { error = ex.Message });
             }
         }
         [FormPermissionAttribute("User Form Permission-Edit")]

@@ -51,9 +51,9 @@ namespace EMPManegment.Services.FormPermissionMaster
             return await FormPermissionMaster.CreateUserForm(UserId);
         }
 
-        public async Task<List<UserPermissionModel>> GetUserFormListById(Guid UserId)
+        public async Task<AGGridResponseModel<UserPermissionModel>> GetUserFormListById(AGGridRequestModel UserPermissionRequest)
         {
-            return await FormPermissionMaster.GetUserFormListById(UserId);
+            return await FormPermissionMaster.GetUserFormListById(UserPermissionRequest);
         }
 
         public async Task<ApiResponseModel> UpdateMultipleUserFormPermission(List<UserPermissionModel> UpdatedUserFormPermissions)

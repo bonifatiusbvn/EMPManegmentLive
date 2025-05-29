@@ -72,27 +72,7 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="table-wrapper">
-                <table class="table fixed-header-table table-bordered table-striped">
-                    <thead>
-                        <tr>
-                            <th>Form Name</th>
-                            <th>Add</th>
-                            <th>View</th>
-                            <th>Edit</th>
-                            <th>Delete</th>
-                            <th>
-                                <div class="custom-control custom-switch">
-                                    <input class="custom-control-input" type="checkbox" id="userCheckboxAll" onclick="userAllCheckboxes(this)">
-                                    <label class="custom-control-label" for="userCheckboxAll"></label>
-                                </div>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody id="dveditUserForm" class="gridjs-tbody">
-                    </tbody>
-                </table>
-            </div>
+            <div id="UserPermissionTable" class="ag-theme-teal" style="height: 540px; width: 100%;"></div>
         </div>
         <div class="card-footer">
             <div class="text-end" id="userupdatebtn" style="display:none;">
@@ -101,15 +81,11 @@
         </div>
     </div>
 </div>
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var allCheckbox = document.getElementById('userCheckboxAll');
-        var checkboxes = document.querySelectorAll('.form-check-input-all, .user-checkbox');
-        allCheckbox.checked = Array.from(checkboxes).every(function (checkbox) {
-            return checkbox.checked;
-        });
-    });
+
+<script type="text/javascript">
+    window.userFormPermissions = @Html.Raw(Json.Serialize(UserSession.FormPermisionData));
 </script>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/FormPermissionScript.js" asp-append-version="true"></script>
 
