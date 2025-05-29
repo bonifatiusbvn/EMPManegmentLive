@@ -9,6 +9,10 @@ public partial class TblCreditDebitMaster
 
     public Guid? VendorId { get; set; }
 
+    public Guid? CompanyId { get; set; }
+
+    public Guid? ProjectId { get; set; }
+
     public string? Type { get; set; }
 
     public string? InvoiceNo { get; set; }

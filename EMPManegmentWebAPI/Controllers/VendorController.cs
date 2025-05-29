@@ -1,6 +1,7 @@
 ﻿using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -55,13 +56,6 @@ namespace EMPManagment.API.Controllers
             return StatusCode(response.Code, response);
         }
 
-        //[HttpPost]
-        //[Route("GetVendorList")]
-        //public async Task<IActionResult> GetVendorList(DataTableRequstModel VendorList)
-        //{
-        //    var GetvendorList = await vendorServices.GetVendorsList(VendorList);
-        //    return Ok(new { code = (int)HttpStatusCode.OK, data = GetvendorList });
-        //}
 
         [HttpPost]
         [Route("GetVendorList")]

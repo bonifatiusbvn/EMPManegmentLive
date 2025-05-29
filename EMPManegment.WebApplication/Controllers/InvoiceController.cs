@@ -429,50 +429,24 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetVendorList()
+        public async Task<IActionResult> GetVendorList([FromBody] AGGridRequestModel VendorRequest)
         {
+
             try
             {
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
+                VendorRequest.filters ??= new List<FilterModel>();
 
-                var dataTable = new DataTableRequstModel
+                var VendorDetails = await APIServices.AGPostAsync<VendorDetailsView>(VendorRequest, "Vendor/GetVendorList");
+
+                return new JsonResult(new
                 {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<VendorDetailsView> vendorList = new List<VendorDetailsView>();
-                var data = new jsonData();
-                ApiResponseModel res = await APIServices.PostAsync(dataTable, "Vendor/GetVendorList");
-                if (res.code == 200)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(res.data.ToString());
-                    vendorList = JsonConvert.DeserializeObject<List<VendorDetailsView>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = vendorList,
-                };
-                return new JsonResult(jsonData);
+                    rowsThisPage = VendorDetails.Data,
+                    totalRowCount = VendorDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
 
@@ -582,34 +556,29 @@ namespace EMPManegment.Web.Controllers
         {
             return View();
         }
-        public async Task<IActionResult> AllVendorTransaction(Guid? VendorId, DateTime? Startdate, DateTime? Enddate)
+
+        [HttpPost]
+        public async Task<IActionResult> AllVendorTransaction([FromBody] AGGridRequestModel VendorRequest)
         {
+
             try
             {
-                List<CreditDebitView> transactions = new List<CreditDebitView>();
-                ApiResponseModel response = await APIServices.PostAsync("", "Invoice/GetAllTransaction");
-                if (response.code == 200)
-                {
-                    transactions = JsonConvert.DeserializeObject<List<CreditDebitView>>(response.data.ToString());
-                }
+                VendorRequest.filters ??= new List<FilterModel>();
 
-                if (VendorId.HasValue)
-                {
-                    transactions = transactions.Where(e => e.VendorId == VendorId.Value).ToList();
-                }
+                var VendorDetails = await APIServices.AGPostAsync<CreditDebitView>(VendorRequest, "Invoice/GetAllTransaction");
 
-                if (Startdate.HasValue && Enddate.HasValue)
+                return new JsonResult(new
                 {
-                    transactions = transactions.Where(e => e.Date >= Startdate.Value && e.Date <= Enddate.Value).ToList();
-                }
-
-                return PartialView("~/Views/Invoice/_AllTransactionPartial.cshtml", transactions);
+                    rowsThisPage = VendorDetails.Data,
+                    totalRowCount = VendorDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Internal server error");
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
+
 
         [HttpPost]
         public async Task<JsonResult> GetCreditDebitDetailsByVendorId(Guid VendorId)

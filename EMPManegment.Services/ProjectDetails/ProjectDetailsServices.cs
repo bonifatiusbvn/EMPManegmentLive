@@ -84,5 +84,10 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.UpdateProjectDetails(updateProject);
         }
+
+        public async Task<IEnumerable<ProjectView>> GetProjectNameList(string? search)
+        {
+            return await ProjectDetails.GetProjectNameList(search);
+        }
     }
 }

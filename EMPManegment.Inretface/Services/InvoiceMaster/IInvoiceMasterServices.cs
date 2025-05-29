@@ -15,9 +15,9 @@ namespace EMPManegment.Inretface.Services.InvoiceMaster
     public interface IInvoiceMasterServices
     {
         Task<InvoicePayVendorModel> GetInvoiceListByVendorId(Guid Vid);
-        Task<jsonData> GetAllTransactionByVendorId(Guid Vid, DataTableRequstModel dataTable);
+        Task<AGGridResponseModel<CreditDebitView>> GetAllTransactionByVendorId(AGGridRequestModel VendorRequest);
         Task<IEnumerable<CreditDebitView>> GetLastTransactionByVendorId(Guid Vid);
-        Task<List<CreditDebitView>> GetAllTransaction();
+        Task<AGGridResponseModel<CreditDebitView>> GetAllTransaction(AGGridRequestModel TransactionRequest);
         Task<AGGridResponseModel<InvoiceViewModel>> InvoiceDetailsList(AGGridRequestModel InvoiceRequest);
         string CheckInvoiceNo(string porjectname);
         Task<UserResponceModel> InsertInvoiceDetails(InvoiceMasterModel InsertInvoice);

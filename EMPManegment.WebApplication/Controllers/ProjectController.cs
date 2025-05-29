@@ -25,6 +25,7 @@ using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using Microsoft.Build.Evaluation;
 using Microsoft.AspNetCore.Authorization;
 using X.PagedList.Extensions;
+using EMPManegment.EntityModels.ViewModels.Company;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -607,7 +608,23 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
+        public async Task<IActionResult> GetProjectNameList(string? search)
+        {
+            try
+            {
+                List<ProjectView> CompanyName = new List<ProjectView>();
+                ApiResponseModel res = await APIServices.PostAsync(search, "ProjectDetails/GetProjectNameList");
+                if (res.code == 200)
+                {
+                    CompanyName = JsonConvert.DeserializeObject<List<ProjectView>>(res.data.ToString());
+                }
+                return new JsonResult(CompanyName);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         public async Task<JsonResult> GetUserProjectLists()
         {
             try

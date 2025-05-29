@@ -10,7 +10,10 @@ namespace EMPManegment.EntityModels.ViewModels.Invoice
     {
         public int Id { get; set; }
         public Guid? VendorId { get; set; }
+        public Guid? CompanyId { get; set; }
+        public Guid? ProjectId { get; set; }
         public string? VendorName { get; set; }
+        public string? ProjectName { get; set; }
         public int PaymentMethod { get; set; }
         public string? PaymentMethodName { get; set; }
         public string? Type { get; set; }

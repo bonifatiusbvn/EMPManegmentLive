@@ -1,6 +1,96 @@
-﻿$(document).ready(function () {
-    GetAllVendorData();
-    AllTransactionData();
+﻿
+var Formdata = window.userFormPermissions || [];
+
+$(document).ready(function () {
+
+
+    $('#ddlCDCompanyName').select2({
+        placeholder: 'Select Company',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Company/GetCompanyNameList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.compnyName,
+                    }))
+                };
+            }
+        }
+    });
+
+
+    $('#ddlCompanyName').select2({
+        placeholder: 'Select Company',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Company/GetCompanyNameList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.compnyName,
+                    }))
+                };
+            }
+        }
+    });
+
+
+    $('#ddlproject').select2({
+        placeholder: 'Select Project',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Project/GetProjectNameList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.projectTitle,
+                    }))
+                };
+            }
+        }
+    });
+
+    $('#ddlCDVendorName').select2({
+        placeholder: 'Select Vendor',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ProductMaster/GetVendorsNameList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.vendorCompany
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
     getVendorTransactionList();
 
     $('#textTransactionCompanyName').on('change', SortCompanyName);
@@ -63,8 +153,12 @@
         }
     });
 });
-function GetAllVendorData() {
-    var colorClasses = [
+
+let VendorListGridOptions;
+
+$(document).ready(function () {
+
+    const colorClasses = [
         { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
         { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
         { bgClass: 'bg-success-subtle', textClass: 'text-success' },
@@ -74,53 +168,488 @@ function GetAllVendorData() {
         { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
     ];
 
-    $('#VendorTableData').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true, // Use 'destroy' instead of 'bDestroy'
-        ajax: {
-            type: "POST",
-            url: '/Invoice/GetVendorList',
-            dataType: 'json'
-        },
-        columns: [
+    VendorListGridOptions = {
+        columnDefs: [
             {
-                data: "vendorCompany",
-                name: "VendorCompany",
-                render: function (data, type, full) {
-                    var profileImageHtml;
+                headerName: "Vendor Company", field: "vendorCompany", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    const full = params.data;
+                    if (!full) return '';
+
+                    let profileImageHtml;
                     if (full.vendorCompanyLogo && full.vendorCompanyLogo.trim() !== '') {
-                        profileImageHtml = '<img src="/Content/Image/' + full.vendorCompanyLogo +
-                            '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
-                            'onmouseover="showIcons(event, this.parentElement)" ' +
-                            'onmouseout="hideIcons(event, this.parentElement)">';
+                        profileImageHtml = `<img src="/Content/Image/${full.vendorCompanyLogo}"
+                style="height: 40px; width: 40px; border-radius: 50%;"
+                onmouseover="showIcons(event, this.parentElement)"
+                onmouseout="hideIcons(event, this.parentElement)">`;
                     } else {
-                        var initials = (full.vendorCompany ? full.vendorCompany[0] : '');
-                        var randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
-                        profileImageHtml = '<div class="flex-shrink-0 avatar-xs me-2">' +
-                            '<div class="avatar-title ' + randomColor.bgClass + ' ' + randomColor.textClass +
-                            ' rounded-circle" style="height: 40px; width: 40px; border-radius: 50%;">' +
-                            initials.toUpperCase() + '</div></div>';
+                        const initials = full.vendorCompany ? full.vendorCompany[0] : '';
+                        const randomColor = colorClasses[Math.floor(Math.random() * colorClasses.length)];
+                        profileImageHtml = `
+                <div class="flex-shrink-0 avatar-xs me-2">
+                    <div class="avatar-title ${randomColor.bgClass} ${randomColor.textClass}
+                        rounded-circle" style="height: 40px; width: 40px;">
+                        ${initials.toUpperCase()}
+                    </div>
+                </div>`;
                     }
-                    return '<a href="#" onclick="GetCreditDebitTotalAmount(\'' + full.vid + '\')" class="link-primary" style="display: flex; align-items: center;">' + profileImageHtml + '<span style="margin-left: 5px;">' + full.vendorCompany + '</span></a>';
+
+                    return `<a href="#" onclick="GetCreditDebitTotalAmount('${full.vid}')" class="link-primary" 
+                    style="display: flex; align-items: center;">
+                    ${profileImageHtml}<span style="margin-left: 5px;">${full.vendorCompany}</span>
+                </a>`;
                 }
             },
             {
-                name: "VendorFullName",
-                render: function (data, type, full) {
-                    return full.vendorFirstName + ' ' + full.vendorLastName;
+                headerName: "Vendor Full Name", field: "gstno", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data) return '';
+                    return `${params.data.vendorFirstName || ''} ${params.data.vendorLastName || ''}`;
                 }
             },
-            { data: "vendorEmail", name: "VendorEmail" },
-            { data: "vendorPhone", name: "VendorPhone" }
+            { headerName: "Email", field: "vendorEmail", sortable: true, filter: true },
+            { headerName: "Phone", field: "vendorPhone", sortable: true, filter: true }
         ],
-        columnDefs: [{
-            defaultContent: "",
-            targets: "_all"
-        }]
-    });
-}
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            resizable: true
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            VendorListGridOptions.api = params.api;
+            VendorListGridOptions.columnApi = params.columnApi;
+            params.api.sizeColumnsToFit();
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: VendorListGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtCompanySearch').val(),
+                };
+
+                $.ajax({
+                    url: '/Invoice/GetVendorList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        $('#FooterTotalrecord').text(response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+
+    const userPermissionArray = Formdata || [];
+    let canEdit = false;
+    let canDelete = false;
+
+    for (let permission of userPermissionArray) {
+        if (permission.formName === "Vendor") {
+            canEdit = permission.edit;
+            canDelete = permission.delete;
+            break;
+        }
+    }
+
+    if (canEdit || canDelete) {
+        VendorListGridOptions.columnDefs.push({
+            headerName: "Actions",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) return '';
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `<a title="Edit" onclick="EditCompanyDetails('${params.data.id}')" aria-label="Edit">
+                        <i class="fa-solid fa-pen-to-square"></i></a>`;
+                }
+                if (canDelete) {
+                    buttons += `<a href="javascript:;" onclick="DeleteCompanyDetails('${params.data.id}')" 
+                                title="Delete" aria-label="Delete" style="margin-left:15px;">
+                                <i class="fa-solid fa-trash"></i></a>`;
+                }
+                return buttons;
+            }
+        });
+    }
+
+    const gridElement = document.querySelector('#VendorTableData');
+    agGrid.createGrid(gridElement, VendorListGridOptions);
+
+
+});
+
+let vendorAllTranGridOptions = {};
+let startDate = null;
+let endDate = null;
+
+$(document).ready(function () {
+
+    initializeVendorTransactionGrid();
+    function initializeVendorTransactionGrid() {
+        const columnDefs = [
+            {
+                headerName: "",
+                field: "",
+                cellRenderer: function () {
+                    return `<div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
+                                <i class="ri-arrow-right-up-fill"></i>
+                            </div>`;
+                }
+            },
+            {
+                headerName: "Vendor Name",
+                field: "vendorName",
+                sortable: true,
+                filter: true
+            },
+            {
+                headerName: "Date",
+                field: "date",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    return params.value ? getCommonDateformat(params.value) : '';
+                }
+            },
+            {
+                headerName: "Payment Type",
+                field: "paymentTypeName",
+                sortable: true,
+                filter: true
+            },
+            {
+                headerName: "Credit/Debit Amount",
+                field: "creditDebitAmount",
+                sortable: true,
+                filter: true
+            },
+            {
+                headerName: "",
+                field: "",
+                cellRenderer: function () {
+                    return `<span class="badge bg-primary-subtle text-primary fs-11">
+                                <i class="ri-time-line align-bottom"></i> Processing
+                            </span>`;
+                }
+            }
+        ];
+
+        let canEdit = false;
+        let canDelete = false;
+
+        for (let i = 0; i < Formdata.length; i++) {
+            const permission = Formdata[i];
+            if (permission.formName === "Vendor List") {
+                canEdit = permission.edit;
+                canDelete = permission.delete;
+                break;
+            }
+        }
+
+        if (canEdit || canDelete) {
+            columnDefs.push({
+                headerName: "Actions",
+                field: "actions",
+                sortable: false,
+                filter: false,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+
+                    let buttons = '<ul class="list-inline mb-0">';
+                    if (canEdit) {
+                        buttons += `<li class="list-inline-item">
+                                        <a href="/PurchaseOrderMaster/CreatePurchaseOrder?id=${params.data.id}">
+                                            <i class="fa-regular fa-pen-to-square"></i>
+                                        </a>
+                                    </li>`;
+                    }
+                    if (canDelete) {
+                        buttons += `<li class="list-inline-item">
+                                        <a class="btn text-danger" onclick="DeleteTransaction('${params.data.id}')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </li>`;
+                    }
+                    buttons += '</ul>';
+                    return buttons;
+                }
+            });
+        }
+
+        vendorAllTranGridOptions = {
+            rowHeight: 50,
+            columnDefs,
+            defaultColDef: {
+                sortable: true,
+                filter: true,
+                cellClass: 'ag-cell-default-style',
+                width: 175,
+            },
+            rowSelection: 'single',
+            rowClassRules: {
+                'selected-row': params => params.node.isSelected()
+            },
+            onGridReady: function (params) {
+                vendorAllTranGridOptions.api = params.api;
+                vendorAllTranGridOptions.columnApi = params.columnApi;
+                vendorAllTranGridOptions.api.sizeColumnsToFit();
+                createEnhancedPagination(params.api);
+            },
+            rowModelType: 'infinite',
+            cacheBlockSize: 20,
+            pagination: true,
+            paginationPageSize: 20,
+            suppressPaginationPanel: true,
+            datasource: getVendorTransactionDatasource()
+        };
+
+        const gridElement = document.querySelector('#vendorAllTransaction');
+        if (gridElement) {
+            agGrid.createGrid(gridElement, vendorAllTranGridOptions);
+        }
+
+        setupEventListeners();
+    }
+
+    function getVendorTransactionDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: vendorAllTranGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    SearchValue: $('#txttransactionSearch').val() || "",
+                    CompanyFilter: $('#ddlCDCompanyName').val() || null,
+                    VendorFilter: $('#ddlCDVendorName').val() || null,
+                    StartDate: startDate,
+                    EndDate: endDate
+
+                };
+
+                $.ajax({
+                    url: '/Invoice/AllVendorTransaction',
+                    method: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+
+                        if (response && Array.isArray(response.rowsThisPage)) {
+                            params.successCallback(response.rowsThisPage, response.totalCount);
+                        } else {
+                            params.failCallback();
+                        }
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
+    }
+
+    function createEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
+
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const gridElement = document.querySelector('#vendorAllTransaction');
+        if (gridElement) {
+            const paginationEl = document.createElement('div');
+            paginationEl.className = 'ag-paging-panel enhanced';
+            paginationEl.appendChild(paginationContainer);
+            gridElement.appendChild(paginationEl);
+        }
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        if (pageSizeSelector) {
+            pageSizeSelector.addEventListener('change', function () {
+                const newPageSize = Number(this.value);
+                const gridElement = document.querySelector('#vendorAllTransaction');
+
+                if (gridElement) {
+                    vendorAllTranGridOptions = {
+                        ...vendorAllTranGridOptions,
+                        cacheBlockSize: newPageSize,
+                        paginationPageSize: newPageSize,
+                        datasource: getAllVendorTransactions(),
+                    };
+
+                    gridElement.innerHTML = '';
+                    agGrid.createGrid(gridElement, vendorAllTranGridOptions);
+                }
+            });
+        }
+
+        updateEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateEnhancedPagination(gridApi, rangeDisplay) {
+        if (!gridApi) return;
+
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = vendorAllTranGridOptions.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        if (rangeDisplay) {
+            rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+        }
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) {
+            pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+        }
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
+        }
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
+
+    function setupEventListeners() {
+        $('#txttransactionSearch').on('change keyup', function () {
+            if (vendorAllTranGridOptions.api) {
+                vendorAllTranGridOptions.api.onFilterChanged();
+            }
+        });
+
+        $('#ddlCDCompanyName').change(() => {
+            const companyText = $("#ddlCDCompanyName option:selected").text();
+            $("#ddlCDCompanyName").val(companyText === 'All Company' ? '' : companyText);
+            if (vendorAllTranGridOptions.api) {
+                vendorAllTranGridOptions.api.onFilterChanged();
+            }
+        });
+
+        $('#ddlCDVendorName').change(() => {
+            const vendorText = $("#ddlCDVendorName option:selected").text();
+            $("#ddlCDVendorName").val(vendorText === 'All Vendor' ? '' : vendorText);
+            if (vendorAllTranGridOptions.api) {
+                vendorAllTranGridOptions.api.onFilterChanged();
+            }
+        });
+
+        $('#toggleDateFilter').click(e => {
+            e.stopPropagation();
+            $('#dateFilterContainer').toggle();
+        });
+
+        $('#applyFilters').click(() => {
+            startDate = $('#txtstartdatebox').val() || null;
+            endDate = $('#txtenddatebox').val() || null;
+            if (vendorAllTranGridOptions.api) {
+                vendorAllTranGridOptions.api.onFilterChanged();
+            }
+        });
+    }
+});
+
 function InsertCreditDebitDetails() {
 
     var value = $('#txtcreditdebitamount').val();
@@ -135,6 +664,9 @@ function InsertCreditDebitDetails() {
         var objData = {
             VendorId: document.getElementById("txtvendorid").textContent,
             InvoiceNo: document.getElementById("txtinvoiceno").textContent,
+            CompanyId: $("#ddlCompanyName").val(),
+            Type: $("#ddltypeonly").val(),
+            ProjectId: $("#ddlproject").val(),
             PaymentType: $("#drpcreditdebitpaymenttype").val(),
             PaymentMethod: $("#drpcreditdebitpaymentmethod").val(),
             CreditDebitAmount: $("#txtcreditdebitamount").val(),
@@ -143,8 +675,10 @@ function InsertCreditDebitDetails() {
             CreatedBy: $("#txtuserid").val(),
             Date: $("#txtpaydatevendor").val(),
         };
+
         var form_data = new FormData();
         form_data.append("CREDITDEBITDETAILS", JSON.stringify(objData));
+
         $.ajax({
             url: '/Invoice/InsertCreditDebitDetails',
             type: 'POST',
@@ -180,21 +714,18 @@ function GetCreditDebitTotalAmount(Vid) {
         type: 'POST',
         dataType: 'json',
         success: function (result) {
-            if (result.length == 0) {
-                toastr.warning('There is no data for selected vendor.');
-                return;
-            } else {
-                var total = 0;
-                result.forEach(function (obj) {
-                    if (obj.creditDebitAmount) {
-                        total += obj.creditDebitAmount;
-                    }
-                });
 
-                localStorage.setItem('creditDebitDetails', JSON.stringify(result));
-                localStorage.setItem('totalCreditAmount', total);
-                window.location = '/Invoice/PayVendors?Vid=' + Vid;
-            }
+            var total = 0;
+            result.forEach(function (obj) {
+                if (obj.creditDebitAmount) {
+                    total += obj.creditDebitAmount;
+                }
+            });
+
+            localStorage.setItem('creditDebitDetails', JSON.stringify(result));
+            localStorage.setItem('totalCreditAmount', total);
+            window.location = '/Invoice/PayVendors?Vid=' + Vid;
+
         },
         error: function (xhr, status, error) {
             toastr.error("Error in AJAX request:", status, error);
@@ -213,125 +744,6 @@ function getLastTransaction(Vid) {
             $("#zoomInModal").modal('show');
         },
     });
-}
-function getVendorTransactionList() {
-    Vid = $("#inputVendorId").val();
-    $('#vendorAllTransactionTable').DataTable({
-        processing: false,
-        serverSide: true,
-        searching: true,
-        destroy: true,
-        ajax: {
-            type: "POST",
-            url: '/Invoice/GetVendorTransactionList?Vid=' + Vid,
-            dataType: 'json',
-        },
-        autoWidth: false,
-        columns: [
-            {
-                "render": function (data, type, row) {
-                    return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                }
-            },
-            { "data": "vendorName", "name": "VendorName" },
-            {
-                "data": "date", "name": "Date",
-                "render": function (data, type, row) {
-                    return getCommonDateformat(data);
-                }
-            },
-            { "data": "paymentMethodName", "name": "PaymentMethodName" },
-            { "data": "paymentTypeName", "name": "PaymentTypeName" },
-            { "data": "creditDebitAmount", "name": "CreditDebitAmount" },
-            { "data": "pendingAmount", "name": "PendingAmount" },
-            {
-                "render": function (data, type, row) {
-                    return '<span class="badge bg-primary-subtle text-primary fs-11"><i class="ri-time-line align-bottom"></i> Processing</span>';
-                }
-            },
-            {
-                "data": "action", "name": "Action",
-                "render": function (data, type, row) {
-                    return '<span data-bs-toggle="modal" data-bs-target="#showModal" ' +
-                        'onclick="DeleteTransaction(\'VendorTransactions\', ' + row.id + ', this)" ' +
-                        'class="btn text-danger d-inline-block remove-item-btn" ' +
-                        'title="Delete"><i class="fas fa-trash"></i></span>';
-                }
-
-            },
-        ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
-    });
-}
-function AllTransactionData() {
-    $.ajax({
-        url: '/Invoice/AllVendorTransaction',
-        type: 'GET',
-        dataType: 'html',
-        success: function (response) {
-            $("#AllTransactionPartial").html(response);
-        },
-        error: function () {
-            toastr.error("Can't get Data");
-        }
-    });
-}
-function SortCompanyName() {
-    var CompanyId = $('#textTransactionCompanyName').val();
-    if (CompanyId == "AllCompany") {
-        $.ajax({
-            url: '/Invoice/AllVendorTransaction',
-            type: 'GET',
-            dataType: 'html',
-            success: function (response) {
-                $("#AllTransactionPartial").html(response);
-            },
-        });
-    } else {
-        $.ajax({
-            url: '/Invoice/AllVendorTransaction?VendorId=' + CompanyId,
-            type: 'GET',
-            dataType: 'html',
-            success: function (response) {
-
-                if (response == "\r\n") {
-                    toastr.warning("There is no data for selected company!");
-                    $("#AllTransactionPartial").html(response);
-                } else {
-                    $("#AllTransactionPartial").html(response);
-                }
-            },
-        });
-    }
-}
-function SearchDatesInVendorCreditDebitList() {
-    var StartDate = $('#vendorstartdate').val();
-    var EndDate = $('#vendorenddate').val();
-    var CompanyId = $('#textTransactionCompanyName').val();
-    if (StartDate == "" && EndDate == "") {
-        toastr.warning("Select dates");
-    } else if (StartDate == "") {
-        toastr.warning("Select Start date");
-    } else if (EndDate == "") {
-        toastr.warning("Select End date");
-    } else {
-        $.ajax({
-            url: '/Invoice/AllVendorTransaction?Startdate=' + StartDate + '&Enddate=' + EndDate + '&VendorId=' + CompanyId,
-            type: 'GET',
-            dataType: 'html',
-            success: function (response) {
-                if (response == "\r\n") {
-                    toastr.warning("There is no data for selected date!");
-                    $("#AllTransactionPartial").html(response);
-                } else {
-                    $("#AllTransactionPartial").html(response);
-                }
-            },
-        });
-    }
 }
 function DeleteTransaction(Transaction, VendorId, that) {
     Swal.fire({
