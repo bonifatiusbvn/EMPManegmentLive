@@ -3,9 +3,7 @@ var Formdata = window.userFormPermissions || [];
 
 $(document).ready(function () {
 
-
-
-
+    populatePaymentTypes();
 
     $('#ddlCompanyName,#ddlCDCompanyName').select2({
         placeholder: 'Select Company',
@@ -115,6 +113,15 @@ $(document).ready(function () {
         });
     }
 
+
+    $('#ddlpaymentType').select2({
+        placeholder: 'Select Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+
+    });
+
     $('#searchcreditdebitlist').on('keyup', function () {
         var value = $(this).val().toLowerCase();
         var hasVisibleItems = false;
@@ -134,6 +141,41 @@ $(document).ready(function () {
         }
     });
 });
+
+function ResetAllTransaction() {
+    window.location = '/Invoice/AllTransaction';
+}
+
+
+const paymentTypeOptions = [
+
+    { text: 'All', value: '' },
+    { text: 'Paid', value: '1' },
+    { text: 'Unpaid', value: '2' },
+    { text: 'Refund', value: '7' },
+    { text: 'Cancel', value: '8' }
+];
+
+
+function populatePaymentTypes() {
+    const select = $('#ddlpaymentType');
+
+    select.empty();
+
+    paymentTypeOptions.forEach(option => {
+        select.append(new Option(option.text, option.value));
+    });
+
+    select.select2({
+        placeholder: 'Select Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true
+    });
+}
+
+
+
 
 let VendorListGridOptions;
 
@@ -649,6 +691,23 @@ $(document).ready(function () {
             vendorAllTranGridOptions.api.refreshInfiniteCache();
         }
     });
+
+    $('#txttransactionSearch').on('keypress', function (e) {
+        if (e.which === 13) {
+            $('#btntranssearch').click();
+        }
+    });
+
+    $('#txttransactionSearch').on('input', function () {
+        var searchText = $(this).val().trim();
+
+        if (searchText === '') {
+            if (vendorAllTranGridOptions.api) {
+                vendorAllTranGridOptions.api.refreshInfiniteCache();
+            }
+        }
+    });
+
 
 
     $('#ddlCDVendorName').change(() => {
