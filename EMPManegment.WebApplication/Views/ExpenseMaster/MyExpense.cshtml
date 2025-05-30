@@ -41,8 +41,8 @@
 <input type="hidden" class="form-control" id="txtuserid" value="@_userSession.UserId" hidden>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">My Expenses</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">My Expenses</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Expense</a></li>
@@ -125,180 +125,81 @@
     <div class="col-lg-12">
         <div class="card" id="invoiceList">
             <div class="card-header">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">My Expense-List</h5>
-                    <div class="flex-shrink-0">
-                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Add == true)))
-                        {
-                            <div class="d-flex gap-2 flex-wrap">
-                                <button class="btn button-teal" id="remove-actions" style="margin-left:-34px;">
-                                    <i class="ri-delete-bin-2-line"></i>
-                                </button>
-                                <a class="btn btn-block button-teal" onclick="DisplayAddExpenseModel()"><i class="fa-solid fa-circle-plus me-1"></i>Expense</a>
-                            </div>
-                        }
+                <div class="row g-3">
+                    <div class="col-12 col-lg-10">
+                        <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3 d-flex align-items-center flex-wrap" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#GetMyAllExpenseList" role="tab">
+                                    <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>All Expense
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Unapprove" href="#GetAllUnApprovedExpenseList" role="tab">
+                                    <i class="ri-close-circle-line me-1 align-bottom"></i>UnApproved Expense
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Approve" href="#GetAllApprovedExpenseList" role="tab">
+                                    <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Approved Expense
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link py-3 Returns" data-bs-toggle="tab" id="Credit" href="#GetAllCreditExpenseList" role="tab">
+                                    <i class="ri-bank-card-line me-1 align-bottom"></i>Credit Expense
+                                </a>
+                            </li>
+                            <li class="nav-item d-flex align-items-center ms-3">
+                                <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="lastMonthRadio" href="#GetUserLastMonthExpenseList">
+                                <label class="form-check-label ms-2" for="lastMonthRadio">
+                                    Last Month
+                                </label>
+                            </li>
+                            <li class="nav-item d-flex align-items-center ms-3">
+                                <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetUserCurrentMonthExpenseList">
+                                <label class="form-check-label ms-2" for="currentMonthRadio">
+                                    Current Month
+                                </label>
+                            </li>
+                            <li class="nav-item d-flex align-items-center ms-3">
+                                <input class="nav-radio form-check-input Returns" type="radio" data-bs-toggle="tab" role="tab" name="flexRadioDefault" id="betweenMonthRadio">
+                                <label class="form-check-label ms-2" for="betweenMonthRadio">
+                                    Between Date
+                                </label>
+                            </li>
+                            <li class="nav-item d-flex align-items-center ms-3">
+                                <div id="dateFilterContainer" class="date-filter-container" style="display: none;margin-top: 160px;">
+                                    <div class="p-2 bg-light border">
+                                        <label for="txtstartdatebox">From Date</label>
+                                        <input type="text" id="txtstartdatebox" class="form-control mb-3 datepicker" style="font-size: 15px;">
+                                        <label for="txtenddatebox">To Date</label>
+                                        <input type="text" id="txtenddatebox" class="form-control mb-3 datepicker" style="font-size: 15px;">
+                                        <button class="btn button-teal btn-block" id="applyFilters">Apply</button>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                </div>
-            </div>
-            <!--Edit Expense Modal -->
-            <div class="modal fade zoomIn" id="EditExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class=" modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content border-0">
-                        <div class="modal-header bg-primary-subtle p-3">
-                            <h5 class="modal-title" id="editModalLabel">Edit Expense Details</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id="EditExpenseForm">
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="txtexpensetype" class="form-label">Expense Type</label>
-                                            <input type="text" class="form-control" id="Editexpensetype" name="Editexpensetype">
-                                            <input type="hidden" id="EditexpensetypeHidden" name="EditexpensetypeHidden">
-                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
-                                        </div>
-                                        <label id="Editexpensetype-error" class="error" for="Editexpensetype"></label>
-                                        <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Description</label>
-                                            <input type="text" id="EditDescription" name="EditDescription" class="form-control" />
-                                            <input type="hidden" id="Editid" class="form-control" name="txtid" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Bill Number</label>
-                                            <input type="text" id="Editbillno" name="Editbillno" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Date</label>
-                                            <input type="datetime-local" id="Editdate" name="Editdate" class="form-control" />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Total Amount</label>
-                                            <input type="number" id="Edittotalamount" name="Edittotalamount" class="form-control" oninput="preventEmptyValue(this)" min="1" />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">Account</label>
-                                            <input class="form-control" id="Editaccount" name="Editaccount" readonly />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label for="txtpaymenttype" class="form-label">Payment Type</label>
-                                            <input class="form-control" id="txtExpensepaymenttype" name="txtExpensepaymenttype" readonly />
-                                            <input type="hidden" class="form-control" id="EditExpensepaymenttypeid" name="EditExpensepaymenttypeid" readonly />
-                                        </div>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">IsPaid</label>
-                                            <input class="form-control" id="EditIsPaid" name="EditIsPaid" readonly />
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-6">
-                                        <div class="mb-3">
-                                            <label class="form-label">IsApproved</label>
-                                            <input class="form-control" id="EditIsApproved" name="EditIsApproved" readonly />
-                                        </div>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-danger btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn button-teal m-1" onclick="UpdateExpenseDetails()" id="updatedetailbtn">Update</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--end Edit Expense modal-->
-            <div class="card-body p-0">
-                <div>
-                    <div class="row g-3">
-                        <div class="col-xxl-5 col-sm-12">
-                            <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3 d-flex align-items-center flex-wrap" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#GetMyAllExpenseList" role="tab">
-                                        <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>All Expense
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link py-3 Returns" data-bs-toggle="tab" href="#GetAllUnApprovedExpenseList" role="tab">
-                                        <i class="ri-close-circle-line me-1 align-bottom"></i>UnApproved Expense
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link py-3 Returns" data-bs-toggle="tab" href="#GetAllApprovedExpenseList" role="tab">
-                                        <i class="ri-checkbox-circle-line me-1 align-bottom"></i>Approved Expense
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link py-3 Returns" data-bs-toggle="tab" href="#GetAllCreditExpenseList" role="tab">
-                                        <i class="ri-bank-card-line me-1 align-bottom"></i>Credit Expense
-                                    </a>
-                                </li>
-                                <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="lastMonthRadio" href="#GetUserLastMonthExpenseList">
-                                    <label class="form-check-label ms-2" for="lastMonthRadio">
-                                        Last Month
-                                    </label>
-                                </li>
-                                <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input Returns" data-bs-toggle="tab" role="tab" type="radio" name="flexRadioDefault" id="currentMonthRadio" href="#GetUserCurrentMonthExpenseList">
-                                    <label class="form-check-label ms-2" for="currentMonthRadio">
-                                        Current Month
-                                    </label>
-                                </li>
-                                <li class="nav-item d-flex align-items-center ms-3">
-                                    <input class="nav-radio form-check-input Returns" type="radio" data-bs-toggle="tab" role="tab" name="flexRadioDefault" id="betweenMonthRadio">
-                                    <label class="form-check-label ms-2" for="betweenMonthRadio">
-                                        Between Date
-                                    </label>
-                                </li>
-                                <li class="nav-item align-items-center ms-3 date-input" style="display:none;">
-                                    <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="startDate">
-                                </li>
-                                <li class="nav-item align-items-center ms-3 date-input" style="display:none;">
-                                    <input class="form-control" placeholder="dd-mm-yyyy" type="date" id="endDate">
-                                </li>
-                                <li class="nav-item d-flex align-items-center ms-3">
-                                    <a class="btn button-teal nav-btn" id="addproduct-btn" data-bs-toggle="tab" role="tab" href="#GetBetweendatesExpenseList" style="display:none;"><i class="ri-search-line"></i></a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="tab-content">
-                    <div class="tab-pane fade show active" role="tabpanel">
 
-                        <div id="UserExpenseListPartial">
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Add == true)))
+                    {
+                        <div class="col-12 col-lg-2" style="text-align:end">
+                            <button class="btn button-teal" id="remove-actions" style="margin-left:-34px;">
+                                <i class="ri-delete-bin-2-line"></i>
+                            </button>
+                            <a class="btn button-teal" onclick="DisplayAddExpenseModel()"><i class="fa-solid fa-circle-plus me-1"></i>Expense</a>
                         </div>
-                    </div>
+                    }
                 </div>
+            </div>
+            <div class="card-body p-0">
+                <div id="MyExpenseTable" class="ag-theme-teal" style="height: 450px; width: 100%;"></div>
+
                 <!-- Modal -->
                 <div class="modal fade zoomIn" id="AddExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class=" modal-dialog modal-dialog-centered modal-lg">
                         <div class="modal-content">
-                            <div class="modal-header bg-primary-subtle p-3">
-                                <h5 class="modal-title" id="exampleModalLabel">Add Expense Details</h5>
+                            <div class="modal-header bg-teal p-3">
+                                <h5 class="modal-title" id="exampleModalLabel" style="color:white;">Add Expense Details</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
@@ -309,13 +210,13 @@
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-top:-10px;">
                                                     <label for="txtexpensetype" class="form-label">Expense Type <span class="text-danger">*</span></label>
                                                     <p class="text-muted">
-                                                        <button type="button" onclick="DisplayExpenseTypeModal()" class="float-end text-decoration-underline btn btn-link waves-effect">
+                                                        <button type="button" onclick="DisplayExpenseTypeModal()" class="float-end text-decoration-underline btn btn-link waves-effect" style="color: #16989A !important;">
                                                             Add New-Expense Type
                                                         </button>
                                                     </p>
                                                 </div>
                                                 <div class="d-flex justify-content-between align-items-center" style="margin-top:-12px;">
-                                                    <input type="text" class="form-control" id="txtexpensetype" name="txtexpensetype" placeholder="Enter Expense Type">
+                                                    <input type="text" class="form-control" id="txtexpensetype" name="txtexpensetype" placeholder="Enter Expense Type"> 
                                                     <input type="hidden" id="txtexpensetypeHidden" name="txtexpensetypeHidden">
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
                                                     <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
@@ -361,13 +262,103 @@
                                 </form>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn button-cls btn-default m-1" id="close-modal" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-success" onclick="AddMyExpenseDetails();">Save</button>
+                                <button type="button" class="btn btn-secondary" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn button-teal" onclick="AddMyExpenseDetails();">Save</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <!--end modal-->
+                <!--Edit Expense Modal -->
+                <div class="modal fade zoomIn" id="EditExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class=" modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content border-0">
+                            <div class="modal-header bg-teal p-3">
+                                <h5 class="modal-title" id="editModalLabel" style="color:white;">Edit Expense Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="EditExpenseForm">
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="txtexpensetype" class="form-label">Expense Type</label>
+                                                <input type="text" class="form-control" id="Editexpensetype" name="Editexpensetype"> 
+                                                <input type="hidden" id="EditexpensetypeHidden" name="EditexpensetypeHidden">
+                                                <input type="hidden" class="text-muted text-uppercase fw-semibold" id="Editexpensetypeid" />
+                                            </div>
+                                            <label id="Editexpensetype-error" class="error" for="Editexpensetype"></label>
+                                            <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@_userSession.UserId">
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Description</label>
+                                                <input type="text" id="EditDescription" name="EditDescription" class="form-control" />
+                                                <input type="hidden" id="Editid" class="form-control" name="txtid" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Bill Number</label>
+                                                <input type="text" id="Editbillno" name="Editbillno" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Date</label>
+                                                <input type="datetime-local" id="Editdate" name="Editdate" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Total Amount</label>
+                                                <input type="number" id="Edittotalamount" name="Edittotalamount" class="form-control" oninput="preventEmptyValue(this)" min="1" />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">Account</label>
+                                                <input class="form-control" id="Editaccount" name="Editaccount" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label for="txtpaymenttype" class="form-label">Payment Type</label>
+                                                <input class="form-control" id="txtExpensepaymenttype" name="txtExpensepaymenttype" readonly />
+                                                <input type="hidden" class="form-control" id="EditExpensepaymenttypeid" name="EditExpensepaymenttypeid" readonly />
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">IsPaid</label>
+                                                <input class="form-control" id="EditIsPaid" name="EditIsPaid" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-lg-6">
+                                            <div class="mb-3">
+                                                <label class="form-label">IsApproved</label>
+                                                <input class="form-control" id="EditIsApproved" name="EditIsApproved" readonly />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn button-teal" onclick="UpdateExpenseDetails()" id="updatedetailbtn">Update</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--end Edit Expense modal-->
             </div>
         </div>
     </div>
@@ -377,8 +368,8 @@
     <div id="ExpenseTypeModal" class="modal fade flip" tabindex="-1" aria-labelledby="flipModalLabel" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary-subtle p-3">
-                    <h5 class="modal-title" id="exampleModalLabel"> Add Expense Type</h5>
+                <div class="modal-header bg-teal p-3">
+                    <h5 class="modal-title" id="exampleModalLabel" style="color:white;"> Add Expense Type</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -390,7 +381,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn button-cls" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     <button type="button" class="btn button-teal" onclick="AddExpenseType()">Save</button>
                 </div>
             </div><!-- /.modal-content -->
@@ -399,7 +390,7 @@
 </form>
 
 <script type="text/javascript">
-    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+     window.userFormPermissions = @Html.Raw(Json.Serialize(UserSession.FormPermisionData));
 
     document.addEventListener('DOMContentLoaded', function () {
         var modal = document.getElementById('AddExpenseModel');
@@ -437,71 +428,71 @@
         });
     });
 
-    document.addEventListener('DOMContentLoaded', function () {
-        const betweenMonthRadio = document.getElementById('betweenMonthRadio');
-        const dateInputs = document.querySelectorAll('.date-input');
-        const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
-        const searchButton = document.getElementById('addproduct-btn');
-        const navLinks = document.querySelectorAll('.nav-link');
+    // document.addEventListener('DOMContentLoaded', function () {
+    //     const betweenMonthRadio = document.getElementById('betweenMonthRadio');
+    //     const dateInputs = document.querySelectorAll('.date-input');
+    //     const radios = document.querySelectorAll('input[name="flexRadioDefault"]');
+    //     const searchButton = document.getElementById('addproduct-btn');
+    //     const navLinks = document.querySelectorAll('.nav-link');
 
-        function toggleDateInputs() {
-            clearDates();
-            if (betweenMonthRadio.checked) {
-                dateInputs.forEach(input => input.style.display = 'flex');
-                searchButton.style.display = 'block';
-            } else {
-                dateInputs.forEach(input => input.style.display = 'none');
-                searchButton.style.display = 'none';
-            }
-        }
+    //     function toggleDateInputs() {
+    //         clearDates();
+    //         if (betweenMonthRadio.checked) {
+    //             dateInputs.forEach(input => input.style.display = 'flex');
+    //             searchButton.style.display = 'block';
+    //         } else {
+    //             dateInputs.forEach(input => input.style.display = 'none');
+    //             searchButton.style.display = 'none';
+    //         }
+    //     }
 
-        radios.forEach(radio => {
-            radio.addEventListener('change', toggleDateInputs);
-        });
+    //     radios.forEach(radio => {
+    //         radio.addEventListener('change', toggleDateInputs);
+    //     });
 
-        navLinks.forEach(link => {
-            link.addEventListener('click', function () {
-                radios.forEach(radio => radio.checked = false);
-                toggleDateInputs();
-            });
-        });
+    //     navLinks.forEach(link => {
+    //         link.addEventListener('click', function () {
+    //             radios.forEach(radio => radio.checked = false);
+    //             toggleDateInputs();
+    //         });
+    //     });
 
-        toggleDateInputs();
-    });
+    //     toggleDateInputs();
+    // });
 
-    function clearDates() {
-        $("#startDate").val('');
-        $("#endDate").val('');
-    }
+    // function clearDates() {
+    //     $("#startDate").val('');
+    //     $("#endDate").val('');
+    // }
 
-    document.getElementById('startDate').addEventListener('change', function () {
-        var startDate = new Date(this.value);
+    // document.getElementById('startDate').addEventListener('change', function () {
+    //     var startDate = new Date(this.value);
 
-        var endDate = new Date(startDate);
-        endDate.setDate(startDate.getDate() + 30);
+    //     var endDate = new Date(startDate);
+    //     endDate.setDate(startDate.getDate() + 30);
 
-        var endDateInput = document.getElementById('endDate');
-        endDateInput.min = this.value;
-        endDateInput.max = endDate.toISOString().split('T')[0];
+    //     var endDateInput = document.getElementById('endDate');
+    //     endDateInput.min = this.value;
+    //     endDateInput.max = endDate.toISOString().split('T')[0];
 
-        endDateInput.style.display = 'block';
-        endDateInput.disabled = false;
+    //     endDateInput.style.display = 'block';
+    //     endDateInput.disabled = false;
 
-        endDateInput.placeholder = "dd-mm-yyyy";
-        endDateInput.value = '';
-    });
+    //     endDateInput.placeholder = "dd-mm-yyyy";
+    //     endDateInput.value = '';
+    // });
 
-    function formatDateForDisplay(date) {
-        var day = String(date.getDate()).padStart(2, '0');
-        var month = String(date.getMonth() + 1).padStart(2, '0');
-        var year = date.getFullYear();
+    // function formatDateForDisplay(date) {
+    //     var day = String(date.getDate()).padStart(2, '0');
+    //     var month = String(date.getMonth() + 1).padStart(2, '0');
+    //     var year = date.getFullYear();
 
-        return day + '-' + month + '-' + year;
-    }
-    document.getElementById('startDate').addEventListener('change', function () {
-        var endDateInput = document.getElementById('endDate');
-        endDateInput.placeholder = "dd-mm-yyyy";
-    });
+    //     return day + '-' + month + '-' + year;
+    // }
+    // document.getElementById('startDate').addEventListener('change', function () {
+    //     var endDateInput = document.getElementById('endDate');
+    //     endDateInput.placeholder = "dd-mm-yyyy";
+    // });
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>

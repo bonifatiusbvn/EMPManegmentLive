@@ -28,6 +28,10 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
         public string? ProjectFilter { get; set; }
         public string? TaskTypeFilter { get; set; }
         public string? TaskStatusFilter { get; set; }
+        public string? FilterType { get; set; }
+        public bool? Approvefilter { get; set; }
+        public bool? UnapproveFilter { get; set; }
+        public string? AccountFilter { get; set; }
     }
 
     public class SortModel

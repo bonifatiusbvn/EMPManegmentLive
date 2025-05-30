@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -158,17 +159,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetUserExpenseDetail")]
-        public async Task<IActionResult> GetUserExpenseDetail(Guid UserId, DataTableRequstModel dataTable, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null)
+        public async Task<AGGridResponseModel<ExpenseDetailsView>> GetUserExpenseList(AGGridRequestModel ExpenseRequest)
         {
-            try
+            var getUserExpense = await expenseMaster.GetUserExpenseList(ExpenseRequest);
+            return new AGGridResponseModel<ExpenseDetailsView>
             {
-                var getUserExpense = await expenseMaster.GetUserExpenseList(UserId, dataTable, filterType, unapprove, approve, startDate, endDate, account, selectMonthlyExpense);
-                return Ok(new { code = (int)HttpStatusCode.OK, data = getUserExpense });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
-            }
+                Data = getUserExpense.Data,
+                RecordsTotal = getUserExpense.RecordsTotal,
+            };
         }
 
         [HttpPost]
