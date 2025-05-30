@@ -408,7 +408,7 @@ $(document).ready(function () {
             }
         };
     }
-       
+
     function createEnhancedPagination(gridApi) {
         const paginationContainer = document.createElement('div');
         paginationContainer.className = 'enhanced-pagination-container';
@@ -472,7 +472,7 @@ $(document).ready(function () {
         pageSizeSelector.addEventListener('change', function () {
             const newPageSize = Number(this.value);
 
-            // Destroy and recreate grid with new block size
+
             const gridDiv = document.querySelector('#invoiceTable');
 
             invoiceTableGrid = {
@@ -482,7 +482,6 @@ $(document).ready(function () {
                 datasource: getInvoiceDatasource(),
             };
 
-            // Clear old grid and re-init
             gridDiv.innerHTML = '';
             agGrid.createGrid(gridDiv, invoiceTableGrid);
         });
@@ -640,7 +639,6 @@ $(document).ready(function () {
     });
 
 
-    // Initialize Company Dropdown
     $('#ddlinvompanyName,#txtInvoiceCompanyName').select2({
         placeholder: 'Select Company',
         width: '100%',
@@ -664,13 +662,11 @@ $(document).ready(function () {
         }
     });
 
-    // Call function when a company is selected
     $('#ddlinvompanyName').on('select2:select', function (e) {
         var companyId = e.params.data.id;
         fn_getInvoiceCompanyDetail(companyId);
     });
 
-    // Initialize Vendor Dropdown
     $('#ddlVendorName,#txtInvoiceVendorName').select2({
         placeholder: 'Select Vendor',
         width: '100%',

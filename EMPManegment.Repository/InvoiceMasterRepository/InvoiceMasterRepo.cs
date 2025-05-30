@@ -359,7 +359,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     var LastTransactions = new CreditDebitView
                     {
                         Id = Convert.ToInt32(row["Id"]),
-                        VendorName = row["VendorName"].ToString(),
+                        VendorCompany = row["VendorName"].ToString(),
                         PaymentTypeName = row["PaymentTypeName"].ToString(),
                         PaymentMethodName = row["PaymentMethodName"].ToString(),
                         Date = Convert.ToDateTime(row["Date"]),
@@ -548,7 +548,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 var transactions = dataSet.Tables[0].AsEnumerable().Select(row => new CreditDebitView
                 {
                     Id = Convert.ToInt32(row["Id"]),
-                    VendorName = row["VendorCompany"].ToString(),
+                    VendorCompany = row["VendorCompany"].ToString(),
                     Date = row.IsNull("Date") ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
                     PaymentTypeName = row["PaymentTypeName"].ToString(),
                     PaymentMethodName = row["PaymentMethodName"].ToString(),
@@ -558,7 +558,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                     VendorAddress = row["VendorAddress"].ToString(),
                     VendorId = Guid.TryParse(row["VId"].ToString(), out Guid vid) ? vid : Guid.Empty,
                     Type = row["Typecd"].ToString(),
-                    ProjectName = row["ProjectName"].ToString()
+                    Project = row["Project"].ToString()
 
                 }).ToList();
 
@@ -958,7 +958,7 @@ namespace EMPManegment.Repository.InvoiceMasterRepository
                 var CompanyList = dataSet.Tables[0].AsEnumerable().Select(row => new CreditDebitView
                 {
                     InvoiceNo = row["InvoiceNo"]?.ToString() ?? string.Empty,
-                    VendorName = row["VendorName"]?.ToString() ?? string.Empty,
+                    VendorCompany = row["VendorCompany"]?.ToString() ?? string.Empty,
                     TotalAmount = row["TotalAmount"] == DBNull.Value ? 0 : Convert.ToDecimal(row["TotalAmount"]),
                     CreatedOn = row["CreatedOn"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["CreatedOn"]),
                     CreatedBy = Guid.Parse(row["CreatedBy"]?.ToString() ?? Guid.Empty.ToString()),

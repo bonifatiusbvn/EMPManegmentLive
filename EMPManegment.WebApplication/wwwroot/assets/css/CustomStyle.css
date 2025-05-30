@@ -262,6 +262,8 @@
     }
 }
 
+
+
 .btn:hover {
     color: #138486 !important;
 }
@@ -312,7 +314,10 @@
         border-color: #6c6e7a;
     }
 
-
+.btn-sm-search {
+    width: 25px;
+    height: 25px
+}
 
 
 /* Custom Control Styles */
@@ -915,4 +920,29 @@
 .select2-teal.select2-container .select2-results__option--highlighted {
     background-color: #16989A !important;
     color: white !important;
+}
+
+.agrounded-circle {
+    border-radius: 50% !important
+}
+
+.agfs-16 {
+    font-size: 20px !important
+}
+
+.agavatar-title {
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    background-color: #25a0e2;
+    color: #fff;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-weight: 800;
+    height: 100%;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    width: 200% !important;
 }

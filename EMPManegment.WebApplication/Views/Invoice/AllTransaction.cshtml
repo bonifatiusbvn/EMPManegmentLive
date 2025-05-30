@@ -30,19 +30,26 @@
             <div class="card-header">
                 <div class="row">
                     <div class="col-12 col-lg-2">
-                        <input class="form-control"
-                               id="txttransactionSearch"
-                               placeholder="Search" />
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Search" id="txttransactionSearch">
+                            <div class="input-group-append">
+                                <button class="btn btn-sidebar button-teal" id="btntranssearch">
+                                    <i class="fas fa-search fa-fw"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12 col-lg-2">
                         <select class="form-control select2 select2-maroon"
                                 data-dropdown-css-class="select2-maroon"
                                 id="ddlpaymentType"
                                 placeholder="Search">
+                            <option value="">Select Type</option>
                             <option value="">All</option>
                             <option value="1">Paid</option>
-                            <option value="7">Unpaid</option>
-                            <option value="8">Other</option>
+                            <option value="2">Unpaid</option>
+                            <option value="7">Refund</option>
+                            <option value="8">Cancel</option>
                         </select>
                     </div>
                     <div class="col-12 col-lg-2">
@@ -51,7 +58,7 @@
                                 id="ddlCDCompanyName"
                                 name="ddlCDCompanyName">
                         </select>
-                        <input type="hidden" id="txtCompanyname" />
+
                     </div>
                     <input type="hidden" id="txtuserid" value="@_userSession.UserId" />
                     <div class="col-12 col-lg-2">
@@ -60,7 +67,6 @@
                                 id="ddlCDVendorName"
                                 name="ddlCDVendorName">
                         </select>
-                        <input type="hidden" id="txtpartyname" />
                     </div>
                     <div class="col-12 col-lg-1">
                         <button class="btn button-teal" id="toggleDateFilter">

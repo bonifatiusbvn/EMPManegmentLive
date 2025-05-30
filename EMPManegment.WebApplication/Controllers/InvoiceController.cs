@@ -570,8 +570,9 @@ namespace EMPManegment.Web.Controllers
                 return new JsonResult(new
                 {
                     rowsThisPage = VendorDetails.Data,
-                    totalRowCount = VendorDetails.RecordsTotal
+                    totalCount = VendorDetails.RecordsTotal
                 });
+
             }
             catch (Exception ex)
             {
