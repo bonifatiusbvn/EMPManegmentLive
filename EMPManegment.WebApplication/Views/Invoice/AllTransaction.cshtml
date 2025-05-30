@@ -29,7 +29,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-12 col-lg-2">
+                    <div class="col-12 col-lg-3">
                         <div class="input-group">
                             <input class="form-control" placeholder="Search" id="txttransactionSearch">
                             <div class="input-group-append">
@@ -63,7 +63,7 @@
                         </select>
                     </div>
                     <div class="col-12 col-lg-1">
-                        <button class="btn button-teal" id="toggleDateFilter">
+                        <button class="btn button-teal" id="toggletraDateFilter">
                             <i class="fa fa-calendar" aria-hidden="true"></i><span class="d-none d-sm-inline" style="margin-left: 10px;">Date</span>
                         </button>
                         <div id="dateFilterContainer" class="date-filter-container" style="display: none;">
@@ -73,6 +73,7 @@
                                 <label for="txtenddatebox">To Date</label>
                                 <input type="date" id="txtenddatebox" class="form-control mb-3" style="font-size: 15px;">
                                 <button class="btn button-teal btn-block" id="applyFilters">Apply</button>
+                                <button class="btn btn-secondary btn-block" id="resetPendingDateFilters">Reset</button>
                             </div>
                         </div>
                     </div>
@@ -82,7 +83,6 @@
                             <span class="d-none d-sm-inline">Reset</span>
                         </button>
                     </div>
-
                 </div>
             </div>
 

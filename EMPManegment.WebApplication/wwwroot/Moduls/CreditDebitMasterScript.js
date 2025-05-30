@@ -3,7 +3,6 @@ var Formdata = window.userFormPermissions || [];
 
 $(document).ready(function () {
 
-    populatePaymentTypes();
 
     $('#ddlCompanyName,#ddlCDCompanyName').select2({
         placeholder: 'Select Company',
@@ -70,6 +69,53 @@ $(document).ready(function () {
         }
     });
 
+
+    $('#ddlInvoicepaymenttype').select2({
+        placeholder: 'Select Payment type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
+    $('#ddlpaymentType').select2({
+        placeholder: 'Select Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
     getVendorTransactionList();
 
     $('#textTransactionCompanyName').on('change', SortCompanyName);
@@ -114,14 +160,6 @@ $(document).ready(function () {
     }
 
 
-    $('#ddlpaymentType').select2({
-        placeholder: 'Select Type',
-        width: '100%',
-        dropdownAutoWidth: true,
-        allowClear: true,
-
-    });
-
     $('#searchcreditdebitlist').on('keyup', function () {
         var value = $(this).val().toLowerCase();
         var hasVisibleItems = false;
@@ -147,32 +185,6 @@ function ResetAllTransaction() {
 }
 
 
-const paymentTypeOptions = [
-
-    { text: 'All', value: '' },
-    { text: 'Paid', value: '1' },
-    { text: 'Unpaid', value: '2' },
-    { text: 'Refund', value: '7' },
-    { text: 'Cancel', value: '8' }
-];
-
-
-function populatePaymentTypes() {
-    const select = $('#ddlpaymentType');
-
-    select.empty();
-
-    paymentTypeOptions.forEach(option => {
-        select.append(new Option(option.text, option.value));
-    });
-
-    select.select2({
-        placeholder: 'Select Type',
-        width: '100%',
-        dropdownAutoWidth: true,
-        allowClear: true
-    });
-}
 
 
 
@@ -709,7 +721,6 @@ $(document).ready(function () {
     });
 
 
-
     $('#ddlCDVendorName').change(() => {
         if (vendorAllTranGridOptions.api) {
             vendorAllTranGridOptions.api.refreshInfiniteCache();
@@ -722,7 +733,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#toggleDateFilter').click(e => {
+    $('#toggletraDateFilter').click(e => {
         e.stopPropagation();
         $('#dateFilterContainer').toggle();
     });
@@ -739,6 +750,17 @@ $(document).ready(function () {
         if (vendorAllTranGridOptions.api) {
             vendorAllTranGridOptions.api.refreshInfiniteCache();
         }
+        $('#dateFilterContainer').hide();
+    });
+
+    $("#resetPendingDateFilters").click(function () {
+        $("#fromDate").val('');
+        $("#toDate").val('');
+        startDate = null;
+        endDate = null;
+        vendorAllTranGridOptions.api.setFilterModel(null);
+        vendorAllTranGridOptions.api.onFilterChanged();
+        $('#dateFilterContainer').hide();
     });
 
 });
