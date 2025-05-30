@@ -39,14 +39,14 @@ namespace EMPManegment.Services.InvoiceMaster
             return InvoiceMaster.EditInvoiceDetails(InvoiceNo);
         }
 
-        public Task<List<CreditDebitView>> GetAllTransaction()
+        public Task<AGGridResponseModel<CreditDebitView>> GetAllTransaction(AGGridRequestModel TransactionRequest)
         {
-            return InvoiceMaster.GetAllTransaction();
+            return InvoiceMaster.GetAllTransaction(TransactionRequest);
         }
 
-        public async Task<jsonData> GetAllTransactionByVendorId(Guid Vid, DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<CreditDebitView>> GetAllTransactionByVendorId(AGGridRequestModel VendorRequest)
         {
-            return await InvoiceMaster.GetAllTransactionByVendorId(Vid, dataTable);
+            return await InvoiceMaster.GetAllTransactionByVendorId(VendorRequest);
         }
 
         public async Task<IEnumerable<CreditDebitView>> GetCreditDebitListByVendorId(Guid Vid)

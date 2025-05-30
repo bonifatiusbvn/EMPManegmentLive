@@ -4,7 +4,7 @@
 @inject UserSession _userSession
 @inject EMPManegment.Web.Helper.Common CommonHelper
 @{
-    ViewData["Title"] = "VendorInvoiceListView";
+    ViewData["Title"] = "PayVendors";
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 <link href="~/assets/libs/swiper/swiper-bundle.min.css" rel="stylesheet" type="text/css" />
@@ -234,6 +234,32 @@
                         </div>
                         <div class="p-3">
                             <div class="row">
+                                <div>
+                                    <div class="input-group mb-3">
+                                        <select class="form-select" id="ddltypeonly">
+                                            <option value="Credit">Credit</option>
+                                            <option value="Debit">Debit</option>
+                                        </select>
+                                    </div>
+                                </div><!-- end col -->
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label> Company :</label>
+                                        <select class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal"
+                                                id="ddlCompanyName">
+                                        </select>
+                                    </div>
+                                </div><!-- end col -->
+                                <div class="col-6">
+                                    <div class="mb-3">
+                                        <label>Project :</label>
+                                        <select class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal"
+                                                id="ddlproject">
+                                        </select>
+                                    </div>
+                                </div><!-- end col -->
                                 <div class="col-6">
                                     <div class="mb-3">
                                         <label>Payment Type :</label>

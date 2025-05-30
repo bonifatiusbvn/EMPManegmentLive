@@ -9,6 +9,7 @@ using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.EntityModels.ViewModels.VendorModels;
 using EMPManegment.Inretface.Interface.OrderDetails;
 using EMPManegment.Inretface.Interface.ProductMaster;
 using EMPManegment.Inretface.Interface.ProjectDetails;
@@ -165,33 +166,44 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetAllTransactionByVendorId")]
-        public async Task<IActionResult> GetAllTransactionByVendorId(Guid Vid, DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<CreditDebitView>> GetAllTransactionByVendorId(AGGridRequestModel VendorRequest)
         {
-            try
+            var GetvendorList = await InvoiceMaster.GetAllTransactionByVendorId(VendorRequest);
+            return new AGGridResponseModel<CreditDebitView>
             {
-                var CreditList = await InvoiceMaster.GetAllTransactionByVendorId(Vid, dataTable);
-                return Ok(new { code = (int)HttpStatusCode.OK, data = CreditList });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
-            }
+                Data = GetvendorList.Data,
+                RecordsTotal = GetvendorList.RecordsTotal,
+            };
         }
 
         [HttpPost]
         [Route("GetAllTransaction")]
-        public async Task<IActionResult> GetAllTransaction()
+        public async Task<IActionResult> GetAllTransaction([FromBody] AGGridRequestModel transactionRequest)
         {
             try
             {
-                var allCreditList = await InvoiceMaster.GetAllTransaction();
-                return Ok(new { code = (int)HttpStatusCode.OK, data = allCreditList.ToList() });
+                var allCreditList = await InvoiceMaster.GetAllTransaction(transactionRequest);
+
+                var response = new AGGridResponseModel<CreditDebitView>
+                {
+                    Data = allCreditList.Data,
+                    RecordsTotal = allCreditList.RecordsTotal,
+                };
+
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+                return StatusCode(
+                    (int)HttpStatusCode.InternalServerError,
+                    new
+                    {
+                        code = (int)HttpStatusCode.InternalServerError,
+                        message = "An error occurred while processing the request."
+                    });
             }
         }
+
 
         [HttpPost]
         [Route("InsertCreditDebitDetails")]

@@ -2,6 +2,7 @@
 using EMPManagment.API;
 using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
@@ -139,7 +140,28 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
         }
 
 
+        public async Task<IEnumerable<ProjectView>> GetProjectNameList(string? search)
+        {
+            try
+            {
+                var query = Context.TblProjectMasters
+                    .Select(a => new ProjectView
+                    {
+                        Id = a.ProjectId,
+                        ProjectTitle = a.ProjectTitle + "-" + a.ShortName
+                    });
 
+                if (!string.IsNullOrWhiteSpace(search))
+                {
+                    query = query.Where(pt => pt.ProjectTitle.Contains(search));
+                }
+                return await query.ToListAsync();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
         public async Task<List<ProjectView>> GetUserProjectList(Guid UserId)
         {
             try

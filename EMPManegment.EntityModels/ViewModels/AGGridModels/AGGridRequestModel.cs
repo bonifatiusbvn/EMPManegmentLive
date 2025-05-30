@@ -21,7 +21,10 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
         public string SortDirection { get; set; }
         public string? UserFilter { get; set; }
         public string? ProductTypeFilter { get; set; }
-        public string? CompanyFilter { get; set; }
+        public Guid? CompanyFilter { get; set; }
+        public Guid? VendorFilter { get; set; }
+        public Guid? ProjectFilter { get; set; }
+        public int? PaymentType { get; set; }
         public Guid? UserId { get; set; }
         public Guid? RoleId { get; set; }
         public Guid? VendorFilter { get; set; }

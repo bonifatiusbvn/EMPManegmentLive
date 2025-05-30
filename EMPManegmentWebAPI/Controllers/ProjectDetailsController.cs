@@ -1,6 +1,7 @@
 ﻿using Azure;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -28,6 +29,24 @@ namespace EMPManagment.API.Controllers
         {
             ProjectDetail = projectDetail;
         }
+
+
+        [HttpPost]
+        [Route("GetProjectNameList")]
+        public async Task<IActionResult> GetProjectNameList(string? search)
+        {
+            try
+            {
+                IEnumerable<ProjectView> projectView = await ProjectDetail.GetProjectNameList(search);
+                return Ok(new { code = (int)HttpStatusCode.OK, data = projectView.ToList() });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
+            }
+        }
+
+
 
         [HttpPost]
         [Route("CreateProject")]
