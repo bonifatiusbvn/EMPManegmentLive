@@ -53,42 +53,46 @@ function GetExpenseTypeList() {
                     value: data.id
                 };
             });
+
+            // Sort alphabetically by label
             expenseTypes.sort(function (a, b) {
-                if (a.label < b.label) {
-                    return -1;
-                }
-                if (a.label > b.label) {
-                    return 1;
-                }
-                return 0;
+                return a.label.localeCompare(b.label);
             });
+
             function setupAutocomplete(inputId, hiddenId) {
                 $(inputId).autocomplete({
                     source: expenseTypes,
                     minLength: 0,
                     focus: function (event, ui) {
-                        event.preventDefault();
-
+                        if (ui?.item) {
+                            $(inputId).val(ui.item.label);
+                        }
+                        event.preventDefault(); // Prevent value insertion on focus
                     },
                     select: function (event, ui) {
-                        $(inputId).val(ui.item.label);
-                        $(hiddenId).val(ui.item.value);
-                        event.preventDefault();
+                        if (ui?.item) {
+                            $(inputId).val(ui.item.label);
+                            $(hiddenId).val(ui.item.value);
+                        }
+                        event.preventDefault(); // Prevent default behavior
                         return false;
                     }
                 }).focus(function () {
-                    $(this).autocomplete("search");
+                    $(this).autocomplete("search", "");
                 });
             }
 
+            // Apply to both input sets
             setupAutocomplete("#txtexpensetype", "#txtexpensetypeHidden");
             setupAutocomplete("#Editexpensetype", "#EditexpensetypeHidden");
         },
-        error: function (err) {
-            toastr.error("Failed to fetch expense types: ", err);
+        error: function (xhr, status, error) {
+            console.error("Failed to fetch expense types:", error);
+            toastr.error("Failed to fetch expense types.");
         }
     });
 }
+
 $(document).ready(function () {
     function GetUsersList() {
         $.ajax({
@@ -1997,805 +2001,328 @@ function UserCreditExpenseList(UserId) {
     });
 }
 
-var datas = userPermissions
+var Formdata = window.userFormPermissions || 0;
+
+let MyExpenseGridOptions = [];
+let startDate = null;
+let endDate = null;
+let selectedTab = $(".Returns.active").attr("id");
+let selectedMonthFilter = "";
+
 $(document).ready(function () {
-    GetMyExpenseList();
-    $('.nav-link').click(function () {
-        var targetTab = $(this).attr('href');
-        if (targetTab === '#GetMyAllExpenseList') {
-            GetMyExpenseList();
-        } else if (targetTab === '#GetAllUnApprovedExpenseList') {
-            GetMyUnapproveExpenseList(datas);
-        } else if (targetTab === '#GetAllApprovedExpenseList') {
-            GetMyApproveExpenseList();
-        } else if (targetTab === '#GetAllCreditExpenseList') {
-            GetMyCreditExpenseList();
-        }
-    });
-
-    $('.nav-radio').click(function () {
-        var targetTab = $(this).attr('href');
-        if (targetTab === '#GetUserLastMonthExpenseList') {
-            GetMyLastMonthExpenseList();
-        } else if (targetTab === '#GetUserCurrentMonthExpenseList') {
-            GetMyCurrentMonthExpenseList();
-        }
-    });
-
-    $('.nav-btn').click(function () {
-        var targetTab = $(this).attr('href');
-        if (targetTab === '#GetBetweendatesExpenseList') {
-            GetMyBetweenDateExpenseList();
-        }
-    });
-    function GetMyUnapproveExpenseList(datas) {
-        $.ajax({
-            url: '/ExpenseMaster/DisplayUserExpenseDetails',
-            type: 'GET',
-            success: function (result) {
-
-                $("#UserExpenseListPartial").html(result);
-                GetAllUserUnapproveExpenseList(datas);
-            },
-            error: function () {
-                alert('Error loading expenses. Please try again.');
-            }
-        });
-    }
-    function GetAllUserUnapproveExpenseList(datas) {
-        var UserId = $("#txtuserid").val();
-        var IsApprove = false;
-
-        var userPermissionArray = JSON.parse(datas);
-        var canEdit = false;
-        var canDelete = false;
-
-        for (var i = 0; i < userPermissionArray.length; i++) {
-            var permission = userPermissionArray[i];
-            if (permission.formName == "Expenses") {
-                canEdit = permission.edit;
-                canDelete = permission.delete;
-                break;
-            }
-        }
-        var columns = [
+    MyExpenseGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
+                headerName: "", field: "account", sortable: false, filter: false, width: 60,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    if (params.data.account === "Credit") {
                         return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
+                    } else if (params.data.account === "Debit") {
                         return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
                     } else {
                         return '';
                     }
-                },
-                "orderable": false,
-                width: "05%"
+                }
             },
-            { "data": "description", "name": "Description" },
-            { "data": "billNumber", "name": "BillNumber" },
+            { headerName: "Description", field: "description", sortable: true, filter: true },
+            { headerName: "Bill No.", field: "billNumber", sortable: true, filter: true },
             {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.date);
                 }
             },
             {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
+                headerName: "Total amount", field: "totalamount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+
                     function formatNumberWithCommas(number) {
                         return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     }
-                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(data).toFixed(2));
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(params.data.totalAmount).toFixed(2));
+                    var color = params.data.account && params.data.account.toLowerCase() === "credit" ? "green" : "red";
                     return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
                 }
             },
-        ];
-        if (canEdit || canDelete) {
-            columns.push({
-                "data": null,
-                "render": function (data, type, full) {
-                    var buttons = '';
-
-                    if (canEdit) {
-                        buttons +=
-                            '<a class="btn text-info" onclick="EditExpenseDetails(\'' + full.id + '\')">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a>';
-                    }
-
-                    if (canDelete) {
-                        buttons += '<a class="btn text-danger btndeletedoc" onclick="deleteExpense(\'' + full.id + '\')">' +
-                            '<i class="fas fa-trash"></i></a>';
-                    }
-
-                    return buttons;
-                }
-            });
-        }
-        $('#GetMyUnapproveExpense').DataTable({
-            processing: false,
-            serverSide: true,
+        ],
+        defaultColDef: {
+            sortable: true,
             filter: true,
-            "bDestroy": true,
-            order: [[3, 'asc']],
-            pageLength: 10,
-            ajax: {
-                type: "Post",
-                url: '/ExpenseMaster/GetUserExpenseList?unapprove=' + IsApprove + "&UserId=" + UserId,
-                dataType: 'json'
-            },
-            columns: columns,
-            scrollY: 400,
-            scrollX: true,
-            scrollCollapse: true,
-            fixedHeader: {
-                header: true,
-                footer: true
-            },
-            autoWidth: false,
-            columnDefs: [{
-                targets: [0],
-                orderable: false,
-                width: "auto"
-            }],
-            footerCallback: function (row, data, start, end, display) {
-                var api = this.api();
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            MyExpenseGridOptions.api = params.api;
+            MyExpenseGridOptions.columnApi = params.columnApi;
+            MyExpenseGridOptions.api.sizeColumnsToFit();
+            createMyExpenseEnhancedPagination(params.api);
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 20,
+        pagination: true,
+        paginationPageSize: 20,
+        suppressPaginationPanel: true,
+        datasource: getMyExpenseDatasource()
+    };
 
-                var intVal = function (i) {
-                    return typeof i === 'string' ?
-                        i.replace(/[\$,]/g, '') * 1 :
-                        typeof i === 'number' ?
-                            i : 0;
+    function getMyExpenseDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    UserId: $('#txtuserid').val(),
+                    FilterType: selectedTab,
+                    UnapproveFilter: selectedTab === "Unapprove" ? true : false,
+                    Approvefilter: selectedTab === "Approve" ? true : false,
+                    AccountFilter: selectedTab === "Credit" ? "Credit" : "",
+                    Month: selectedMonthFilter === "lastMonthRadio" ? "Last" : selectedMonthFilter === "currentMonthRadio" ? "Current" : "",
+                    StartDate: startDate,
+                    EndDate: endDate,
                 };
 
-                var total = api
-                    .column(4)
-                    .data()
-                    .reduce(function (a, b) {
-                        return intVal(a) + intVal(b);
-                    }, 0);
+                $.ajax({
+                    url: '/ExpenseMaster/GetUserExpenseList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#MyExpenseTable .range-display');
+                        if (rangeDisplay) updateMyExpenseEnhancedPagination(MyExpenseGridOptions.api, rangeDisplay);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
+    }
 
-                $(api.column(5).footer()).html(
-                    '<span style="color: black;">Total: ' + '₹' + total.toFixed(2) + '</span>'
-                );
+    function createMyExpenseEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
+
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateMyExpenseEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateMyExpenseEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#MyExpenseTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+            // Destroy and recreate grid with new block size
+            const gridDiv = document.querySelector('#MyExpenseTable');
+
+            MyExpenseGridOptions = {
+                ...MyExpenseGridOptions,
+                cacheBlockSize: newPageSize,
+                paginationPageSize: newPageSize,
+                datasource: getMyExpenseDatasource(),
+            };
+
+            // Clear old grid and re-init
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, MyExpenseGridOptions);
+        });
+
+        updateMyExpenseEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateMyExpenseEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = MyExpenseGridOptions.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateMyExpenseEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
+        }
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
+
+    const userFormPermissionArray = Formdata;
+    let canEdit = false;
+    let canDelete = false;
+    for (let i = 0; i < userFormPermissionArray.length; i++) {
+        if (userFormPermissionArray[i].formName === "Expenses") {
+            canEdit = userFormPermissionArray[i].edit;
+            canDelete = userFormPermissionArray[i].delete;
+            break;
+        }
+    }
+
+    if (canEdit || canDelete) {
+        MyExpenseGridOptions.columnDefs.push({
+            headerName: "Action",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) return '';
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `
+                         <a onclick="EditExpenseDetails('${params.data.id}')"><i class="fa-regular fa-pen-to-square"></i></a>`;
+                }
+
+                if (canDelete) {
+                    buttons += `
+                    <a class="btn text-danger" onclick="deleteExpense('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                }
+                return buttons;
             }
         });
     }
+
+    const myGridElement = document.querySelector('#MyExpenseTable');
+    agGrid.createGrid(myGridElement, MyExpenseGridOptions);
+
+    $('.nav-link').on('click', function () {
+        selectedTab = this.id;
+        MyExpenseGridOptions.api.purgeInfiniteCache();
+
+        $('.nav-radio').prop('checked', false);
+        selectedMonthFilter = "";
+        $('#dateFilterContainer').hide();
+        $('#txtstartdatebox').val('');
+        $('#txtenddatebox').val('');
+        startDate = null;
+        endDate = null;
+    });
+
+    $('.nav-radio').on('change', function () {
+        selectedMonthFilter = this.id;
+        const isBetweenSelected = $('#betweenMonthRadio').is(':checked');
+
+        if (isBetweenSelected) {
+            $('#dateFilterContainer').show(); 
+        } else {
+            $('#dateFilterContainer').hide();
+            $('#txtstartdatebox').val('');
+            $('#txtenddatebox').val('');
+            startDate = null;
+            endDate = null;
+        }
+        selectedTab = '';
+        MyExpenseGridOptions.api.purgeInfiniteCache();
+    });
+
+    $('#applyFilters').click(() => {
+        startDate = $('#txtstartdatebox').val() || null;
+        endDate = $('#txtenddatebox').val() || null;
+        if (MyExpenseGridOptions.api) {
+            MyExpenseGridOptions.api.onFilterChanged();
+        }
+    });
+    $('#txtstartdatebox').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true
+    });
+    $('#txtenddatebox').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true
+    });
 });
-function GetMyExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayUserExpenseList',
-        type: 'GET',
-        success: function (result) {
-            $("#UserExpenseListPartial").html(result);
-            GetUserAllExpenseDetails();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
 
-function GetUserAllExpenseDetails() {
-    var UserId = $("#txtuserid").val();
-
-    $('#DisplayUserAllExpenseList').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-        order: [[3, 'asc']],
-        pageLength: 10,
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId,
-            dataType: 'json'
-        },
-        columns: [
-            {
-                data: null,
-
-                render: function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                orderable: false,
-                width: "05%"
-            },
-            { data: "description", name: "Description", width: "20%" },
-            { data: "billNumber", name: "BillNumber", width: "20%" },
-            {
-                data: "date",
-                name: "Date",
-                render: function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                },
-                width: "20%"
-            },
-            {
-                data: "totalAmount",
-                name: "TotalAmount",
-                render: function (data, type, full, meta) {
-                    var color = full.account.toLowerCase() === "credit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN');
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
-                },
-                width: "20%"
-            }
-
-
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-        footerCallback: function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-
-            var total = api
-                .column(4)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-            var formattedTotal = total.toLocaleString('en-IN', { style: 'currency', currency: 'INR' });
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + formattedTotal + '</span>'
-            );
-
-        }
-    });
-}
-
-
-function GetMyApproveExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayUserExpenseList',
-        type: 'GET',
-        success: function (result) {
-
-            $("#UserExpenseListPartial").html(result);
-            GetAllUserApproveExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-function GetAllUserApproveExpenseList() {
-    var UserId = $("#txtuserid").val();
-    var IsApprove = true;
-    $('#DisplayUserAllExpenseList').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        order: [[3, 'asc']],
-        pageLength: 10,
-        ajax: {
-            type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseList?approve=' + IsApprove + "&UserId=" + UserId,
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "description", "name": "Description" },
-            { "data": "billNumber", "name": "BillNumber" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN');
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
-                }
-            },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-
-            var total = api
-                .column(4)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
-            );
-        }
-    });
-}
-function GetMyCreditExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayUserExpenseList',
-        type: 'GET',
-        success: function (result) {
-
-            $("#UserExpenseListPartial").html(result);
-            GetAllUserCreditExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-function GetAllUserCreditExpenseList() {
-    var UserId = $("#txtuserid").val();
-    var Account = "Credit";
-    var filterType = 'credit';
-
-    $('#DisplayUserAllExpenseList').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        order: [[3, 'asc']],
-        pageLength: 10,
-        ajax: {
-            type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseList?Credit=' + Account + "&UserId=" + UserId + '&filterType=' + filterType,
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "description", "name": "Description" },
-            { "data": "billNumber", "name": "BillNumber" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
-                }
-            },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-
-            var total = api
-                .column(4)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
-            );
-        }
-    });
-}
-function GetMyLastMonthExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayUserExpenseList',
-        type: 'GET',
-        success: function (result) {
-
-            $("#UserExpenseListPartial").html(result);
-            GetUserLastMonthExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-function GetUserLastMonthExpenseList() {
-    var filterType = "lastmonth";
-    var UserId = $("#txtuserid").val();
-    $('#DisplayUserAllExpenseList').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        order: [[3, 'asc']],
-        pageLength: 10,
-        ajax: {
-            type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "description", "name": "Description" },
-            { "data": "billNumber", "name": "BillNumber" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
-                }
-            },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-
-            var total = api
-                .column(4)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
-            );
-        }
-    });
-}
-function GetMyCurrentMonthExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayUserExpenseList',
-        type: 'GET',
-        success: function (result) {
-
-            $("#UserExpenseListPartial").html(result);
-            GetUserCurrentMonthExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-function GetUserCurrentMonthExpenseList() {
-    var filterType = 'thismonth';
-    var UserId = $("#txtuserid").val();
-    $('#DisplayUserAllExpenseList').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        order: [[3, 'asc']],
-        pageLength: 10,
-        ajax: {
-            type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&filterType=' + filterType,
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "description", "name": "Description" },
-            { "data": "billNumber", "name": "BillNumber" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
-                }
-            },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-
-            var total = api
-                .column(4)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
-            );
-        }
-    });
-}
-function GetMyBetweenDateExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayUserExpenseList',
-        type: 'GET',
-        success: function (result) {
-
-            $("#UserExpenseListPartial").html(result);
-            SearchBetweenDateExpense();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-function SearchBetweenDateExpense() {
-    var StartDate = $('#startDate').val();
-    var EndDate = $('#endDate').val();
-    var UserId = $('#txtuserid').val();
-
-    if (StartDate == "" && EndDate == "") {
-        toastr.warning("Select dates");
-    } else if (StartDate == "") {
-        toastr.warning("Select Start date");
-    } else if (EndDate == "") {
-        toastr.warning("Select End date");
-    } else {
-        GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId)
-    }
-}
-
-function GetUserBetweenMonthsExpenseList(StartDate, EndDate, UserId) {
-    var filterType = 'daterange';
-    $('#DisplayUserAllExpenseList').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        order: [[3, 'asc']],
-        pageLength: 10,
-        ajax: {
-            type: "Post",
-            url: '/ExpenseMaster/GetUserExpenseList?startDate=' + StartDate + '&endDate=' + EndDate + '&UserId=' + UserId + '&filterType=' + filterType,
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "description", "name": "Description" },
-            { "data": "billNumber", "name": "BillNumber" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
-                }
-            },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-
-            var total = api
-                .column(4)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
-            );
-        }
-    });
-}
 
 var ExpenseTypeForm;
 $(document).ready(function () {

@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.OrderModels;
@@ -32,7 +33,7 @@ namespace EMPManegment.Inretface.Interface.ExpenseMaster
 
         Task<UserResponceModel> AddExpenseDetails(ExpenseDetailsView ExpenseDetails);
 
-        Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null);
+        Task<AGGridResponseModel<ExpenseDetailsView>> GetUserExpenseList(AGGridRequestModel ExpenseRequest);
 
         Task<jsonData> GetUserList(DataTableRequstModel dataTable);
 

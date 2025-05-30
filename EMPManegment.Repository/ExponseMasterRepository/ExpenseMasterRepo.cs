@@ -1,32 +1,33 @@
-﻿using EMPManagment.API;
+﻿using Azure;
+using EMPManagment.API;
+using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
+using EMPManegment.EntityModels.ViewModels.OrderModels;
 using EMPManegment.EntityModels.ViewModels.ProductMaster;
+using EMPManegment.EntityModels.ViewModels.Purchase_Request;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Globalization;
 using System.Linq;
-using System.Net;
 using System.Linq.Dynamic.Core;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using EMPManegment.EntityModels.ViewModels.OrderModels;
-using EMPManegment.EntityModels.ViewModels.Invoice;
-using Microsoft.Extensions.Configuration;
-using Microsoft.AspNetCore.Mvc;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using System.Globalization;
-using Azure;
-using EMPManegment.EntityModels.Common;
-using System.Data;
-using EMPManegment.EntityModels.ViewModels.Purchase_Request;
-using System.Data.SqlClient;
-using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 
 namespace EMPManegment.Repository.ExponseMasterRepository
 {
@@ -453,190 +454,63 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return model;
         }
-        public async Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null)
+        public async Task<AGGridResponseModel<ExpenseDetailsView>> GetUserExpenseList(AGGridRequestModel ExpenseRequest)
         {
             try
             {
-                string dbConnectionStr = configuration.GetConnectionString("EMPDbconn");
-                var sqlPar = new SqlParameter[]
-                {
-                    new SqlParameter("@UserId", UserId),
-                };
-                var dataSet = DbHelper.GetDataSet("[spGetUserExpenseListByUserId]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
-                var sqlPar2 = new SqlParameter[]
-                {
-                 new SqlParameter("@UserId", UserId),
-                };
-                var dataSetofPA = DbHelper.GetDataSet("[GetMonthlyPendingAmounts]", System.Data.CommandType.StoredProcedure, sqlPar2, dbConnectionStr);
-                var UserExpenseList = new List<ExpenseDetailsView>();
+                var filterConditions = string.Join(" AND ", ExpenseRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = ExpenseRequest.SortModel?.FirstOrDefault()?.ColId ?? "Date";
+                string sortDirection = ExpenseRequest.SortModel?.FirstOrDefault()?.Sort ?? "desc";
 
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                var parameters = new List<SqlParameter>
                 {
-                    var UserExpenseDetails = new ExpenseDetailsView
-                    {
-                        Id = Guid.Parse(row["Id"].ToString()),
-                        UserId = Guid.Parse(row["UserId"].ToString()),
-                        ExpenseType = Convert.ToInt32(row["ExpenseType"]),
-                        PaymentType = Convert.ToInt32(row["PaymentType"]),
-                        BillNumber = row["BillNumber"].ToString(),
-                        IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
-                        Description = row["Description"].ToString(),
-                        Image = row["Image"].ToString(),
-                        Account = row["Account"].ToString(),
-                        ExpenseTypeName = row["ExpenseTypeName"].ToString(),
-                        PaymentTypeName = row["PaymentTypeName"].ToString(),
-                        Date = Convert.ToDateTime(row["Date"]),
-                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
-                    };
-                    UserExpenseList.Add(UserExpenseDetails);
-                }
-
-                var userMonthlyPendingExpenseList = new List<UserMonthlyPendingExpense>();
-
-                foreach (DataRow row in dataSetofPA.Tables[0].Rows)
-                {
-                    var UserMonthlyExpenseDetails = new UserMonthlyPendingExpense
-                    {
-                        MonthName = row["MonthName"]?.ToString(),
-                        TotaldebitAmount = Convert.ToDecimal(row["TotaldebitAmount"]),
-                        TotalcreditAmount = Convert.ToDecimal(row["TotalcreditAmount"]),
-                        PendingAmount = Convert.ToDecimal(row["PendingAmount"]),
-                        CumulativePending = Convert.ToDecimal(row["CumulativePending"]),
-                        YearNumber = row["YearNumber"]?.ToString(),
-                    };
-                    userMonthlyPendingExpenseList.Add(UserMonthlyExpenseDetails);
-                }
-
-                if (!string.IsNullOrEmpty(selectMonthlyExpense))
-                {
-                    var selectedYearMonth = selectMonthlyExpense.Split('-');
-                    if (selectedYearMonth.Length == 2 &&
-                        int.TryParse(selectedYearMonth[0], out int selectedYear) &&
-                        int.TryParse(selectedYearMonth[1], out int selectedMonth))
-                    {
-                        switch (filterType.ToLower())
-                        {
-                            case "credit":
-                                UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "credit" && expense.Date.Year == selectedYear && expense.Date.Month == selectedMonth).ToList();
-                                break;
-                            case "debit":
-                                UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "debit" && expense.IsApproved == true && expense.Date.Year == selectedYear && expense.Date.Month == selectedMonth).ToList();
-                                break;
-                            default:
-                                break;
-                        }
-                    }
-                }
-                else if (!string.IsNullOrEmpty(filterType))
-                {
-                    switch (filterType.ToLower())
-                    {
-                        case "credit":
-                            UserExpenseList = UserExpenseList.Where(expense => expense.Account.ToLower() == "credit").ToList();
-                            break;
-                        case "debit":
-                            UserExpenseList = UserExpenseList.Where(e => e.Account.ToLower() == filterType && e.IsApproved == true).ToList();
-                            break;
-                        case "thismonth":
-                            UserExpenseList = UserExpenseList.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month).ToList();
-                            break;
-                        case "thismonth and debit":
-                            UserExpenseList = UserExpenseList.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "debit" && e.IsApproved == true).ToList();
-                            break;
-                        case "thismonth and credit":
-                            UserExpenseList = UserExpenseList.Where(e => e.Date.Year == DateTime.Now.Year && e.Date.Month == DateTime.Now.Month && e.Account.ToLower() == "credit").ToList();
-                            break;
-                        case "lastmonth":
-                            var lastMonth = DateTime.Now.AddMonths(-1);
-                            UserExpenseList = UserExpenseList.Where(e => e.Date.Year == lastMonth.Year && e.Date.Month == lastMonth.Month).ToList();
-                            break;
-                        case "daterange":
-                            if (startDate.HasValue && endDate.HasValue)
-                            {
-                                UserExpenseList = UserExpenseList.Where(e => e.Date >= startDate.Value && e.Date <= endDate.Value).ToList();
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else if (unapprove.HasValue)
-                {
-                    UserExpenseList = UserExpenseList.Where(e => e.IsApproved == unapprove && e.Description != "Expense Paid").ToList();
-                }
-                else if (approve.HasValue)
-                {
-                    UserExpenseList = UserExpenseList.Where(e => e.IsApproved == approve && e.Description != "Expense Paid").ToList();
-                }
-                else if (!string.IsNullOrEmpty(account))
-                {
-                    UserExpenseList = UserExpenseList.Where(e => e.Account == account).ToList();
-                }
-
-                if (!string.IsNullOrEmpty(dataTable.searchValue))
-                {
-                    string searchValue = dataTable.searchValue.ToLower();
-                    DateTime searchDate;
-                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
-
-                    UserExpenseList = UserExpenseList.Where(e => e.BillNumber.ToLower().Contains(searchValue) ||
-                                                 (isDate && e.Date == searchDate) ||
-                                                 e.Account.ToLower().Contains(searchValue) ||
-                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue)).ToList();
-                }
-
-                IQueryable<ExpenseDetailsView> queryableExpenseDetails = UserExpenseList.AsQueryable();
-
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
-                {
-                    switch (dataTable.sortColumn)
-                    {
-                        case "BillNumber":
-                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.BillNumber) : queryableExpenseDetails.OrderByDescending(e => e.BillNumber);
-                            break;
-                        case "Date":
-                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.Date) : queryableExpenseDetails.OrderByDescending(e => e.Date);
-                            break;
-                        case "Account":
-                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.Account) : queryableExpenseDetails.OrderByDescending(e => e.Account);
-                            break;
-                        case "TotalAmount":
-                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.TotalAmount) : queryableExpenseDetails.OrderByDescending(e => e.TotalAmount);
-                            break;
-                        case "Description":
-                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.Description) : queryableExpenseDetails.OrderByDescending(e => e.Description);
-                            break;
-                        case "ExpenseTypeName":
-                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.ExpenseTypeName) : queryableExpenseDetails.OrderByDescending(e => e.ExpenseTypeName);
-                            break;
-                        case "PaymentTypeName":
-                            queryableExpenseDetails = dataTable.sortColumnDir == "asc" ? queryableExpenseDetails.OrderBy(e => e.PaymentTypeName) : queryableExpenseDetails.OrderByDescending(e => e.PaymentTypeName);
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                else
-                {
-                    queryableExpenseDetails = queryableExpenseDetails.OrderBy("Date desc");
-                }
-                var totalRecord = queryableExpenseDetails.Count();
-                var filteredData = queryableExpenseDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
-
-                var jsonData = new jsonData
-                {
-                    draw = dataTable.draw,
-                    recordsFiltered = totalRecord,
-                    recordsTotal = totalRecord,
-                    data = filteredData,
-                    userMonthlyPendingExpense = userMonthlyPendingExpenseList
+                    new SqlParameter("@UserId", ExpenseRequest.UserId),
+                    new SqlParameter("@FilterType", ExpenseRequest.FilterType),
+                    new SqlParameter("@Unapprove", ExpenseRequest.UnapproveFilter),
+                    new SqlParameter("@Approve", ExpenseRequest.Approvefilter),
+                    new SqlParameter("@Account", ExpenseRequest.AccountFilter),
+                    new SqlParameter("@SelectMonthlyExpense", ExpenseRequest.Month),
+                    new SqlParameter("@StartDate", ExpenseRequest.StartDate),
+                    new SqlParameter("@EndDate", ExpenseRequest.EndDate),
+                    new SqlParameter("@SortColumn", sortColumn),
+                    new SqlParameter("@SortDirection", sortDirection),
+                    new SqlParameter("@PageSize", ExpenseRequest.PageSize),
+                    new SqlParameter("@Skip", ExpenseRequest.StartRow),
+                    new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                    new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
-                return jsonData;
+                var dataSet = DbHelper.GetDataSet("spGetUserExpenseListByUserId", CommandType.StoredProcedure, parameters.ToArray(), configuration.GetConnectionString("EMPDbconn"));
+
+                var ExpenseList = dataSet.Tables[0].AsEnumerable().Select(row => new ExpenseDetailsView
+                {
+                    Id = Guid.Parse(row["Id"].ToString()),
+                    UserId = Guid.Parse(row["UserId"].ToString()),
+                    ExpenseType = Convert.ToInt32(row["ExpenseType"]),
+                    PaymentType = Convert.ToInt32(row["PaymentType"]),
+                    BillNumber = row["BillNumber"].ToString(),
+                    IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
+                    Description = row["Description"].ToString(),
+                    Image = row["Image"].ToString(),
+                    Account = row["Account"].ToString(),
+                    ExpenseTypeName = row["ExpenseTypeName"].ToString(),
+                    PaymentTypeName = row["PaymentTypeName"].ToString(),
+                    Date = Convert.ToDateTime(row["Date"]),
+                    TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<ExpenseDetailsView>
+                {
+                    Data = ExpenseList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
         public async Task<jsonData> GetUserList(DataTableRequstModel dataTable)

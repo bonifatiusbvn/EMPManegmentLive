@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.ExpenseMaster;
@@ -80,9 +81,9 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetPaymentById(PaymentId);
         }
 
-        public async Task<jsonData> GetUserExpenseList(Guid UserId, DataTableRequstModel dataTable, string filterType = null, bool? unapprove = null, bool? approve = null, DateTime? startDate = null, DateTime? endDate = null, string account = null, string selectMonthlyExpense = null)
+        public async Task<AGGridResponseModel<ExpenseDetailsView>> GetUserExpenseList(AGGridRequestModel ExpenseRequest)
         {
-            return await expenseMaster.GetUserExpenseList(UserId, dataTable, filterType, unapprove, approve, startDate, endDate, account, selectMonthlyExpense);
+            return await expenseMaster.GetUserExpenseList(ExpenseRequest);
         }
 
         public async Task<jsonData> GetUserList(DataTableRequstModel dataTable)
