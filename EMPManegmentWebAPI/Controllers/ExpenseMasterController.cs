@@ -171,17 +171,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetUserList")]
-        public async Task<IActionResult> GetUserList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<UserExpenseDetailsView>> GetUserList(AGGridRequestModel ExpenseRequest)
         {
-            try
+            var getUserExpense = await expenseMaster.GetUserList(ExpenseRequest);
+            return new AGGridResponseModel<UserExpenseDetailsView>
             {
-                var getUserExpense = await expenseMaster.GetUserList(dataTable);
-                return Ok(new { code = (int)HttpStatusCode.OK, data = getUserExpense });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
-            }
+                Data = getUserExpense.Data,
+                RecordsTotal = getUserExpense.RecordsTotal,
+            };
         }
 
         [HttpPost]

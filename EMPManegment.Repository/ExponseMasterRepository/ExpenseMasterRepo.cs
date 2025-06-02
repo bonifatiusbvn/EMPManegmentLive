@@ -513,70 +513,52 @@ namespace EMPManegment.Repository.ExponseMasterRepository
                 throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
-        public async Task<jsonData> GetUserList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<UserExpenseDetailsView>> GetUserList(AGGridRequestModel ExpenseRequest)
         {
             try
             {
-                string dbConnectionStr = configuration.GetConnectionString("EMPDbconn");
-                var dataSet = DbHelper.GetDataSet("[spGetAllUserExpenseDetails]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
-                var UserExpenseList = new List<UserExpenseDetailsView>();
+                var filterConditions = string.Join(" AND ", ExpenseRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = ExpenseRequest.SortModel?.FirstOrDefault()?.ColId ?? "Date";
+                string sortDirection = ExpenseRequest.SortModel?.FirstOrDefault()?.Sort ?? "desc";
 
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                var parameters = new List<SqlParameter>
                 {
-                    var UserExpenseDetails = new UserExpenseDetailsView
-                    {
-                        UserId = Guid.Parse(row["UserId"].ToString()),
-                        FullName = row["FullName"].ToString(),
-                        FirstName = row["FirstName"].ToString(),
-                        LastName = row["LastName"].ToString(),
-                        UserName = row["UserName"].ToString(),
-                        Image = row["Image"].ToString(),
-                        Date = Convert.ToDateTime(row["Date"]),
-                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
-                        UnapprovedPendingAmount = Convert.ToDecimal(row["UnapprovedPendingAmount"]),
-                        TotalPendingAmount = Convert.ToDecimal(row["TotalPendingAmount"]),
-
-                    };
-                    UserExpenseList.Add(UserExpenseDetails);
-                }
-                if (!string.IsNullOrEmpty(dataTable.searchValue))
-                {
-                    string searchValue = dataTable.searchValue.ToLower();
-                    DateTime searchDate;
-                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
-
-                    UserExpenseList = UserExpenseList.Where(e => e.UserName.ToLower().Contains(searchValue) ||
-                                                 (isDate && e.Date == searchDate) ||
-                                                 e.FullName.ToLower().Contains(searchValue) ||
-                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue)).ToList();
-                }
-
-                IQueryable<UserExpenseDetailsView> queryableExpenseDetails = UserExpenseList.AsQueryable();
-
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
-                {
-                    queryableExpenseDetails = queryableExpenseDetails.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
-                }
-                else
-                {
-                    queryableExpenseDetails = queryableExpenseDetails.OrderBy("Date desc");
-                }
-                var totalRecord = queryableExpenseDetails.Count();
-                var filteredData = queryableExpenseDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
-
-                var jsonData = new jsonData
-                {
-                    draw = dataTable.draw,
-                    recordsFiltered = totalRecord,
-                    recordsTotal = totalRecord,
-                    data = filteredData
+                    new SqlParameter("@SearchValue", ExpenseRequest.SearchValue),
+                    new SqlParameter("@SortColumn", sortColumn),
+                    new SqlParameter("@SortDirection", sortDirection),
+                    new SqlParameter("@PageSize", ExpenseRequest.PageSize),
+                    new SqlParameter("@Skip", ExpenseRequest.StartRow),
+                    new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                    new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
-                return jsonData;
+                var dataSet = DbHelper.GetDataSet("spGetAllUserExpenseDetails", CommandType.StoredProcedure, parameters.ToArray(), configuration.GetConnectionString("EMPDbconn"));
+
+                var ExpenseList = dataSet.Tables[0].AsEnumerable().Select(row => new UserExpenseDetailsView
+                {
+                    UserId = Guid.Parse(row["UserId"].ToString()),
+                    FirstName = row["FirstName"].ToString(),
+                    LastName = row["LastName"].ToString(),
+                    UserName = row["UserName"].ToString(),
+                    Image = row["Image"].ToString(),
+                    Date = Convert.ToDateTime(row["Date"]),
+                    TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                    UnapprovedPendingAmount = Convert.ToDecimal(row["UnapprovedPendingAmount"]),
+                    TotalPendingAmount = Convert.ToDecimal(row["TotalPendingAmount"]),
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<UserExpenseDetailsView>
+                {
+                    Data = ExpenseList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
         public async Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId)

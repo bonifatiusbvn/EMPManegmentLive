@@ -86,9 +86,9 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetUserExpenseList(ExpenseRequest);
         }
 
-        public async Task<jsonData> GetUserList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<UserExpenseDetailsView>> GetUserList(AGGridRequestModel ExpenseRequest)
         {
-            return await expenseMaster.GetUserList(dataTable);
+            return await expenseMaster.GetUserList(ExpenseRequest);
         }
 
         public async Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails)

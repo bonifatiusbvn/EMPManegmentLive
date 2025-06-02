@@ -20,8 +20,8 @@
 <input type="hidden" class="form-control" id="txtexpensetype" value="6" hidden>
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Pay Expenses</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">Pay Expenses</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
                     <li class="breadcrumb-item"><a href="javascript: void(0);">Expenses</a></li>
@@ -102,120 +102,39 @@
 <!--end col-->
 
 <div class="row">
-    <div class="col-xxl-9">
+    <div class="col-xl-9">
         <div class="card card-height-100">
-            <ul class="nav nav-tabs nav-tabs-custom nav-primary mb-3" role="tablist">
-                <li class="nav-item">
-                    <a class="nav-link active All py-3" data-bs-toggle="tab" id="All" href="#GetallExpense" role="tab" aria-selected="true">
-                        <i class="ri-arrow-left-right-fill me-1 align-bottom"></i>@ViewBag.UserName (All Expense)
-                    </a>
-                </li>
-                <li class="nav-item ml-auto">
-                    <div class="card-title mb-0 flex-grow-1 text-info">
-                        <div class="dropdown p-3">
-                            <input type="month" id="textselectedmonth" class="form-control">
+            <div class="card-header">
+                <div class="d-flex justify-content-between align-items-center flex-wrap">
+                    <h5 class="mb-0" style="color: #16989A !important;">@ViewBag.UserName (All Expense)</h5>
+                    <div>
+                        <input type="month" id="textselectedmonth" class="form-control" style="min-width: 200px;">
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0" style="color: #16989A !important;">Pay to Users</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="UserPayExpenseCreditTable" class="ag-theme-teal" style="height: 350px; width: 100%;"></div>
+                            </div>
                         </div>
                     </div>
-                </li>
-            </ul>
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="live-preview">
-                                <div class="row">
-                                    <div class="col-xl-6 ">
-                                        <div class="table-responsive">
-                                            <h6>Pay to Users</h6>
-                                            <table id="UserPayExpenseTableCredit" class="table table-bordered dt-responsive nowrap table-striped align-middle">
-                                                <thead class="button-teal text-center">
-                                                    <tr>
-                                                        <th>Debit</th>
-                                                        <th>Id</th>
-                                                        <th>Description</th>
-                                                        <th>Date</th>
-                                                        <th>Amount</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody class="list form-check-all">
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th>Total:</th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                            <div class="noresult" style="display: none">
-                                                <div class="text-center">
-                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                                    </lord-icon>
-                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                    <p class="text-muted mb-0">
-                                                        We've searched more than 150+ invoices We did not find any
-                                                        invoices for you search.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                    <div class="col-xl-6 ">
-                                        <div class="table-responsive">
-                                            <h6>Pay to Company</h6>
-                                            <table id="UserPayExpenseTableDebit" class="table table-bordered dt-responsive nowrap table-striped align-middle">
-                                                <thead class="button-teal text-center">
-                                                    <tr>
-                                                        <th>Credit</th>
-                                                        <th>Id</th>
-                                                        <th>Description</th>
-                                                        <th>Date</th>
-                                                        <th>Amount</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr id="monthlyPendingExpenseFooter">
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th>Last Month Pending:</th>
-                                                    </tr>
-                                                    <tr id="totaldebitExpenseFooter">
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th></th>
-                                                        <th>Total:</th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                            <div class="noresult" style="display: none">
-                                                <div class="text-center">
-                                                    <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                                    </lord-icon>
-                                                    <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                    <p class="text-muted mb-0">
-                                                        We've searched more than 150+ invoices We did not find any
-                                                        invoices for you search.
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!--end col-->
-                                </div>
-                                <!--end row-->
+                    <div class="col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="mb-0" style="color: #16989A !important;">Pay to Company</h6>
                             </div>
-                        </div><!-- end card-body -->
-                    </div><!-- end card -->
+                            <div class="card-body">
+                                <div id="UserPayExpenseDebitTable" class="ag-theme-teal" style="height: 350px; width: 100%;"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- end col -->
             </div>
         </div>
         <!--end col-->
@@ -225,7 +144,7 @@
             <div class="card-header">
                 <ul class="nav nav-tabs-custom rounded card-header-tabs nav-justified border-bottom-0 mx-n3" role="tablist">
                     <li class="nav-item ">
-                        <h6 class="text-primary p-3 bg-primary-subtle">
+                        <h6 class="p-3 bg-teal" style="color:white;">
                             Get PAY
                         </h6>
                     </li>
@@ -235,17 +154,17 @@
                 <div class="tab-content text-muted">
                     <div class="tab-pane active" id="cryptoBuy" role="tabpanel">
                         <form id="GetPayForm">
-                            <div class="p-3 bg-primary-subtle">
+                            <div class="p-3 bg-teal">
                                 <div class="float-end ms-2">
-                                    <h6 class="text-primary mb-0" id="pendingamount"></h6>
+                                    <h6 class=" mb-0" style="color:white;" id="pendingamount"></h6>
                                 </div>
-                                <h6 class="mb-0">Pending Amount</h6>
+                                <h6 class="mb-0" style="color:white;">Pending Amount</h6>
                             </div>
                             <div class="p-3">
                                 <div>
                                     <div class="input-group mb-3">
-                                        <select class="form-control form-select valid" id="txtExpensepaymenttype" name="txtExpensepaymenttype">
-                                            <option selected value="">--Select Type--</option>
+                                        <select class="form-control select2 select2-teal"
+                                                data-dropdown-css-class="select2-teal" id="txtExpensepaymenttype" name="txtExpensepaymenttype">
                                         </select>
                                         <input type="hidden" class="form-control" id="txtAccount" value="Credit" readonly>
                                     </div>
@@ -278,7 +197,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-3 pt-2">
-                                    <button type="button" class="btn btn-success w-100" id="creditdebitsubmitbtn" onclick="GetPayExpense()">Submit</button>
+                                    <button type="button" class="btn button-teal w-100" id="creditdebitsubmitbtn" onclick="GetPayExpense()">Submit</button>
                                 </div>
                             </div>
                         </form>

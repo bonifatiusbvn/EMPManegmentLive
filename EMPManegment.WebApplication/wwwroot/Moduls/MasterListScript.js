@@ -438,7 +438,7 @@ function GetPaymentTypeList() {
             var firstPaymentType = result[0];
             $('#drpcreditdebitpaymenttype').val(firstPaymentType.id);
             $.each(result, function (i, data) {
-                $('#txtExpensepaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
+               // $('#txtExpensepaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 $('#EditExpensepaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
             $.each(result, function (i, data) {

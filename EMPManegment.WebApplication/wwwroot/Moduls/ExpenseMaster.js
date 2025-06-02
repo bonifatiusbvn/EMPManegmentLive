@@ -1,13 +1,15 @@
-﻿function DisplayAddExpenseModel() {
+﻿var Formdata = window.userFormPermissions || 0;
+
+function DisplayAddExpenseModel() {
     clearText();
     $('#AddExpenseModel').modal('show');
 }
 
 $(document).ready(function () {
     GetExpenseTotalAmount();
-    GetAllUserExpenseList();
+   // GetAllUserExpenseList();
     ApprovedExpenseList();
-    UserExpensesDetails();
+    //UserExpensesDetails();
     GetExpenseTypeList();
 });
 
@@ -503,779 +505,824 @@ function deleteExpense(Id) {
         }
     });
 }
+const now = new Date();
+const currentMonth = now.toISOString().slice(0, 7);
+$('#textselectedmonth').val(currentMonth);
+
+let UserPayExpenseCreditOptions = [];
+let UserPayExpenseCreditMonthFilter = currentMonth;
 
 $(document).ready(function () {
-    $(document).on('change', '#textselectedmonth', function () {
-        var selectedMonth = $(this).val();
-        var userId = $("#txtuserid").val();
-        var monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-        var selectedYear = selectedMonth.split('-')[0];
-        var month = parseInt(selectedMonth.split('-')[1], 10);
-        var selectedText = monthNames[month - 1];
-        GetPayUserExpenseCreditList(userId, selectedMonth);
-        GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selectedYear);
+    UserPayExpenseCreditOptions = {
+        rowHeight: 50,
+        columnDefs: [
+            {
+                headerName: "", field: "account", sortable: false, filter: false, width: 60,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                }
+            },
+            { headerName: "Description", field: "description", sortable: true, filter: true },
+            {
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.date);
+                }
+            },
+            {
+                headerName: "Total amount", field: "totalamount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(params.data.totalAmount).toFixed(2));
+                    var color = params.data.account && params.data.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
+                }
+            },
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            UserPayExpenseCreditOptions.api = params.api;
+            UserPayExpenseCreditOptions.columnApi = params.columnApi;
+            UserPayExpenseCreditOptions.api.sizeColumnsToFit();
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 20,
+        pagination: true,
+        paginationPageSize: 20,
+        suppressPaginationPanel: true,
+        datasource: getUserPayExpenseCreditDatasource()
+    };
+
+    function getUserPayExpenseCreditDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    UserId: $('#txtuserid').val(),
+                    Month: UserPayExpenseCreditMonthFilter,
+                    FilterType: "Credit",
+                };
+
+                $.ajax({
+                    url: '/ExpenseMaster/GetUserExpenseList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
+    }
+
+    const myGridElement = document.querySelector('#UserPayExpenseCreditTable');
+    agGrid.createGrid(myGridElement, UserPayExpenseCreditOptions);
+
+    $('#textselectedmonth').on('change', function () {
+        UserPayExpenseCreditMonthFilter = $(this).val();
+        UserPayExpenseCreditOptions.api.purgeInfiniteCache();
     });
 });
 
-function getNextMonth() {
-    const date = new Date();
-    let month = date.getMonth();
-    let year = date.getFullYear();
 
-    if (month > 11) {
-        month = 0;
-        year += 1;
-    }
-    const formattedMonth = month < 9 ? '0' + (month + 1) : (month + 1);
-    return `${year}-${formattedMonth}`;
-}
+let UserPayExpenseDebitOptions = [];
+let UserPayExpenseDebitMonthFilter = currentMonth;
 
-function GetPayUserExpenseCreditList(userId, selectedMonth) {
-    var filterType;
-    var selectMonthlyExpense;
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var today = new Date();
-    var monthName = months[today.getMonth()];
-    var monthValue = today.getMonth() + 1;
-
-    if (selectedMonth != null) {
-        selectMonthlyExpense = selectedMonth;
-        filterType = "credit";
-    } else {
-        filterType = "thismonth and credit";
-        selectMonthlyExpense = '';
-        document.getElementById('textselectedmonth').value = getNextMonth();
-    }
-
-    $('#UserPayExpenseTableCredit').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-        order: [[3, 'asc']],
-        pageLength: 30,
-        info: false,
-        lengthChange: false,
-        searching: false,
-        pagingType: "simple",
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filterType + '&selectMonthlyExpense=' + selectMonthlyExpense,
-            dataType: 'json',
-        },
-        columns: [
+$(document).ready(function () {
+    UserPayExpenseDebitOptions = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                },
-                "orderable": false
-            },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "description", "name": "Description" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "debit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
-                }
-            },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "20%"
-        }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-            var total = api
-                .column(4)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-            var formattedTotal = total.toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-            $(api.column(4).footer()).html(
-                '<span style="color: black;">Total: ' + '₹' + formattedTotal + '</span>'
-            );
-        }
-    });
-}
-
-function GetPayUserExpenseDebitList(userId, selectedMonth, selectedText, selectedYear) {
-    var filterType;
-    var selectMonthlyExpense;
-    var SelectedMonthName;
-    var PreviousMonthName;
-    var Year;
-    var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    var today = new Date();
-    var monthName = months[today.getMonth()];
-    var currentYear = today.getFullYear();
-
-    function getPreviousMonth(currentMonthName) {
-        var currentIndex = months.indexOf(currentMonthName);
-        var previousIndex = (currentIndex - 1 + months.length) % months.length;
-        return months[previousIndex];
-    }
-
-    if (selectedMonth != null) {
-        selectMonthlyExpense = selectedMonth;
-        SelectedMonthName = selectedText;
-        Year = selectedYear;
-        PreviousMonthName = getPreviousMonth(SelectedMonthName);
-        filterType = "debit";
-    } else {
-        filterType = "thismonth and debit";
-        selectMonthlyExpense = '';
-        SelectedMonthName = monthName;
-        Year = currentYear;
-        PreviousMonthName = getPreviousMonth(SelectedMonthName);
-    }
-
-    $('#UserPayExpenseTableDebit').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-        order: [[3, 'asc']],
-        pageLength: 30,
-        info: false,
-        lengthChange: false,
-        searching: false,
-        pagingType: "simple",
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + userId + '&filterType=' + filterType + '&selectMonthlyExpense=' + selectMonthlyExpense,
-            dataType: 'json',
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
+                headerName: "", field: "account", sortable: false, filter: false, width: 60,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
                     return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-right-down-fill"></i></div></div>';
-                },
-                "orderable": false
+                }
             },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "description", "name": "Description" },
+            { headerName: "Description", field: "description", sortable: true, filter: true },
             {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.date);
                 }
             },
             {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "debit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
+                headerName: "Total amount", field: "totalamount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(params.data.totalAmount).toFixed(2));
+                    var color = params.data.account && params.data.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
                 }
-            }
+            },
         ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
         },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "20%"
-        }],
-        footerCallback: function (row, data, start, end, display) {
-            var api = this.api();
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            UserPayExpenseDebitOptions.api = params.api;
+            UserPayExpenseDebitOptions.columnApi = params.columnApi;
+            UserPayExpenseDebitOptions.api.sizeColumnsToFit();
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 20,
+        pagination: true,
+        paginationPageSize: 20,
+        suppressPaginationPanel: true,
+        datasource: getUserPayExpenseDebitDatasource()
+    };
 
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\₹,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
+    function getUserPayExpenseDebitDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    UserId: $('#txtuserid').val(),
+                    Month: UserPayExpenseDebitMonthFilter,
+                    FilterType: "Debit",
+                };
 
-            function intVal(i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            }
-
-            function formatNumber(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-            }
-
-            var total = api
-                .column(4)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-
-            var $cumulativePendingFooterRow = $('#monthlyPendingExpenseFooter');
-            var $cumulativePendingFooterCell = $cumulativePendingFooterRow.find('th').last();
-
-            var monthlyDataArray = api.ajax.json().userPendingExpenseAmount;
-
-            if (Array.isArray(monthlyDataArray)) {
-                var isPreviousMonthFound = false;
-                monthlyDataArray.forEach(function (monthlyData) {
-                    if (monthlyData.monthName == PreviousMonthName && monthlyData.yearNumber == Year) {
-
-                        isPreviousMonthFound = true;
-                        $('#monthlyPendingExpenseFooter').show();
-
-                        $cumulativePendingFooterCell.html(
-                            '<span style="color: black;">Last Month Pending: ₹' + formatNumber(monthlyData.cumulativePending.toFixed(2)) + '</span>'
-                        );
+                $.ajax({
+                    url: '/ExpenseMaster/GetUserExpenseList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
                     }
                 });
-
-                if (!isPreviousMonthFound) {
-                    $('#monthlyPendingExpenseFooter').hide();
-                }
             }
+        };
+    }
 
-            var $totalFooterRow = $('#totaldebitExpenseFooter');
-            var $totalFooterCell = $totalFooterRow.find('th').last();
+    const myGridElement = document.querySelector('#UserPayExpenseDebitTable');
+    agGrid.createGrid(myGridElement, UserPayExpenseDebitOptions);
 
-            $totalFooterCell.html(
-                '<span style="color: black;">Total: ₹' + formatNumber(total.toFixed(2)) + '</span>'
-            );
-        }
+    $('#textselectedmonth').on('change', function () {
+        UserPayExpenseDebitMonthFilter = $(this).val();
+        UserPayExpenseDebitOptions.api.purgeInfiniteCache();
     });
-}
+});
 
+let UserListExpenseGridOptions = [];
 
+$(document).ready(function () {
+    function formatNumberWithCommas(number) {
+        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
 
-function UserExpensesDetails() {
-    $('#UserListTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        order: [[4, 'asc']],
-        ajax: {
-            type: "Post",
-            url: '/ExpenseMaster/GetUserListTable',
-            dataType: 'json'
-        },
-        columns: [
-            { "data": "userId", "name": "UserID", "visible": false },
+    UserListExpenseGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": "fullName",
-                "name": "FullName",
-                "render": function (data, type, full, meta) {
+                headerName: "Employee Name", field: "firstName", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.userId) return '';
+
                     var imageSrc;
-                    if (full.image && full.image.trim() !== '') {
-                        imageSrc = '<img src="/' + full.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
+                    if (params.data.image && params.data.image.trim() !== '') {
+                        imageSrc = '<img src="/' + params.data.image + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
                             'onmouseover="showIcons(event, this.parentElement)" onmouseout="hideIcons(event, this.parentElement)">';
                     } else {
-                        var initials = (full.firstName ? full.firstName[0] : '') + (full.lastName ? full.lastName[0] : '');
+                        var initials = (params.data.firstName ? params.data.firstName[0] : '') + (params.data.lastName ? params.data.lastName[0] : '');
                         imageSrc = '<div class="flex-shrink-0 avatar-xs me-2">' +
                             '<div class="avatar-title bg-success-subtle text-success rounded-circle fs-13" style="height: 40px; width: 40px; border-radius: 50%;">' + initials.toUpperCase() + '</div></div>';
                     }
-                    return '<div class="d-flex align-items-center">' +
-                        '<div class="flex-shrink-0">' +
-                        imageSrc +
-                        '</div>' +
-                        '<div class="flex-grow-1 ms-2 name">' +
-                        '<h5 class="fs-15"><a href="/ExpenseMaster/ApprovedExpense?UserId=' + full.userId + '&UserName=' + full.fullName + '" class="fw-medium link-primary view-details" data-userid="' + full.userId + '">' + data + '</a></h5>' +
-                        '</div>' +
-                        '</div>';
-                }
-            },
-            { "data": "userName", "name": "UserName" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
 
+                    return '<a href="/ExpenseMaster/ApprovedExpense?UserId=' + params.data.userId + '&UserName=' + params.data.firstName + ' ' + params.data.lastName + '" class="link-primary" style="display: flex; align-items: center;" data-userid="' + params.data.userId + '">' + imageSrc + '<span style="margin-left: 10px;color: #16989A !important;">' + params.data.firstName + ' ' + params.data.lastName + '</span></a>';
+                }
+            },
+            { headerName: "Employee Id", field: "userName", sortable: true, filter: true },
             {
-                "data": "unapprovedPendingAmount", "name": "UnapprovedPendingAmount", "render": function (data, type, full, meta) {
-                    function formatNumberWithCommas(number) {
-                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-                    return '₹' + formatNumberWithCommas(data);
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.userId) return '';
+                    return getCommonDateformat(params.data.date);
                 }
             },
             {
-                "data": "totalPendingAmount", "name": "TotalPendingAmount", "render": function (data, type, full, meta) {
-                    function formatNumberWithCommas(number) {
-                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-                    return '₹' + formatNumberWithCommas(data);
-                }
-            },
-            {
-                "data": "totalAmount", "name": "TotalAmount", "render": function (data, type, full, meta) {
-                    function formatNumberWithCommas(number) {
-                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-                    return '₹' + formatNumberWithCommas(data);
-                }
-            }
+                headerName: "Unapprove Pending Amount", field: "unapprovedPendingAmount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.userId) return '';
 
+                    return '₹' + formatNumberWithCommas(params.data.unapprovedPendingAmount);
+                }
+            },
+            {
+                headerName: "Total Pending Amount", field: "totalPendingAmount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.userId) return '';
+                    return '₹' + formatNumberWithCommas(params.data.totalPendingAmount);
+                }
+            },
+            {
+                headerName: "Total Amount", field: "totalAmount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.userId) return '';
+
+                    return '₹' + formatNumberWithCommas(params.data.totalAmount);
+                }
+            },
         ],
-        columnDefs: [{
-            "defaultContent": "",
-            "targets": "_all",
-        }]
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            UserListExpenseGridOptions.api = params.api;
+            UserListExpenseGridOptions.columnApi = params.columnApi;
+            UserListExpenseGridOptions.api.sizeColumnsToFit();
+            createEnhancedPagination(params.api);
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 20,
+        pagination: true,
+        paginationPageSize: 20,
+        suppressPaginationPanel: true,
+        datasource: getUserListExpenseDatasource()
+    };
+
+    function getUserListExpenseDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtUserListExpenseSearch').val(),
+                };
+
+                $.ajax({
+                    url: '/ExpenseMaster/GetUserListTable',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#UserListExpenseTable .range-display');
+                        if (rangeDisplay) updateEnhancedPagination(UserListExpenseGridOptions.api, rangeDisplay);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
+    }
+
+    function createEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
+
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#UserListExpenseTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+            // Destroy and recreate grid with new block size
+            const gridDiv = document.querySelector('#UserListExpenseTable');
+
+            UserListExpenseGridOptions = {
+                ...UserListExpenseGridOptions,
+                cacheBlockSize: newPageSize,
+                paginationPageSize: newPageSize,
+                datasource: getUserListExpenseDatasource(),
+            };
+
+            // Clear old grid and re-init
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, UserListExpenseGridOptions);
+        });
+
+        updateEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = UserListExpenseGridOptions.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
+        }
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
+
+    const myGridElement = document.querySelector('#UserListExpenseTable');
+    agGrid.createGrid(myGridElement, UserListExpenseGridOptions);
+
+    $('#btnUserListExpensesearch').on('click', function () {
+        UserListExpenseGridOptions.api.onFilterChanged();
     });
-}
-$(document).ready(function () {
-    $('.nav-link').click(function () {
-        var targetTab = $(this).attr('href');
-        if (targetTab === 'AllExpenseList') {
-            GetAllUserExpenseList();
-        } else if (targetTab === 'UnapproveExpenseList') {
-            GetAllUserUnapproveExpense();
-        } else if (targetTab === 'ApproveExpenseList') {
-            GetAllUserApproveExpense();
+    $('#txtUserListExpenseSearch').on('keypress', function (e) {
+        if (e.which === 13) {
+            $('#btnUserListExpensesearch').click();
+        }
+    });
+    $('#txtUserListExpenseSearch').on('input', function () {
+        var searchText = $(this).val().trim();
+
+        if (searchText === '') {
+            if (UserListExpenseGridOptions.api) {
+                UserListExpenseGridOptions.api.refreshInfiniteCache();
+            }
         }
     });
 
-    $('.nav-btn').click(function () {
-        var targetTab = $(this).attr('href');
-        if (targetTab === '#GetUserBetweenDatesExpenseList') {
-            GetUserBetweenDateExpenseList();
+});
+
+let UserExpenseApproveGridOptions = [];
+let UserExpenseApprovestartDate = null;
+let UserExpenseApproveendDate = null;
+let UserExpenseApproveselectedTab = $(".Returns.active").attr("id");
+let UserExpenseApproveselectedMonthFilter = "";
+
+$(document).ready(function () {
+    function getCheckboxColumnDef() {
+        return {
+            headerName: "",
+            field: "select",
+            width: 50,
+            suppressMenu: true,
+            suppressSorting: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) return '';
+
+                const checkboxId = `ApproveCheckbox_${params.data.id}`;
+                return `
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input custom-control-input-teal" 
+                           data-id="${params.data.id}" 
+                           type="checkbox" 
+                           name="chk_child" 
+                           id="${checkboxId}">
+                    <label class="custom-control-label" for="${checkboxId}"></label>
+                </div>
+            `;
+            }
+        };
+    }
+
+    function getColumnDefs() {
+        const baseColumns = [
+            {
+                headerName: "", field: "account", sortable: false, filter: false, width: 60,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    if (params.data.account === "Credit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
+                    } else if (params.data.account === "Debit") {
+                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
+                    } else {
+                        return '';
+                    }
+                }
+            },
+            { headerName: "Expense Type", field: "expenseTypeName", sortable: true, filter: true },
+            { headerName: "Bill No.", field: "billNumber", sortable: true, filter: true },
+            { headerName: "Description", field: "description", sortable: true, filter: true },
+            {
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.date);
+                }
+            },
+            {
+                headerName: "Total amount", field: "totalamount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(params.data.totalAmount).toFixed(2));
+                    var color = params.data.account && params.data.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
+                }
+            },
+        ];
+
+        if (UserExpenseApproveselectedTab === "Unapprove") {
+            baseColumns.unshift(getCheckboxColumnDef());
         }
+
+        return baseColumns;
+    }
+
+    function getUserExpenseApproveDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    UserId: GetParameterByName('userId'),
+                    FilterType: UserExpenseApproveselectedTab,
+                    UnapproveFilter: UserExpenseApproveselectedTab === "Unapprove",
+                    Approvefilter: UserExpenseApproveselectedTab === "Approve",
+                    AccountFilter: UserExpenseApproveselectedTab === "Credit" ? "Credit" : "",
+                    Month: UserExpenseApproveselectedMonthFilter === "lastMonthRadio" ? "Last" : UserExpenseApproveselectedMonthFilter === "currentMonthRadio" ? "Current" : "",
+                    StartDate: UserExpenseApprovestartDate,
+                    EndDate: UserExpenseApproveendDate,
+                };
+
+                $.ajax({
+                    url: '/ExpenseMaster/GetUserExpenseList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#UserExpenseApproveTable .range-display');
+                        if (rangeDisplay) updateUserExpenseApproveEnhancedPagination(UserExpenseApproveGridOptions.api, rangeDisplay);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
+    }
+
+    function initGrid() {
+        UserExpenseApproveGridOptions = {
+            rowHeight: 50,
+            columnDefs: getColumnDefs(),
+            defaultColDef: {
+                sortable: true,
+                filter: true,
+                cellClass: 'ag-cell-default-style',
+                width: 175,
+            },
+            rowSelection: 'single',
+            rowClassRules: {
+                'selected-row': params => params.node.isSelected()
+            },
+            onGridReady: function (params) {
+                UserExpenseApproveGridOptions.api = params.api;
+                UserExpenseApproveGridOptions.columnApi = params.columnApi;
+                UserExpenseApproveGridOptions.api.sizeColumnsToFit();
+                createUserExpenseApproveEnhancedPagination(params.api);
+            },
+            rowModelType: 'infinite',
+            cacheBlockSize: 20,
+            pagination: true,
+            paginationPageSize: 20,
+            suppressPaginationPanel: true,
+            datasource: getUserExpenseApproveDatasource()
+        };
+
+        const gridDiv = document.querySelector('#UserExpenseApproveTable');
+        gridDiv.innerHTML = ''; // Clear old grid
+        agGrid.createGrid(gridDiv, UserExpenseApproveGridOptions);
+    }
+
+    function createUserExpenseApproveEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
+
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateUserExpenseApproveEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateUserExpenseApproveEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#UserExpenseApproveTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+            UserExpenseApproveGridOptions.cacheBlockSize = newPageSize;
+            UserExpenseApproveGridOptions.paginationPageSize = newPageSize;
+            UserExpenseApproveGridOptions.datasource = getUserExpenseApproveDatasource();
+
+            initGrid(); // Re-init with new page size
+        });
+
+        updateUserExpenseApproveEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateUserExpenseApproveEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = UserExpenseApproveGridOptions.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateUserExpenseApproveEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
+        }
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
+
+    initGrid();
+
+    $('.nav-link').on('click', function () {
+        UserExpenseApproveselectedTab = this.id;
+
+        $('.nav-radio').prop('checked', false);
+        UserExpenseApproveselectedMonthFilter = "";
+        $('#dateFilterContainer').hide();
+        $('#txtstartdatebox').val('');
+        $('#txtenddatebox').val('');
+        UserExpenseApprovestartDate = null;
+        UserExpenseApproveendDate = null;
+
+        initGrid(); // re-init grid with updated tab logic (checkbox)
+    });
+
+    $('.nav-radio').on('change', function () {
+        UserExpenseApproveselectedMonthFilter = this.id;
+        const isBetweenSelected = $('#approveExpensebetweenMonth').is(':checked');
+
+        if (isBetweenSelected) {
+            $('#dateFilterContainer').show();
+        } else {
+            $('#dateFilterContainer').hide();
+            $('#txtstartdatebox').val('');
+            $('#txtenddatebox').val('');
+            UserExpenseApprovestartDate = null;
+            UserExpenseApproveendDate = null;
+        }
+        UserExpenseApproveselectedTab = '';
+        UserExpenseApproveGridOptions.api.purgeInfiniteCache();
+    });
+
+    $('#applyFilters').click(() => {
+        UserExpenseApprovestartDate = $('#txtstartdatebox').val() || null;
+        UserExpenseApproveendDate = $('#txtenddatebox').val() || null;
+        if (UserExpenseApproveGridOptions.api) {
+            UserExpenseApproveGridOptions.api.onFilterChanged();
+        }
+    });
+
+    $('#txtstartdatebox').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true
+    });
+
+    $('#txtenddatebox').datepicker({
+        format: 'yyyy-mm-dd',
+        autoclose: true
     });
 });
 
-function GetUserBetweenDateExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayExpenseList',
-        type: 'GET',
-        success: function (result) {
-            $("#AllUserExpensePartial").html(result);
-            SearchUserBetweenDateExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-
-function SearchUserBetweenDateExpenseList() {
-    var startDate = $('#approveExpenseStartDate').val();
-    var endDate = $('#approveExpenseEndDate').val();
-
-    if (startDate == "" && endDate == "") {
-        toastr.warning("Select dates");
-    } else if (startDate == "") {
-        toastr.warning("Select Start date");
-    } else if (endDate == "") {
-        toastr.warning("Select End date");
-    } else {
-        DisplayUserBetweenDateExpenseList(startDate, endDate)
+document.addEventListener('change', function (e) {
+    if (e.target && e.target.name === 'chk_child') {
+        toggleApproveButton();
     }
+});
+
+function toggleApproveButton() {
+
+    const isAnyChecked = document.querySelectorAll('input[name="chk_child"]:checked').length > 0;
+
+    const btn = document.getElementById('remove-actions');
+    btn.style.display = isAnyChecked ? 'inline-block' : 'none';
 }
 
-function DisplayUserBetweenDateExpenseList(startDate, endDate) {
-    var userId = GetParameterByName('userId');
-    var filterType = 'daterange';
-    $('#UserallExpenseTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-        order: [[7, 'desc']],
-        ajax: {
-            url: '/ExpenseMaster/GetUserExpenseList?startDate=' + startDate + '&endDate=' + endDate + '&UserId=' + userId + '&filterType=' + filterType,
-            type: 'POST',
-            data: function (d) {
-                d.UserId = userId;
-            }
-        },
-        columns: [
-            {
-                "data": null, "visible": false,
-                "orderable": false
-            },
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "billNumber", "name": "BillNumber" },
-            { "data": "description", "name": "Description" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    var color = full.account && full.account.toLowerCase() === "debit" ? "green" : "red";
-                    var formattedData = parseFloat(data).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-                    return '<span style="color: ' + color + ';">' + '₹' + formattedData + '</span>';
-                }
-            },
-
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [
-            {
-                defaultContent: "",
-                targets: "_all",
-                width: 'auto'
-            }
-        ]
-    });
-}
-
-function GetAllUserExpenseList() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayExpenseList',
-        type: 'GET',
-        success: function (result) {
-            $("#AllUserExpensePartial").html(result);
-            DisplayAllUserExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-function GetAllUserUnapproveExpense() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayExpenseList',
-        type: 'GET',
-        success: function (result) {
-            $("#AllUserUnapproveExpensePartial").html(result);
-            DisplayUnApprovedExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-function GetAllUserApproveExpense() {
-
-    $.ajax({
-        url: '/ExpenseMaster/DisplayExpenseList',
-        type: 'GET',
-        success: function (result) {
-
-            $("#AllUserExpensePartial").html(result);
-            DisplayAllApprovedExpenseList();
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-
-function DisplayAllUserExpenseList() {
-    var userId = GetParameterByName('userId');
-    $('#UserallExpenseTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-        order: [[7, 'desc']],
-        ajax: {
-            url: '/ExpenseMaster/GetUserExpenseList',
-            type: 'POST',
-            data: function (d) {
-                d.UserId = userId;
-            }
-        },
-        columns: [
-            {
-                "data": null, "visible": false,
-                "orderable": false
-            },
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "billNumber", "name": "BillNumber" },
-            { "data": "description", "name": "Description" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    function formatNumberWithCommas(number) {
-                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-
-                    var formattedAmount = '₹ ' + formatNumberWithCommas(data);
-
-                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
-                }
-            },
-
-
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [
-            {
-                defaultContent: "",
-                targets: "_all",
-                width: 'auto'
-            }
-        ]
-    });
-}
-
-function DisplayUnApprovedExpenseList() {
-    var UserId = GetParameterByName('userId');
-    var unapprove = false;
-    $('#UserallExpenseTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-        order: [[7, 'desc']],
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList',
-            data: function (d) {
-                d.UserId = UserId;
-                d.unapprove = unapprove;
-            },
-            dataType: 'json'
-        },
-        columns: [
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="chk_child"></div>';
-                },
-                "orderable": false
-            },
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "billNumber", "name": "BillNumber" },
-            { "data": "description", "name": "Description" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    function formatNumberWithCommas(number) {
-                        if (typeof number === 'number') {
-                            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                        }
-                        return number;
-                    }
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(data));
-                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
-                }
-            },
-            { "data": "account", "name": "Account", "visible": false },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [
-            {
-                defaultContent: "",
-                targets: "_all",
-                width: 'auto'
-            }
-        ],
-        drawCallback: function () {
-
-            updateCheckedAllState();
-        }
-    });
-}
-
-function DisplayAllApprovedExpenseList() {
-
-    var UserId = GetParameterByName('userId');
-    var approve = true;
-    $('#UserallExpenseTable').DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        "bDestroy": true,
-        order: [[7, 'desc']],
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetUserExpenseList?UserId=' + UserId + '&approve=' + approve,
-            dataType: 'json',
-        },
-        columns: [
-            {
-                "data": null, "visible": false,
-                "orderable": false
-            },
-            {
-                "data": null,
-                "render": function (data, type, full, meta) {
-                    var account = full.account.toLowerCase();
-                    if (account === "credit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-success-subtle text-success rounded-circle fs-16"><i class="ri-arrow-left-down-fill"></i></div></div>';
-                    } else if (account === "debit") {
-                        return '<div class="avatar-xs"><div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16"><i class="ri-arrow-right-up-fill"></i></div></div>';
-                    } else {
-                        return '';
-                    }
-                },
-                "orderable": false,
-                width: "05%"
-            },
-            { "data": "id", "name": "Id", "visible": false },
-            { "data": "expenseTypeName", "name": "ExpenseTypeName" },
-            { "data": "billNumber", "name": "BillNumber" },
-            { "data": "description", "name": "Description" },
-            {
-                "data": "date",
-                "name": "Date",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                "data": "totalAmount",
-                "name": "TotalAmount",
-                "render": function (data, type, full, meta) {
-                    function formatNumberWithCommas(number) {
-                        if (typeof number === 'number') {
-                            return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                        }
-                        return number;
-                    }
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(data));
-                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
-                }
-            },
-            { "data": "account", "name": "Account", "visible": false },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [
-            {
-                defaultContent: "",
-                targets: "_all",
-                width: 'auto'
-            }
-        ]
-    });
-}
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('remove-actions').style.display = 'none';
+});
 
 $(document).ready(function () {
     GetAllUserExpenseDetails();
@@ -1831,6 +1878,30 @@ function ApprovedExpenseList() {
         }]
     });
 }
+$(document).ready(function () {
+    $('#txtExpensepaymenttype').select2({
+        placeholder: 'Select Payment type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+});
 function GetPayExpense() {
     if ($("#GetPayForm").valid()) {
         var formData = new FormData();
@@ -1883,13 +1954,7 @@ $(document).ready(function () {
     })
 });
 
-$(document).ready(function () {
-    var UserId = $("#txtuserid").val();
-    if (UserId) {
-        GetPayUserExpenseCreditList(UserId, null)
-        GetPayUserExpenseDebitList(UserId, null)
-    }
-});
+
 
 function UserDebitExpenseList(UserId) {
     var Account = "Debit";
@@ -2001,7 +2066,7 @@ function UserCreditExpenseList(UserId) {
     });
 }
 
-var Formdata = window.userFormPermissions || 0;
+
 
 let MyExpenseGridOptions = [];
 let startDate = null;
