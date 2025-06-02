@@ -423,7 +423,7 @@ namespace EMPManegment.Repository.TaskRepository
                 throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
-        
+
         public async Task<IEnumerable<TaskDetailsView>> GetUserTotalTask(Guid UserId)
         {
             var TaskList = new List<TaskDetailsView>();

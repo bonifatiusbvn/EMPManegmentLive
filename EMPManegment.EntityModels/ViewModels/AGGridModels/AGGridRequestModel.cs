@@ -27,6 +27,8 @@ namespace EMPManegment.EntityModels.ViewModels.AGGridModels
         public int? PaymentType { get; set; }
         public Guid? UserId { get; set; }
         public Guid? RoleId { get; set; }
+
+        public string? ProjectName { get; set; }
         public string? TaskTypeFilter { get; set; }
         public string? TaskStatusFilter { get; set; }
         public string? FilterType { get; set; }

@@ -116,7 +116,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             try
             {
                 var PaymentType = from a in Context.TblPaymentTypes
-                                  orderby a.Type
+                                  orderby a.Id
                                   select new PaymentTypeView
                                   {
                                       Id = a.Id,

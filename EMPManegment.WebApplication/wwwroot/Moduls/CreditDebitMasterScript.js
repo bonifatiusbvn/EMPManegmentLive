@@ -4,29 +4,7 @@ var Formdata = window.userFormPermissions || [];
 $(document).ready(function () {
 
 
-    $('#ddlCDCompanyName').select2({
-        placeholder: 'Select Company',
-        width: '100%',
-        dropdownAutoWidth: true,
-        allowClear: true,
-        ajax: {
-            url: '/Company/GetCompanyNameList',
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-
-                return {
-                    results: data.map(item => ({
-                        id: item.id,
-                        text: item.compnyName,
-                    }))
-                };
-            }
-        }
-    });
-
-
-    $('#ddlCompanyName').select2({
+    $('#ddlCompanyName,#ddlCDCompanyName').select2({
         placeholder: 'Select Company',
         width: '100%',
         dropdownAutoWidth: true,
@@ -91,6 +69,53 @@ $(document).ready(function () {
         }
     });
 
+
+    $('#ddlInvoicepaymenttype').select2({
+        placeholder: 'Select Payment type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
+    $('#ddlpaymentType').select2({
+        placeholder: 'Select Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
     getVendorTransactionList();
 
     $('#textTransactionCompanyName').on('change', SortCompanyName);
@@ -134,6 +159,7 @@ $(document).ready(function () {
         });
     }
 
+
     $('#searchcreditdebitlist').on('keyup', function () {
         var value = $(this).val().toLowerCase();
         var hasVisibleItems = false;
@@ -153,6 +179,15 @@ $(document).ready(function () {
         }
     });
 });
+
+function ResetAllTransaction() {
+    window.location = '/Invoice/AllTransaction';
+}
+
+
+
+
+
 
 let VendorListGridOptions;
 
@@ -314,16 +349,25 @@ $(document).ready(function () {
         const columnDefs = [
             {
                 headerName: "",
-                field: "",
-                cellRenderer: function () {
-                    return `<div class="avatar-title bg-danger-subtle text-danger rounded-circle fs-16">
+                field: "type",
+                cellRenderer: function (params) {
+
+                    const type = params.data?.type || '';
+                    if (type.toLowerCase() === "credit") {
+                        return `<div class="agavatar-title bg-success-subtle text-success agrounded-circle agfs-16">
+                                <i class="ri-arrow-left-down-fill"></i>
+                            </div>`;
+                    } else {
+
+                        return `<div class="agavatar-title bg-danger-subtle text-danger agrounded-circle agfs-16">
                                 <i class="ri-arrow-right-up-fill"></i>
                             </div>`;
+                    }
                 }
             },
             {
                 headerName: "Vendor Name",
-                field: "vendorName",
+                field: "vendorCompany",
                 sortable: true,
                 filter: true
             },
@@ -337,8 +381,8 @@ $(document).ready(function () {
                 }
             },
             {
-                headerName: "Payment Type",
-                field: "paymentTypeName",
+                headerName: "Project",
+                field: "project",
                 sortable: true,
                 filter: true
             },
@@ -346,17 +390,60 @@ $(document).ready(function () {
                 headerName: "Credit/Debit Amount",
                 field: "creditDebitAmount",
                 sortable: true,
-                filter: true
+                filter: true,
+                cellRenderer: function (params) {
+                    const type = params.data?.type || '';
+                    const amount = params.value || '';
+
+                    if (type.toLowerCase() === "credit") {
+                        return `<h6 class="text-success mb-1 amount">${amount}</h6>`;
+                    } else {
+                        return `<h6 class="text-danger mb-1 amount">${amount}</h6>`;
+                    }
+                }
             },
             {
-                headerName: "",
-                field: "",
-                cellRenderer: function () {
-                    return `<span class="badge bg-primary-subtle text-primary fs-11">
-                                <i class="ri-time-line align-bottom"></i> Processing
-                            </span>`;
+                headerName: "Staus",
+                field: "paymentTypeName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    const paymentType = params.value ? params.value.toLowerCase() : '';
+                    let badgeClass = '';
+                    let textColor = '';
+                    let icon = '';
+                    let text = params.value || '';
+
+                    switch (paymentType) {
+                        case 'paid':
+                            badgeClass = 'bg-success-subtle';
+                            textColor = 'text-success';
+                            icon = '<i class="ri-checkbox-circle-line align-bottom"></i>';
+                            break;
+                        case 'cancel':
+                            badgeClass = 'bg-danger-subtle';
+                            textColor = 'text-danger';
+                            icon = '<i class="ri-close-circle-line align-bottom"></i>';
+                            break;
+                        case 'unpaid':
+                            badgeClass = 'bg-primary-subtle';
+                            textColor = 'text-warning';
+                            icon = '<i class="ri-time-line align-bottom"></i>';
+                            break;
+                        case 'refund':
+                            badgeClass = 'bg-primary-subtle';
+                            textColor = 'text-primary';
+                            icon = '<i class="ri-time-line align-bottom"></i>';
+                            break;
+                        default:
+                            badgeClass = 'bg-secondary-subtle';
+                            textColor = 'text-secondary';
+                            icon = '<i class="ri-question-line align-bottom"></i>';
+                    }
+
+                    return `<span class="badge ${badgeClass} ${textColor} fs-11">${icon} ${text}</span>`;
                 }
-            }
+            },
         ];
 
         let canEdit = false;
@@ -383,17 +470,17 @@ $(document).ready(function () {
                     let buttons = '<ul class="list-inline mb-0">';
                     if (canEdit) {
                         buttons += `<li class="list-inline-item">
-                                        <a href="/PurchaseOrderMaster/CreatePurchaseOrder?id=${params.data.id}">
-                                            <i class="fa-regular fa-pen-to-square"></i>
-                                        </a>
-                                    </li>`;
+                                    <a href="/PurchaseOrderMaster/CreatePurchaseOrder?id=${params.data.id}">
+                                        <i class="fa-regular fa-pen-to-square"></i>
+                                    </a>
+                                </li>`;
                     }
                     if (canDelete) {
                         buttons += `<li class="list-inline-item">
-                                        <a class="btn text-danger" onclick="DeleteTransaction('${params.data.id}')">
-                                            <i class="fas fa-trash"></i>
-                                        </a>
-                                    </li>`;
+                                    <a class="btn text-danger" onclick="DeleteTransaction('${params.data.id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </li>`;
                     }
                     buttons += '</ul>';
                     return buttons;
@@ -427,13 +514,6 @@ $(document).ready(function () {
             suppressPaginationPanel: true,
             datasource: getVendorTransactionDatasource()
         };
-
-        const gridElement = document.querySelector('#vendorAllTransaction');
-        if (gridElement) {
-            agGrid.createGrid(gridElement, vendorAllTranGridOptions);
-        }
-
-        setupEventListeners();
     }
 
     function getVendorTransactionDatasource() {
@@ -453,6 +533,7 @@ $(document).ready(function () {
                     })),
                     SearchValue: $('#txttransactionSearch').val() || "",
                     CompanyFilter: $('#ddlCDCompanyName').val() || null,
+                    PaymentType: $('#ddlpaymentType').val() || null,
                     VendorFilter: $('#ddlCDVendorName').val() || null,
                     StartDate: startDate,
                     EndDate: endDate
@@ -612,42 +693,76 @@ $(document).ready(function () {
         if (pageSizeSelector) pageSizeSelector.value = pageSize;
     }
 
-    function setupEventListeners() {
-        $('#txttransactionSearch').on('change keyup', function () {
-            if (vendorAllTranGridOptions.api) {
-                vendorAllTranGridOptions.api.onFilterChanged();
-            }
-        });
 
-        $('#ddlCDCompanyName').change(() => {
-            const companyText = $("#ddlCDCompanyName option:selected").text();
-            $("#ddlCDCompanyName").val(companyText === 'All Company' ? '' : companyText);
-            if (vendorAllTranGridOptions.api) {
-                vendorAllTranGridOptions.api.onFilterChanged();
-            }
-        });
+    const gridElement = document.querySelector('#vendorAllTransaction');
+    agGrid.createGrid(gridElement, vendorAllTranGridOptions);
 
-        $('#ddlCDVendorName').change(() => {
-            const vendorText = $("#ddlCDVendorName option:selected").text();
-            $("#ddlCDVendorName").val(vendorText === 'All Vendor' ? '' : vendorText);
-            if (vendorAllTranGridOptions.api) {
-                vendorAllTranGridOptions.api.onFilterChanged();
-            }
-        });
 
-        $('#toggleDateFilter').click(e => {
-            e.stopPropagation();
-            $('#dateFilterContainer').toggle();
-        });
+    $('#btntranssearch').on('click', function () {
+        if (vendorAllTranGridOptions.api) {
+            vendorAllTranGridOptions.api.refreshInfiniteCache();
+        }
+    });
 
-        $('#applyFilters').click(() => {
-            startDate = $('#txtstartdatebox').val() || null;
-            endDate = $('#txtenddatebox').val() || null;
+    $('#txttransactionSearch').on('keypress', function (e) {
+        if (e.which === 13) {
+            $('#btntranssearch').click();
+        }
+    });
+
+    $('#txttransactionSearch').on('input', function () {
+        var searchText = $(this).val().trim();
+
+        if (searchText === '') {
             if (vendorAllTranGridOptions.api) {
-                vendorAllTranGridOptions.api.onFilterChanged();
+                vendorAllTranGridOptions.api.refreshInfiniteCache();
             }
-        });
-    }
+        }
+    });
+
+
+    $('#ddlCDVendorName').change(() => {
+        if (vendorAllTranGridOptions.api) {
+            vendorAllTranGridOptions.api.refreshInfiniteCache();
+        }
+    });
+
+    $('#ddlpaymentType').change(() => {
+        if (vendorAllTranGridOptions.api) {
+            vendorAllTranGridOptions.api.refreshInfiniteCache();
+        }
+    });
+
+    $('#toggletraDateFilter').click(e => {
+        e.stopPropagation();
+        $('#dateFilterContainer').toggle();
+    });
+
+    $('#applyFilters').click(() => {
+        startDate = $('#txtstartdatebox').val() || null;
+        endDate = $('#txtenddatebox').val() || null;
+
+        if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+            alert('End date must be after start date');
+            return;
+        }
+
+        if (vendorAllTranGridOptions.api) {
+            vendorAllTranGridOptions.api.refreshInfiniteCache();
+        }
+        $('#dateFilterContainer').hide();
+    });
+
+    $("#resetPendingDateFilters").click(function () {
+        $("#fromDate").val('');
+        $("#toDate").val('');
+        startDate = null;
+        endDate = null;
+        vendorAllTranGridOptions.api.setFilterModel(null);
+        vendorAllTranGridOptions.api.onFilterChanged();
+        $('#dateFilterContainer').hide();
+    });
+
 });
 
 function InsertCreditDebitDetails() {

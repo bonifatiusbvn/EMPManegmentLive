@@ -29,20 +29,21 @@
         <div class="card">
             <div class="card-header">
                 <div class="row">
-                    <div class="col-12 col-lg-2">
-                        <input class="form-control"
-                               id="txttransactionSearch"
-                               placeholder="Search" />
+                    <div class="col-12 col-lg-3">
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Search" id="txttransactionSearch">
+                            <div class="input-group-append">
+                                <button class="btn btn-sidebar button-teal" id="btntranssearch">
+                                    <i class="fas fa-search fa-fw"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-12 col-lg-2">
-                        <select class="form-control select2 select2-maroon"
-                                data-dropdown-css-class="select2-maroon"
+                        <select class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal"
                                 id="ddlpaymentType"
                                 placeholder="Search">
-                            <option value="">All</option>
-                            <option value="1">Paid</option>
-                            <option value="7">Unpaid</option>
-                            <option value="8">Other</option>
                         </select>
                     </div>
                     <div class="col-12 col-lg-2">
@@ -51,7 +52,7 @@
                                 id="ddlCDCompanyName"
                                 name="ddlCDCompanyName">
                         </select>
-                        <input type="hidden" id="txtCompanyname" />
+
                     </div>
                     <input type="hidden" id="txtuserid" value="@_userSession.UserId" />
                     <div class="col-12 col-lg-2">
@@ -60,10 +61,9 @@
                                 id="ddlCDVendorName"
                                 name="ddlCDVendorName">
                         </select>
-                        <input type="hidden" id="txtpartyname" />
                     </div>
                     <div class="col-12 col-lg-1">
-                        <button class="btn button-teal" id="toggleDateFilter">
+                        <button class="btn button-teal" id="toggletraDateFilter">
                             <i class="fa fa-calendar" aria-hidden="true"></i><span class="d-none d-sm-inline" style="margin-left: 10px;">Date</span>
                         </button>
                         <div id="dateFilterContainer" class="date-filter-container" style="display: none;">
@@ -73,13 +73,16 @@
                                 <label for="txtenddatebox">To Date</label>
                                 <input type="date" id="txtenddatebox" class="form-control mb-3" style="font-size: 15px;">
                                 <button class="btn button-teal btn-block" id="applyFilters">Apply</button>
+                                <button class="btn btn-secondary btn-block" id="resetPendingDateFilters">Reset</button>
                             </div>
                         </div>
                     </div>
                     <div class="col-12 col-lg-2">
-                        <button class="btn button-rest" style="margin-left: -30px;" onclick="ResetPurchaseOrderData()"> Reset</button>
+                        <button type="button" class="btn button-rest" style="margin-left: -30px;" onclick="ResetAllTransaction()" data-bs-toggle="tooltip" title="Reset" aria-label="Reset">
+                            <i class="fas fa-undo me-1"></i>
+                            <span class="d-none d-sm-inline">Reset</span>
+                        </button>
                     </div>
-
                 </div>
             </div>
 
