@@ -37,7 +37,7 @@ namespace EMPManegment.Inretface.Interface.ExpenseMaster
 
         Task<AGGridResponseModel<UserExpenseDetailsView>> GetUserList(AGGridRequestModel ExpenseRequest);
 
-        Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable, bool? unapprove = null, DateTime? TodayDate = null);
+        Task<AGGridResponseModel<ExpenseDetailsView>> GetExpenseDetailList(AGGridRequestModel ExpenseRequest);
 
         Task<UserResponceModel> GetExpenseDetailById(Guid Id);
 

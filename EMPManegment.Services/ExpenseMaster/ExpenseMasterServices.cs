@@ -71,9 +71,9 @@ namespace EMPManegment.Services.ExpenseMaster
             return await expenseMaster.GetExpenseDetailByUserId(UserId);
         }
 
-        public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable, bool? unapprove = null, DateTime? TodayDate = null)
+        public async Task<AGGridResponseModel<ExpenseDetailsView>> GetExpenseDetailList(AGGridRequestModel ExpenseRequest)
         {
-            return await expenseMaster.GetExpenseDetailList(dataTable, unapprove, TodayDate);
+            return await expenseMaster.GetExpenseDetailList(ExpenseRequest);
         }
 
         public async Task<UserResponceModel> GetPaymentById(int PaymentId)

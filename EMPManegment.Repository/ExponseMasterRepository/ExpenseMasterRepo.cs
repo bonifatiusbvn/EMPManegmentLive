@@ -336,85 +336,62 @@ namespace EMPManegment.Repository.ExponseMasterRepository
             }
             return response;
         }
-        public async Task<jsonData> GetExpenseDetailList(DataTableRequstModel dataTable, bool? unapprove = null, DateTime? TodayDate = null)
+        public async Task<AGGridResponseModel<ExpenseDetailsView>> GetExpenseDetailList(AGGridRequestModel ExpenseRequest)
         {
             try
             {
-                string dbConnectionStr = configuration.GetConnectionString("EMPDbconn");
-                var dataSet = DbHelper.GetDataSet("[spGetExpenseDetailList]", System.Data.CommandType.StoredProcedure, new SqlParameter[] { }, dbConnectionStr);
-                var ExpenseList = new List<ExpenseDetailsView>();
+                var filterConditions = string.Join(" AND ", ExpenseRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = ExpenseRequest.SortModel?.FirstOrDefault()?.ColId ?? "Date";
+                string sortDirection = ExpenseRequest.SortModel?.FirstOrDefault()?.Sort ?? "desc";
 
-                foreach (DataRow row in dataSet.Tables[0].Rows)
+                var parameters = new List<SqlParameter>
                 {
-                    var ExpenseDetails = new ExpenseDetailsView
-                    {
-                        Id = Guid.Parse(row["Id"].ToString()),
-                        UserId = Guid.Parse(row["UserId"].ToString()),
-                        UserName = row["UserName"].ToString(),
-                        ExpenseType = Convert.ToInt32(row["ExpenseType"]),
-                        PaymentType = Convert.ToInt32(row["PaymentType"]),
-                        BillNumber = row["BillNumber"].ToString(),
-                        Description = row["Description"].ToString(),
-                        Date = Convert.ToDateTime(row["Date"]),
-                        TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
-                        Account = row["Account"].ToString(),
-                        ExpenseTypeName = row["ExpenseTypeName"].ToString(),
-                        PaymentTypeName = row["PaymentTypeName"].ToString(),
-                        Image = row["Image"].ToString(),
-                        IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
-                    };
-                    ExpenseList.Add(ExpenseDetails);
-                }
-                if (unapprove.HasValue)
-                {
-                    ExpenseList = ExpenseList.Where(e => e.IsApproved == unapprove && e.Description != "Expense Paid").ToList();
-                }
-                if (TodayDate.HasValue)
-                {
-                    ExpenseList = ExpenseList.Where(e => e.Date == TodayDate.Value.Date).ToList();
-                }
-                if (!string.IsNullOrEmpty(dataTable.searchValue))
-                {
-                    string searchValue = dataTable.searchValue.ToLower();
-                    DateTime searchDate;
-                    bool isDate = DateTime.TryParseExact(dataTable.searchValue, "dd MMM yy", CultureInfo.InvariantCulture, DateTimeStyles.None, out searchDate);
-
-                    ExpenseList = ExpenseList.Where(e => e.Description.ToLower().Contains(searchValue) ||
-                                                 (isDate && e.Date == searchDate) ||
-                                                 e.Account.ToLower().Contains(searchValue) ||
-                                                 e.BillNumber.ToLower().Contains(searchValue) ||
-                                                 e.UserName.ToLower().Contains(searchValue) ||
-                                                 e.TotalAmount.ToString().ToLower().Contains(searchValue)).ToList();
-                }
-
-                IQueryable<ExpenseDetailsView> queryableExpenseDetails = ExpenseList.AsQueryable();
-
-                if (!string.IsNullOrEmpty(dataTable.sortColumn) && !string.IsNullOrEmpty(dataTable.sortColumnDir))
-                {
-                    queryableExpenseDetails = queryableExpenseDetails.OrderBy(dataTable.sortColumn + " " + dataTable.sortColumnDir);
-                }
-                else
-                {
-                    queryableExpenseDetails = queryableExpenseDetails.OrderBy("Date desc");
-                }
-                var totalRecord = queryableExpenseDetails.Count();
-                var filteredData = queryableExpenseDetails.Skip(dataTable.skip).Take(dataTable.pageSize).ToList();
-
-                var jsonData = new jsonData
-                {
-                    draw = dataTable.draw,
-                    recordsFiltered = totalRecord,
-                    recordsTotal = totalRecord,
-                    data = filteredData
+                    new SqlParameter("@Unapprove", ExpenseRequest.UnapproveFilter),
+                    new SqlParameter("@TodayDate", ExpenseRequest.TodayDate),
+                    new SqlParameter("@SortColumn", sortColumn),
+                    new SqlParameter("@SortDirection", sortDirection),
+                    new SqlParameter("@PageSize", ExpenseRequest.PageSize),
+                    new SqlParameter("@Skip", ExpenseRequest.StartRow),
+                    new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                    new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
-                return jsonData;
+                var dataSet = DbHelper.GetDataSet("spGetExpenseDetailList", CommandType.StoredProcedure, parameters.ToArray(), configuration.GetConnectionString("EMPDbconn"));
+
+                var ExpenseList = dataSet.Tables[0].AsEnumerable().Select(row => new ExpenseDetailsView
+                {
+                    Id = Guid.Parse(row["Id"].ToString()),
+                    UserId = Guid.Parse(row["UserId"].ToString()),
+                    FirstName = row["FirstName"].ToString(),
+                    LastName = row["LastName"].ToString(),
+                    ExpenseType = Convert.ToInt32(row["ExpenseType"]),
+                    PaymentType = Convert.ToInt32(row["PaymentType"]),
+                    BillNumber = row["BillNumber"].ToString(),
+                    IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
+                    Description = row["Description"].ToString(),
+                    Image = row["Image"].ToString(),
+                    Account = row["Account"].ToString(),
+                    ExpenseTypeName = row["ExpenseTypeName"].ToString(),
+                    PaymentTypeName = row["PaymentTypeName"].ToString(),
+                    Date = Convert.ToDateTime(row["Date"]),
+                    TotalAmount = Convert.ToDecimal(row["TotalAmount"]),
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<ExpenseDetailsView>
+                {
+                    Data = ExpenseList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the inword list.", ex);
             }
         }
+
         public async Task<UserResponceModel> UpdateExpenseDetail(ExpenseDetailsView ExpenseDetails)
         {
             UserResponceModel model = new UserResponceModel();

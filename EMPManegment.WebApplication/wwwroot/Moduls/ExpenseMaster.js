@@ -7,9 +7,7 @@ function DisplayAddExpenseModel() {
 
 $(document).ready(function () {
     GetExpenseTotalAmount();
-   // GetAllUserExpenseList();
     ApprovedExpenseList();
-    //UserExpensesDetails();
     GetExpenseTypeList();
 });
 
@@ -1324,338 +1322,335 @@ document.addEventListener('DOMContentLoaded', function () {
     document.getElementById('remove-actions').style.display = 'none';
 });
 
+
+let AllExpenseGridOptions = [];
+let AllExpenseTodayDate = null;
+let AllExpenseselectedTab = $(".Returns.active").attr("id");
+
 $(document).ready(function () {
-    GetAllUserExpenseDetails();
+    function getAllExpenseCheckboxColumnDef() {
+        return {
+            headerName: "",
+            field: "select",
+            width: 50,
+            suppressMenu: true,
+            suppressSorting: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) return '';
 
-    $('.nav-link').click(function () {
-        var targetTab = $(this).attr('href');
-        if (targetTab === '#AllExpenseDetails') {
-            GetAllUserExpenseDetails();
-        } else if (targetTab === '#AllUnapprovedExpenseDetails') {
-            GetAllUserUnapproveExpenseDetails();
-        } else if (targetTab === '#AllTodayExpenseDetails') {
-            GetAllUserTodayExpenseDetails();
+                const checkboxId = `ApproveCheckbox_${params.data.id}`;
+                return `
+                    <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input custom-control-input-teal" 
+                               data-id="${params.data.id}" 
+                               type="checkbox" 
+                               name="check_Box"
+                               id="${checkboxId}">
+                        <label class="custom-control-label" for="${checkboxId}"></label>
+                    </div>
+                `;
+            }
+        };
+    }
+
+    function getColumnDefs() {
+        const baseColumns = [
+            {
+                headerName: "Employee Name", field: "firstName", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return params.data.firstName + ' ' + params.data.lastName;
+                }
+            },
+            { headerName: "Description", field: "description", sortable: true, filter: true },
+            {
+                headerName: "Bill No.", field: "billNumber", sortable: false, filter: false, width: 60,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return params.data.image
+                        ? `<div class="d-flex">
+                                <div class="flex-grow-1 tasks_name">${params.data.billNumber}</div>
+                                <div class="flex-shrink-0 ms-4 task-icons">
+                                    <ul class="list-inline tasks-list-menu mb-0">
+                                        <a onclick="downloadBill('${params.data.image}')">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                                                <path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />
+                                            </svg>
+                                        </a>
+                                    </ul>
+                                </div>
+                            </div>`
+                        : `<div class="d-flex">
+                                <div class="flex-grow-1 tasks_name">${params.data.billNumber}</div>
+                                <div class="flex-shrink-0 ms-4 task-icons"></div>
+                            </div>`;
+                }
+            },
+            {
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.date);
+                }
+            },
+            {
+                headerName: "Total Amount", field: "totalAmount", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+
+                    function formatNumberWithCommas(number) {
+                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                    }
+
+                    var formattedAmount = '₹ ' + formatNumberWithCommas(parseFloat(params.data.totalAmount).toFixed(2));
+                    var color = params.data.account && params.data.account.toLowerCase() === "credit" ? "green" : "red";
+                    return '<span style="color: ' + color + ';">' + formattedAmount + '</span>';
+                }
+            },
+            { headerName: "Account", field: "account", sortable: true, filter: true }
+        ];
+
+        if (AllExpenseselectedTab === "Unapprove") {
+            baseColumns.unshift(getAllExpenseCheckboxColumnDef());
         }
+
+        const userFormPermissionArray = Formdata;
+        let canEdit = false;
+        let canDelete = false;
+
+        for (let i = 0; i < userFormPermissionArray.length; i++) {
+            if (userFormPermissionArray[i].formName === "Expenses") {
+                canEdit = userFormPermissionArray[i].edit;
+                canDelete = userFormPermissionArray[i].delete;
+                break;
+            }
+        }
+
+        if (canEdit || canDelete) {
+            baseColumns.push({
+                headerName: "Action",
+                field: "actions",
+                sortable: false,
+                filter: false,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    let buttons = '';
+                    if (canEdit) {
+                        buttons += `<a onclick="EditAllUserExpenseDetails('${params.data.id}')"><i class="fa-regular fa-pen-to-square"></i></a>`;
+                    }
+                    if (canDelete) {
+                        buttons += `<a class="btn text-danger" onclick="deleteExpense('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                    }
+                    return buttons;
+                }
+            });
+        }
+
+        return baseColumns;
+    }
+
+    function getAllExpenseDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    UnapproveFilter: AllExpenseselectedTab === "Unapprove",
+                    TodayDate: AllExpenseTodayDate,
+                };
+
+                $.ajax({
+                    url: '/ExpenseMaster/GetExpenseDetailsList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#AllExpenseTable .range-display');
+                        if (rangeDisplay) updateAllExpenseEnhancedPagination(AllExpenseGridOptions.api, rangeDisplay);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
+    }
+
+    function initGrid() {
+        AllExpenseGridOptions = {
+            rowHeight: 50,
+            columnDefs: getColumnDefs(),
+            defaultColDef: {
+                sortable: true,
+                filter: true,
+                cellClass: 'ag-cell-default-style',
+                width: 175,
+            },
+            rowSelection: 'single',
+            rowClassRules: {
+                'selected-row': params => params.node.isSelected()
+            },
+            onGridReady: function (params) {
+                AllExpenseGridOptions.api = params.api;
+                AllExpenseGridOptions.columnApi = params.columnApi;
+                AllExpenseGridOptions.api.sizeColumnsToFit();
+                createAllExpenseEnhancedPagination(params.api);
+            },
+            rowModelType: 'infinite',
+            cacheBlockSize: 20,
+            pagination: true,
+            paginationPageSize: 20,
+            suppressPaginationPanel: true,
+            datasource: getAllExpenseDatasource()
+        };
+
+        const gridDiv = document.querySelector('#AllExpenseTable');
+        if (gridDiv) {
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, AllExpenseGridOptions);
+        }
+    }
+
+    function createAllExpenseEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
+
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateAllExpenseEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateAllExpenseEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#AllExpenseTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+            AllExpenseGridOptions.cacheBlockSize = newPageSize;
+            AllExpenseGridOptions.paginationPageSize = newPageSize;
+            AllExpenseGridOptions.datasource = getAllExpenseDatasource();
+
+            initGrid();
+        });
+
+        updateAllExpenseEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateAllExpenseEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = AllExpenseGridOptions.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateAllExpenseEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
+        }
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
+
+    $('.nav-link').on('click', function () {
+        AllExpenseselectedTab = $(this).attr('id');
+
+        if (AllExpenseselectedTab === "TodayExpense") {
+            const today = new Date();
+            AllExpenseTodayDate = today.toISOString().split('T')[0];
+        } else {
+            AllExpenseTodayDate = null;
+        }
+
+        initGrid();
     });
+
+    initGrid();
 });
-
-function GetAllUserExpenseDetails() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayAllUserExpenseDetails',
-        type: 'GET',
-        success: function (result) {
-            $("#AllExpenseDetailsPartial").html(result);
-            DisplayAllExpenseList('#AllExpenseDetailsPartial table');
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-
-function GetAllUserUnapproveExpenseDetails() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayAllUserExpenseDetails',
-        type: 'GET',
-        success: function (result) {
-            $("#AllUnapprovedExpenseDetailsPartial").html(result);
-            DisplayAllUnApproveExpenseDetails('#AllUnapprovedExpenseDetailsPartial table');
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-
-function GetAllUserTodayExpenseDetails() {
-    $.ajax({
-        url: '/ExpenseMaster/DisplayAllUserExpenseDetails',
-        type: 'GET',
-        success: function (result) {
-            $("#AllTodayExpenseDetailsPartial").html(result);
-            DisplayAllTodayExpenseDetails('#AllTodayExpenseDetailsPartial table');
-        },
-        error: function () {
-            alert('Error loading expenses. Please try again.');
-        }
-    });
-}
-
-function DisplayAllExpenseList(tableId) {
-    $(tableId).DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-        order: [[3, 'asc']],
-        pageLength: 10,
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetExpenseDetailsList',
-            dataType: 'json'
-        },
-        columns: [
-            { data: null, visible: false, orderable: false },
-            { data: "userName", name: "UserName", className: "text-center" },
-            { data: "description", name: "Description", className: "text-center" },
-            {
-                data: "billNumber", name: "BillNumber",
-                render: function (data, type, full) {
-                    return full.image
-                        ? `<div class="d-flex">
-                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
-                            <div class="flex-shrink-0 ms-4 task-icons">
-                                <ul class="list-inline tasks-list-menu mb-0">
-                                    <a onclick="downloadBill('${full.image}')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />
-                                        </svg>
-                                    </a>
-                                </ul>
-                            </div>
-                        </div>`
-                        : `<div class="d-flex">
-                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
-                            <div class="flex-shrink-0 ms-4 task-icons"></div>
-                        </div>`;
-                }
-            },
-            {
-                data: "date", name: "Date", className: "text-center",
-                render: function (data) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                data: "totalAmount",
-                name: "TotalAmount",
-                className: "text-center",
-                render: function (data, type, full) {
-                    function formatNumberWithCommas(number) {
-                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-                    var formattedData = formatNumberWithCommas(parseFloat(data));
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return `<span style="color: ${color};">₹ ${formattedData}</span>`;
-                }
-            },
-            { data: "account", name: "Account", className: "text-center" },
-            {
-                data: null, orderable: false, searchable: false,
-                render: function (data, type, full) {
-                    return `<a class="btn text-info" onclick="EditAllUserExpenseDetails('${full.id}')"><i class="fa-regular fa-pen-to-square"></i></a><a class="btn text-danger" onclick="deleteExpense('${full.id}')"><i class="fas fa-trash"></i></a>`;
-                }
-            }
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-    });
-}
-
-function DisplayAllUnApproveExpenseDetails(tableId) {
-    $(tableId).DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-        order: [[3, 'asc']],
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetExpenseDetailsList?unapprove=false',
-            dataType: 'json'
-        },
-        columns: [
-            {
-                data: null,
-                render: function (data, type, full, meta) {
-                    return '<div class="form-check"><input class="form-check-input" data-id="' + full.id + '" type="checkbox" name="check_Box"></div>';
-                },
-                orderable: false
-            },
-            { data: "userName", name: "UserName", className: "text-center" },
-            { data: "description", name: "Description", className: "text-center" },
-            {
-                data: "billNumber", name: "BillNumber",
-                render: function (data, type, full) {
-                    return full.image
-                        ? `<div class="d-flex">
-                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
-                            <div class="flex-shrink-0 ms-4 task-icons">
-                                <ul class="list-inline tasks-list-menu mb-0">
-                                    <a onclick="downloadBill('${full.image}')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />
-                                        </svg>
-                                    </a>
-                                </ul>
-                            </div>
-                        </div>`
-                        : `<div class="d-flex">
-                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
-                            <div class="flex-shrink-0 ms-4 task-icons"></div>
-                        </div>`;
-                }
-            },
-            {
-                data: "date", name: "Date", className: "text-center",
-                render: function (data) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                data: "totalAmount",
-                name: "TotalAmount",
-                className: "text-center",
-                render: function (data, type, full) {
-                    function formatNumberWithCommas(number) {
-                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-                    var formattedData = formatNumberWithCommas(parseFloat(data));
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return `<span style="color: ${color};">₹ ${formattedData}</span>`;
-                }
-            },
-            { data: "account", name: "Account", className: "text-center" },
-            {
-                data: null, orderable: false, searchable: false,
-                render: function (data, type, full) {
-                    return `<a class="btn text-info" onclick="EditAllUserExpenseDetails('${full.id}')"><i class="fa-regular fa-pen-to-square"></i></a><a class="btn text-danger" onclick="deleteExpense('${full.id}')"><i class="fas fa-trash"></i></a>`;
-                }
-            }
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-        drawCallback: function (settings) {
-
-        }
-    });
-}
-
-function DisplayAllTodayExpenseDetails(tableId) {
-    var todayDate = new Date().toISOString().split('T')[0];
-    $(tableId).DataTable({
-        processing: false,
-        serverSide: true,
-        filter: true,
-        destroy: true,
-
-
-        ajax: {
-            type: "POST",
-            url: '/ExpenseMaster/GetExpenseDetailsList?TodayDate=' + todayDate,
-            dataType: 'json'
-        },
-        columns: [
-            { data: null, visible: false, orderable: false },
-            { data: "userName", name: "UserName", className: "text-center" },
-            { data: "description", name: "Description", className: "text-center" },
-            {
-                data: "billNumber", name: "BillNumber",
-                render: function (data, type, full) {
-                    return full.image
-                        ? `<div class="d-flex">
-                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
-                            <div class="flex-shrink-0 ms-4 task-icons">
-                                <ul class="list-inline tasks-list-menu mb-0">
-                                    <a onclick="downloadBill('${full.image}')">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z" />
-                                        </svg>
-                                    </a>
-                                </ul>
-                            </div>
-                        </div>`
-                        : `<div class="d-flex">
-                            <div class="flex-grow-1 tasks_name">${full.billNumber}</div>
-                            <div class="flex-shrink-0 ms-4 task-icons"></div>
-                        </div>`;
-                }
-            },
-            {
-                data: "date", name: "Date", className: "text-center",
-                render: function (data) {
-                    return getCommonDateformat(data);
-                }
-            },
-            {
-                data: "totalAmount",
-                name: "TotalAmount",
-                className: "text-center",
-                render: function (data, type, full) {
-                    function formatNumberWithCommas(number) {
-                        return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-                    }
-                    var formattedData = formatNumberWithCommas(parseFloat(data));
-                    var color = full.account && full.account.toLowerCase() === "credit" ? "green" : "red";
-                    return `<span style="color: ${color};">₹ ${formattedData}</span>`;
-                }
-            },
-            { data: "account", name: "Account", className: "text-center" },
-            { data: null, visible: false, orderable: false },
-        ],
-        scrollY: 400,
-        scrollX: true,
-        scrollCollapse: true,
-        fixedHeader: {
-            header: true,
-            footer: true
-        },
-        autoWidth: false,
-        columnDefs: [{
-            targets: [0],
-            orderable: false,
-            width: "auto"
-        }],
-        "footerCallback": function (row, data, start, end, display) {
-            var api = this.api(), data;
-
-            var intVal = function (i) {
-                return typeof i === 'string' ?
-                    i.replace(/[\$,]/g, '') * 1 :
-                    typeof i === 'number' ?
-                        i : 0;
-            };
-            function formatNumberWithCommas(number) {
-                return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-            }
-            var total = api
-                .column(5)
-                .data()
-                .reduce(function (a, b) {
-                    return intVal(a) + intVal(b);
-                }, 0);
-            var formattedTotal = '₹' + formatNumberWithCommas(total.toFixed(2));
-
-            $(api.column(5).footer()).html(
-                '<span style="color: black;">Total: ' + formattedTotal + '</span>'
-            );
-
-        }
-    });
-}
-
 
 function GetExpenseTotalAmount() {
     var userId = {
