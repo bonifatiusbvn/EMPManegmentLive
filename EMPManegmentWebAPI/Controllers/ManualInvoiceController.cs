@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.InvoiceMaster;
@@ -53,17 +54,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetManualInvoiceList")]
-        public async Task<IActionResult> GetManualInvoiceList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<ManualInvoiceModel>> GetManualInvoiceList(AGGridRequestModel ManualInvoiceRequest)
         {
-            try
+            var ManualInvoiceList = await ManualInvoice.GetManualInvoiceList(ManualInvoiceRequest);
+            return new AGGridResponseModel<ManualInvoiceModel>
             {
-                var AllInvoiceList = await ManualInvoice.GetManualInvoiceList(dataTable);
-                return Ok(new { code = (int)HttpStatusCode.OK, data = AllInvoiceList });
-            }
-            catch (Exception ex)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, new { code = (int)HttpStatusCode.InternalServerError, message = "An error occurred while processing the request." });
-            }
+                Data = ManualInvoiceList.Data,
+                RecordsTotal = ManualInvoiceList.RecordsTotal,
+            };
         }
 
         [HttpGet]

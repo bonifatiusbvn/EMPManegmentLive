@@ -422,9 +422,6 @@ function GetPaymentMethodList() {
             });
             var firstPaymentMethod = result[0];
             $('#drpcreditdebitpaymentmethod').val(firstPaymentMethod.id);
-            $.each(result, function (i, data) {
-                $('#txtpaymentmethod').append('<Option value=' + data.id + '>' + data.paymentMethod + '</Option>')
-            });
         }
     });
 }
@@ -440,10 +437,6 @@ function GetPaymentTypeList() {
             $.each(result, function (i, data) {
                // $('#txtExpensepaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
                 $('#EditExpensepaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-            });
-            $.each(result, function (i, data) {
-                $('#textPaymentMethod').append('<Option value=' + data.id + '>' + data.type + '</Option>')
-                $('#txtpaymenttype').append('<Option value=' + data.id + '>' + data.type + '</Option>')
             });
         }
     });
@@ -527,22 +520,6 @@ function fn_ChangeCityDrp(selectedCity) {
     sessionStorage.setItem('SelectedCityName', selectedCity);
     /*showWeatherAPI(selectedCity);*/
 }
-
-function GetGetInvoiceType() {
-    $.ajax({
-        url: '/Authentication/GetInvoiceType',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#ddlinvoicetype').append('<option value="' + data.id + '">' + data.invoiceType + '</option>');
-            });
-        },
-    });
-}
-
-$('#ddlinvoicetype').change(function () {
-    var txttype = $(this).val();
-    $("#txtinvoicetype").val(txttype);
-});
 
 function clearProductListSearchText() {
     $('#mdProductSearch').val('');

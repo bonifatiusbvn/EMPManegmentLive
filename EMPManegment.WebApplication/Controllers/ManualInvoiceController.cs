@@ -1,6 +1,7 @@
 ﻿using DinkToPdf.Contracts;
 using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
@@ -40,47 +41,20 @@ namespace EMPManegment.Web.Controllers
             }
             return View();
         }
+
         [HttpPost]
-        public async Task<IActionResult> GetManualInvoiceList()
+        public async Task<IActionResult> GetManualInvoiceList([FromBody] AGGridRequestModel ManualInvoiceRequest)
         {
             try
             {
-                var draw = Request.Form["draw"].FirstOrDefault();
-                var start = Request.Form["start"].FirstOrDefault();
-                var length = Request.Form["length"].FirstOrDefault();
-                var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
-                var sortColumnDir = Request.Form["order[0][dir]"].FirstOrDefault();
-                var searchValue = Request.Form["search[value]"].FirstOrDefault();
-                int pageSize = length != null ? Convert.ToInt32(length) : 0;
-                int skip = start != null ? Convert.ToInt32(start) : 0;
+                ManualInvoiceRequest.filters ??= new List<FilterModel>();
 
-                var dataTable = new DataTableRequstModel
+                var InvoiceDetails = await APIServices.AGPostAsync<ManualInvoiceModel>(ManualInvoiceRequest, "ManualInvoice/GetManualInvoiceList");
+                return new JsonResult(new
                 {
-                    draw = draw,
-                    start = start,
-                    pageSize = pageSize,
-                    skip = skip,
-                    lenght = length,
-                    searchValue = searchValue,
-                    sortColumn = sortColumn,
-                    sortColumnDir = sortColumnDir
-                };
-                List<ManualInvoiceModel> InvoiceList = new List<ManualInvoiceModel>();
-                var data = new jsonData();
-                ApiResponseModel postuser = await APIServices.PostAsync(dataTable, "ManualInvoice/GetManualInvoiceList");
-                if (postuser.data != null)
-                {
-                    data = JsonConvert.DeserializeObject<jsonData>(postuser.data.ToString());
-                    InvoiceList = JsonConvert.DeserializeObject<List<ManualInvoiceModel>>(data.data.ToString());
-                }
-                var jsonData = new
-                {
-                    draw = data.draw,
-                    recordsFiltered = data.recordsFiltered,
-                    recordsTotal = data.recordsTotal,
-                    data = InvoiceList,
-                };
-                return new JsonResult(jsonData);
+                    rowsThisPage = InvoiceDetails.Data,
+                    totalRowCount = InvoiceDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {

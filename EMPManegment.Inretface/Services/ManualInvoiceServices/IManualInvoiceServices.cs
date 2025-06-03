@@ -1,4 +1,5 @@
-﻿using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using System;
@@ -12,7 +13,7 @@ namespace EMPManegment.Inretface.Services.ManualInvoiceServices
     public interface IManualInvoiceServices
     {
         Task<UserResponceModel> InsertManualInvoice(ManualInvoiceMasterModel InvoiceDetails);
-        Task<jsonData> GetManualInvoiceList(DataTableRequstModel dataTable);
+        Task<AGGridResponseModel<ManualInvoiceModel>> GetManualInvoiceList(AGGridRequestModel ManualInvoiceRequest);
         Task<ManualInvoiceMasterModel> GetManualInvoiceDetails(Guid InvoiceId);
         Task<UserResponceModel> DeleteManualInvoice(Guid InvoiceId);
         Task<UserResponceModel> UpdateManualInvoice(ManualInvoiceMasterModel UpdateInvoice);

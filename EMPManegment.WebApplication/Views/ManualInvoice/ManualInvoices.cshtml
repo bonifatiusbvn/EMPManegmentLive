@@ -11,76 +11,66 @@
 <!-- start page title -->
 <div class="row" style="margin-top:80px;">
     <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">Manual Invoice List</h4>
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">Manual Invoice List</h4>
             <div class="page-title-right">
                 <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item"><a href="javascript: void(0);">InvoicesManual</a></li>
-                    <li class="breadcrumb-item active">ManualInvoicesListView</li>
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">Manual Invoice</a></li>
+                    <li class="breadcrumb-item active">Manual Invoice List</li>
                 </ol>
             </div>
         </div>
     </div>
 </div>
 <!-- end page title -->
+
+
+<input hidden id="txtMIProjectId" type="text" value="@UserSession.ProjectId" />
+
 <div class="row">
     <div class="col-lg-12">
         <div class="card" id="invoiceList">
-            <div class="card-header border-0">
-                <div class="d-flex align-items-center">
-                    <h5 class="card-title mb-0 flex-grow-1">Manual Invoices</h5>
-                    <input hidden id="txtMIProjectId" type="text" value="@UserSession.ProjectId" />
-                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "CreateInvoiceManual" && (a.Add == true)))
-                    {
-                        <div class="flex-shrink-0">
-                            <div class="d-flex gap-2 flex-wrap">
-                                <a href="/ManualInvoice/CreateInvoiceManual" class="btn button-teal"><i class="fa-solid fa-circle-plus me-1"></i>Manual Invoice</a>
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-12 col-lg-3">
+                        <input class="form-control"
+                               id="txtManualInvoiceSearch"
+                               placeholder="Search..." />
+                    </div>
+                    <div class="col-12 col-lg-1">
+                        <button class="btn button-teal" id="toggleDateFilter">
+                            <i class="fa fa-calendar" aria-hidden="true"></i><span class="d-none d-sm-inline" style="margin-left: 10px;">Date</span>
+                        </button>
+                        <div id="dateFilterContainer" class="date-filter-container" style="display: none;">
+                            <div class="p-2 bg-light border">
+                                <label for="txtstartdatebox">From Date</label>
+                                <input type="date" id="txtstartdatebox" class="form-control mb-3" style="font-size: 15px;">
+                                <label for="txtenddatebox">To Date</label>
+                                <input type="date" id="txtenddatebox" class="form-control mb-3" style="font-size: 15px;">
+                                <button class="btn button-teal btn-block" id="applyFilters">Apply</button>
                             </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-2">
+                        <button class="btn button-rest" style="margin-left: -30px;" onclick="ResetManualInvoiceFilters()"> Reset</button>
+                    </div>
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Manual Invoice Creatation" && (a.Add == true)))
+                    {
+                        <div class="col-12 col-lg-6" style="text-align:end">
+                            <a href="/ManualInvoice/CreateInvoiceManual" class="btn button-teal"><i class="fa-solid fa-circle-plus me-1"></i>Manual Invoice</a>
                         </div>
                     }
                 </div>
             </div>
             <div class="card-body">
-                <div class="listjs-table">
-                    <div class="table-responsive">
-                        <table id="manualInvoiceTable" class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                            <thead class="button-teal text-center">
-                                <tr class="text-center">
-                                    <th>InvoiceNo</th>
-                                    <th>VendorName</th>
-                                    <th>Date</th>
-                                    <th>CompanyName</th>
-                                    <th>TotalAmount</th>
-                                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Manual Invoices" && (a.Edit == true || a.Delete == true)))
-                                    {
-                                        <th>Action</th>
-                                    }
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
-                        <div class="noresult" style="display: none">
-                            <div class="text-center">
-                                <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                </lord-icon>
-                                <h5 class="mt-2">Sorry! No Result Found</h5>
-                                <p class="text-muted mb-0">
-                                    We've searched more than 150+ transactions We did not find any
-                                    transactions for you search.
-                                </p>
-                            </div>
-                        </div>
-                        <!-- end table -->
-                    </div>
-                </div>
-                <!-- container-fluid -->
+                <div id="ManualInvoiceTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
             </div>
         </div>
     </div>
 </div>
 <!--end row-->
 <script type="text/javascript">
-    var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+    window.userFormPermissions = @Html.Raw(Json.Serialize(UserSession.FormPermisionData));
 </script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

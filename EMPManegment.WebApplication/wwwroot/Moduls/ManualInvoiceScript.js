@@ -1,4 +1,70 @@
-﻿$(document).ready(function () {
+﻿var Formdata = window.userFormPermissions || 0;
+
+$(document).ready(function () {
+
+    $('#txtpaymenttype').select2({
+        placeholder: 'Select Payment Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            }
+        }
+    });
+    $('#txtpaymentmethod').select2({
+        placeholder: 'Select Payment Method',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/PurchaseOrderMaster/GetPaymentMethodList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.paymentMethod
+                    }))
+                };
+            }
+        }
+    });
+
+    $('#ddlinvoicetype').select2({
+        placeholder: 'Select Invoice Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/Authentication/GetInvoiceType',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.invoiceType
+                    }))
+                };
+            }
+        }
+    });
+    $('#ddlinvoicetype').change(function () {
+        var txttype = $(this).val();
+        $("#txtinvoicetype").val(txttype);
+    });
+
     function handleFocus(event, selector) {
         if (event.keyCode == 13 || event.keyCode == 9) {
             event.preventDefault();
@@ -475,91 +541,281 @@ function InsertManualInvoiceDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-var datas = userPermissions
+
+let ManualInvoiceTableGrid = [];
+let startDate = null;
+let endDate = null;
+
 $(document).ready(function () {
-    function data(datas) {
-        userPermission = datas;
-        AllManualInvoiceList(userPermission);
+
+    const userPermissionArray = Formdata || [];
+    let canEdit = false;
+    let canDelete = false;
+
+    for (let i = 0; i < userPermissionArray.length; i++) {
+        const permission = userPermissionArray[i];
+        if (permission.formName === "Manual Invoices") {
+            canEdit = permission.edit;
+            canDelete = permission.delete;
+            break;
+        }
     }
-    function AllManualInvoiceList(userPermission) {
-        var userPermissionArray = [];
-        userPermissionArray = JSON.parse(userPermission);
 
-        var canEdit = false;
-        var canDelete = false;
-
-        for (var i = 0; i < userPermissionArray.length; i++) {
-            var permission = userPermissionArray[i];
-            if (permission.formName == "Manual Invoices") {
-                canEdit = permission.edit;
-                canDelete = permission.delete;
-                break;
-            }
-        }
-        var columns = [
+    ManualInvoiceTableGrid = {
+        rowHeight: 50,
+        columnDefs: [
             {
-                "data": "invoiceNo",
-                "name": "InvoiceNo",
-                "render": function (data, type, full) {
-                    return '<div class="d-flex justify-content-center"><h5 class="fs-15"><a href="/ManualInvoice/ManualInvoiceDetails?InvoiceId=' + full.id + '" class="fw-medium link-primary text-center">' + full.invoiceNo + '</a></h5></div>';
+                headerName: "Invoice No",
+                field: "invoiceNo",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return `<a href="/ManualInvoice/ManualInvoiceDetails?InvoiceId=${params.data.id}"><span style="color: #16989A !important;">` + params.data.invoiceNo + `</span></a>`;
                 }
             },
-            { "data": "vendorName", "name": "VendorName", "className": "text-center" },
+            { headerName: "Vendor Name", field: "vendorName", sortable: true, filter: true },
             {
-                "data": "invoiceDate",
-                "name": "InvoiceDate",
-                "render": function (data, type, full, meta) {
-                    return getCommonDateformat(data);
+                headerName: "Invoice Date", field: "invoiceDate", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.invoiceDate);
                 }
             },
-            { "data": "companyName", "name": "CompanyName", "className": "text-center" },
-            { "data": "totalAmount", "name": "TotalAmount", "className": "text-center" }
-        ];
-
-        if (canEdit || canDelete) {
-            columns.push({
-                "data": null,
-                "orderable": false,
-                "searchable": false,
-                "render": function (data, type, full) {
-                    var buttons = '<div class="d-flex justify-content-center">';
-                    buttons += '<ul class="list-inline mb-0">';
-
-                    if (canEdit) {
-                        buttons += '<a href="/ManualInvoice/CreateInvoiceManual?InvoiceId=' + full.id + '" class="btn text-info list-inline-item">' +
-                            '<i class="fa-regular fa-pen-to-square"></i></a>';
-                    }
-
-                    if (canDelete) {
-                        buttons += '<a onclick="deleteManualInvoice(\'' + full.id + '\')" class="btn text-danger btndeletedoc list-inline-item">' +
-                            '<i class="fas fa-trash"></i></a>';
-                    }
-
-                    buttons += '</ul></div>';
-                    return buttons;
-                }
-            });
-        }
-
-        $('#manualInvoiceTable').DataTable({
-            processing: false,
-            serverSide: true,
+            { headerName: "Company Name", field: "companyName", sortable: true, filter: true },
+            { headerName: "Total Amount", field: "totalAmount", sortable: true, filter: true },
+        ],
+        defaultColDef: {
+            sortable: true,
             filter: true,
-            "bDestroy": true,
-            ajax: {
-                type: "POST",
-                url: '/ManualInvoice/GetManualInvoiceList',
-                dataType: 'json'
-            },
-            columns: columns,
-            columnDefs: [{
-                "defaultContent": "",
-                "targets": "_all"
-            }]
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            ManualInvoiceTableGrid.api = params.api;
+            ManualInvoiceTableGrid.columnApi = params.columnApi;
+            ManualInvoiceTableGrid.api.sizeColumnsToFit();
+            createEnhancedPagination(params.api);
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 20,
+        pagination: true,
+        paginationPageSize: 20,
+        suppressPaginationPanel: true,
+        datasource: getManualInvoiceDatasource()
+    };
+    function getManualInvoiceDatasource() {
+        return {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: params.endRow - params.startRow,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    searchValue: $('#txtManualInvoiceSearch').val(),
+                    StartDate: startDate,
+                    EndDate: endDate,
+                };
+
+                $.ajax({
+                    url: '/ManualInvoice/GetManualInvoiceList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                        const rangeDisplay = document.querySelector('#ManualInvoiceTable .range-display');
+                        if (rangeDisplay) updateEnhancedPagination(ManualInvoiceTableGrid.api, rangeDisplay);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        };
+    }
+
+    function createEnhancedPagination(gridApi) {
+        const paginationContainer = document.createElement('div');
+        paginationContainer.className = 'enhanced-pagination-container';
+
+        const pageSizeContainer = document.createElement('div');
+        pageSizeContainer.className = 'page-size-container';
+        pageSizeContainer.innerHTML = `
+            <span>Page Size: </span>
+            <select class="page-size-selector">
+                <option value="10">10</option>
+                <option value="20" selected>20</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+            </select>
+        `;
+
+        const rangeDisplay = document.createElement('div');
+        rangeDisplay.className = 'range-display';
+
+        const navContainer = document.createElement('div');
+        navContainer.className = 'navigation-container';
+
+        const prevButton = document.createElement('button');
+        prevButton.className = 'pagination-button';
+        prevButton.innerHTML = '<i class="ri-arrow-left-s-line"></i> Previous';
+        prevButton.addEventListener('click', () => {
+            gridApi.paginationGoToPreviousPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const nextButton = document.createElement('button');
+        nextButton.className = 'pagination-button';
+        nextButton.innerHTML = 'Next <i class="ri-arrow-right-s-line"></i>';
+        nextButton.addEventListener('click', () => {
+            gridApi.paginationGoToNextPage();
+            updateEnhancedPagination(gridApi, rangeDisplay);
+        });
+
+        const pageButtonsContainer = document.createElement('div');
+        pageButtonsContainer.className = 'page-buttons';
+
+        navContainer.appendChild(prevButton);
+        navContainer.appendChild(pageButtonsContainer);
+        navContainer.appendChild(nextButton);
+
+        const pageInfo = document.createElement('div');
+        pageInfo.className = 'page-info';
+
+        paginationContainer.appendChild(pageSizeContainer);
+        paginationContainer.appendChild(rangeDisplay);
+        paginationContainer.appendChild(navContainer);
+        paginationContainer.appendChild(pageInfo);
+
+        const eGui = document.querySelector('#ManualInvoiceTable');
+        const paginationEl = document.createElement('div');
+        paginationEl.className = 'ag-paging-panel enhanced';
+        paginationEl.appendChild(paginationContainer);
+        eGui.appendChild(paginationEl);
+
+        const pageSizeSelector = pageSizeContainer.querySelector('.page-size-selector');
+        pageSizeSelector.addEventListener('change', function () {
+            const newPageSize = Number(this.value);
+
+
+            const gridDiv = document.querySelector('#invoiceTable');
+
+            ManualInvoiceTableGrid = {
+                ...ManualInvoiceTableGrid,
+                cacheBlockSize: newPageSize,
+                paginationPageSize: newPageSize,
+                datasource: getManualInvoiceDatasource(),
+            };
+
+            gridDiv.innerHTML = '';
+            agGrid.createGrid(gridDiv, ManualInvoiceTableGrid);
+        });
+
+        updateEnhancedPagination(gridApi, rangeDisplay);
+    }
+
+    function updateEnhancedPagination(gridApi, rangeDisplay) {
+        const currentPage = gridApi.paginationGetCurrentPage() + 1;
+        const totalPages = gridApi.paginationGetTotalPages();
+        const totalRows = gridApi.paginationGetRowCount();
+        const pageSize = ManualInvoiceTableGrid.paginationPageSize;
+
+        const startRow = totalRows > 0 ? ((currentPage - 1) * pageSize + 1) : 0;
+        const endRow = totalRows > 0 ? Math.min(currentPage * pageSize, totalRows) : 0;
+
+        rangeDisplay.textContent = totalRows > 0 ? `${startRow} to ${endRow} of ${totalRows}` : '0 to 0 of 0';
+
+        const pageInfo = document.querySelector('.page-info');
+        if (pageInfo) pageInfo.textContent = `Page ${currentPage} of ${totalPages || 1}`;
+
+        const pageButtonsContainer = document.querySelector('.page-buttons');
+        if (!pageButtonsContainer) return;
+
+        pageButtonsContainer.innerHTML = '';
+
+        const startPage = Math.max(1, currentPage - 1);
+        const endPage = Math.min(totalPages, currentPage + 1);
+
+        for (let i = startPage; i <= endPage; i++) {
+            const pageButton = document.createElement('button');
+            pageButton.className = `pagination-button ${i === currentPage ? 'active' : ''}`;
+            pageButton.textContent = i;
+            pageButton.addEventListener('click', () => {
+                gridApi.paginationGoToPage(i - 1);
+                updateEnhancedPagination(gridApi, rangeDisplay);
+            });
+            pageButtonsContainer.appendChild(pageButton);
+        }
+
+        const prevButton = document.querySelector('.navigation-container .pagination-button:first-child');
+        const nextButton = document.querySelector('.navigation-container .pagination-button:last-child');
+        if (prevButton) prevButton.disabled = currentPage === 1;
+        if (nextButton) nextButton.disabled = currentPage === totalPages || totalPages === 0;
+
+        const pageSizeSelector = document.querySelector('.page-size-selector');
+        if (pageSizeSelector) pageSizeSelector.value = pageSize;
+    }
+
+    if (canEdit || canDelete) {
+        ManualInvoiceTableGrid.columnDefs.push({
+            headerName: "Actions",
+            field: "actions",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) return '';
+
+                let buttons = '';
+                if (canEdit) {
+                    buttons += `<a href="/ManualInvoice/CreateInvoiceManual?InvoiceId=${params.data.id}" class="btn text-info editbtn">
+                        <i class="fa-regular fa-pen-to-square"></i></a>`;
+                }
+                if (canDelete) {
+                    buttons += `<a onclick="deleteManualInvoice('${params.data.id}')" class="btn text-danger">
+                        <i class="fas fa-trash"></i></a>`;
+                }
+                return buttons;
+            }
         });
     }
-    data(datas);
+
+    const myGridElement = document.querySelector('#ManualInvoiceTable');
+    agGrid.createGrid(myGridElement, ManualInvoiceTableGrid);
+
+
+    $('#txtManualInvoiceSearch').on('change keyup', function () {
+        ManualInvoiceTableGrid.api.onFilterChanged();
+    });
+
+    $('#toggleDateFilter').click(e => {
+        e.stopPropagation();
+        $('#dateFilterContainer').toggle();
+    });
+
+    $('#applyFilters').click(() => {
+        startDate = $('#txtstartdatebox').val() || null;
+        endDate = $('#txtenddatebox').val() || null;
+        if (ManualInvoiceTableGrid.api) {
+            ManualInvoiceTableGrid.api.onFilterChanged();
+        }
+    });
 });
+function ResetManualInvoiceFilters() {
+    window.location = '/ManualInvoice/ManualInvoices';
+}
+
 function deleteManualInvoice(InvoiceId) {
     Swal.fire({
         title: "Are you sure want to delete this?",

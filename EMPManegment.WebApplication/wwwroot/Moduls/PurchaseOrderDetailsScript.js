@@ -1,5 +1,53 @@
 ﻿var Formdata = window.userFormPermissions || 0;
 
+$(document).ready(function () {
+    $('#txtPOpaymentmethod').select2({
+        placeholder: 'Select Payment Method',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/PurchaseOrderMaster/GetPaymentMethodList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.paymentMethod
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+
+    $('#txtPOpaymenttype').select2({
+        placeholder: 'Select Payment type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+});
+
 let PurchaseOrderGridOptions = [];
 let startDate = null;
 let endDate = null;
@@ -297,52 +345,6 @@ $(document).ready(function () {
                         text: item.compnyName,
                     }))
                 };
-            }
-        }
-    });
-
-    $('#txtPOpaymentmethod').select2({
-        placeholder: 'Select Payment Method',
-        width: '100%',
-        dropdownAutoWidth: true,
-        allowClear: true,
-        ajax: {
-            url: '/PurchaseOrderMaster/GetPaymentMethodList',
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-                return {
-                    results: data.map(item => ({
-                        id: item.id,
-                        text: item.paymentMethod
-                    }))
-                };
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching vendor list:", error);
-            }
-        }
-    });
-
-    $('#txtPOpaymenttype').select2({
-        placeholder: 'Select Payment type',
-        width: '100%',
-        dropdownAutoWidth: true,
-        allowClear: true,
-        ajax: {
-            url: '/ExpenseMaster/GetPaymentTypeList',
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-                return {
-                    results: data.map(item => ({
-                        id: item.id,
-                        text: item.type
-                    }))
-                };
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching vendor list:", error);
             }
         }
     });

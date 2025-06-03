@@ -1,4 +1,5 @@
 ﻿using EMPManagment.API;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ManualInvoice;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -25,9 +26,9 @@ namespace EMPManegment.Services.ManualInvoice
         {
             return await ManualInvoice.InsertManualInvoice(InvoiceDetails);
         }
-        public async Task<jsonData> GetManualInvoiceList(DataTableRequstModel dataTable)
+        public async Task<AGGridResponseModel<ManualInvoiceModel>> GetManualInvoiceList(AGGridRequestModel ManualInvoiceRequest)
         {
-            return await ManualInvoice.GetManualInvoiceList(dataTable);
+            return await ManualInvoice.GetManualInvoiceList(ManualInvoiceRequest);
         }
         public async Task<ManualInvoiceMasterModel> GetManualInvoiceDetails(Guid InvoiceId)
         {
