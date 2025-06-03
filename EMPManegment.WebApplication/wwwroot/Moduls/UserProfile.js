@@ -1,51 +1,131 @@
 ﻿var UserId = '';
 var userPermissions = '';
 $(document).ready(function () {
-    GetDocumentList();
-    GetDocumentType();
     GetProjectList();
     loadPartialView();
+
+    $('#Documents').select2({
+        placeholder: 'Select Document',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        ajax: {
+            url: '/UserProfile/GetDocumentType',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.documentType
+                    }))
+                };
+            }
+        }
+    });
 });
 
-function GetDocumentType() {
+let UserDocumentGridOptions = [];
+$(document).ready(function () {
 
-    $.ajax({
-        url: '/UserProfile/GetDocumentType',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#Documents').append('<Option value=' + data.id + '>' + data.documentType + '</Option>')
-            });
-        }
-    });
-}
+    UserDocumentGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
+            { headerName: "Document Type", field: "documentType", sortable: true, filter: true,width: 300},
+            {
+                headerName: "Document Name",
+                field: "documentName",
+                sortable: true,
+                filter: true, width: 350,
+                cellRenderer: function (params) {
 
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
+                    let documentName = params.data.documentName;
+                    let extractedDocumentName = documentName.substring(documentName.lastIndexOf('_') + 1);
 
-function GetDocumentList() {
-    $.ajax({
-        url: '/UserProfile/DisplayDocumentList',
-        type: 'Get',
-        dataType: 'json',
-        contentType: 'application/json;charset=utf-8;',
-        success: function (result) {
-            var object = '';
-            $.each(result, function (index, item) {
-                object += '<tr>';
-                object += '<td>' + item.documentType + '</td>';
-                let documentName = item.documentName;
-                let extractedDocumentName = documentName.substring(documentName.lastIndexOf('_') + 1);
-                object += '<td>' + extractedDocumentName + '</td>';
-                object += '<td>' + getCommonDateformat(item.createdOn) + '</td>';
-                object += '<td>' + item.createdBy + '</td>';
-                object += '<td><a onclick="DownloadDocument(\'' + item.documentName + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z"/></svg></a></td>';
-                object += '</tr>';
-            });
-            $('#TableData').html(object);
+                    return extractedDocumentName;
+                }
+            },
+            {
+                headerName: "CreatedOn", field: "createdOn", sortable: true, filter: true,width:300,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.id) return '';
+                    return getCommonDateformat(params.data.createdOn);
+                }
+            },
+            { headerName: "Created By", field: "createdBy", sortable: true, filter: true,width: 350 },
+            {
+                headerName: "Download",
+                field: "id",
+                sortable: true,
+                filter: true,
+                width:275,
+                cellRenderer: function (params) {
+
+                    if (!params.data || !params.data.id) {
+                        return '';
+                    }
+                    return '<a onclick="DownloadDocument(\'' + params.data.documentName + '\')"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M13 12h3l-4 4l-4-4h3V8h2v4Zm2-8H5v16h14V8h-4V4ZM3 2.992C3 2.444 3.447 2 3.999 2H16l5 5v13.993A1 1 0 0 1 20.007 22H3.993A1 1 0 0 1 3 21.008V2.992Z"/></svg></a>';
+                }
+            },
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
         },
-        error: function () {
-            toastr.error("Can't get Data");
+
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            UserDocumentGridOptions.api = params.api;
+            UserDocumentGridOptions.columnApi = params.columnApi;
+            UserDocumentGridOptions.api.sizeColumnsToFit();
+        },
+
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        datasource: {
+            getRows: function (params) {
+
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: UserDocumentGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel && params.sortModel.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                };
+
+                $.ajax({
+                    url: '/UserProfile/DisplayDocumentList',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
         }
-    });
-};
+    };
+
+    const myGridElement = document.querySelector('#UserDocumentTable');
+    agGrid.createGrid(myGridElement, UserDocumentGridOptions);
+});
 
 
 function UploadDocument() {

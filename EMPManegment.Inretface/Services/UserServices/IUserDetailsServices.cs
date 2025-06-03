@@ -23,7 +23,7 @@ namespace EMPManegment.Inretface.Services.UserListServices
         Task<UserResponceModel> EnterOutTime(UserAttendanceModel EnterOutTime);
         Task<UserResponceModel> ResetPassword(PasswordResetView ResetPassword);
         Task<IEnumerable<EmpDocumentView>> GetDocumentType();
-        Task<IEnumerable<DocumentInfoView>> GetDocumentList(Guid Userid);
+        Task<AGGridResponseModel<DocumentInfoView>> GetDocumentList(AGGridRequestModel DocumentRequest);
         Task<DocumentInfoView> UploadDocument(DocumentInfoView UploadDocument);
         Task<UserResponceModel> UserLockScreen(LoginRequest UserLockScreen);
         Task<UserResponceModel> UserBirsthDayWish(Guid UserId);

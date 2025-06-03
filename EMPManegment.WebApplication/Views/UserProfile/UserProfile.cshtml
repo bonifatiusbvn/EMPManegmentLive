@@ -34,7 +34,7 @@
         <div class="card-body p-4">
             <div class="row g-4">
                 <div class="col-auto" style="margin: auto; position: revert-layer;">
-                    <div class="profile-user position-relative d-inline-block mx-auto mb-4" style="height: 119px; width: 111px;">
+                    <div class="profile-user position-relative d-inline-block mx-auto mb-4">
                         @if (!string.IsNullOrEmpty(imageUrl))
                         {
                             <img id="user-profile-image" src="@imageUrl" class="rounded-circle avatar-xl img-thumbnail user-profile-image" alt="user-profile-image">
@@ -73,8 +73,6 @@
                     </div>
                 </div>
                 <!--end col-->
-                <!--end col-->
-
             </div>
             <!--end row-->
         </div>
@@ -120,36 +118,36 @@
                                 <div class="col-xxl-3">
                                     <div class="card" id="ProfileDetails">
                                         <div class="card-body">
-                                            <h5 class="card-title mb-3">Profile Details</h5>
+                                            <h5 class="card-title mb-3" style="font-weight:800;color:#16989A;">Profile Details</h5>
                                             <div class="table-responsive">
                                                 <table class="table table-borderless mb-0 dt-responsive nowrap">
                                                     <tbody>
                                                         <tr>
-                                                            <th>UserName:</th>
+                                                            <th><span style="color: #16989A !important;">UserName:</span></th>
                                                             <td class="text-muted" id="UserName">@Model.UserName</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Name:</th>
+                                                            <th><span style="color: #16989A !important;">Name:</span></th>
                                                             <td class="text-muted" id="FirstName">@Model.FirstName @Model.LastName</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Birth Date:</th>
+                                                            <th><span style="color: #16989A !important;">Birth Date:</span></th>
                                                             <td class="text-muted" id="LastName">@CommonHelper.GetCommonDateFormat(Model.DateOfBirth)</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>E-mail:</th>
+                                                            <th><span style="color: #16989A !important;">E-mail:</span></th>
                                                             <td class="text-muted" id="Email">@Model.Email</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Mobile:</th>
+                                                            <th><span style="color: #16989A !important;">Mobile:</span></th>
                                                             <td class="text-muted" id="PhoneNumber">@Model.PhoneNumber</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>JoiningDate:</th>
+                                                            <th><span style="color: #16989A !important;"> JoiningDate:</span></th>
                                                             <td class="text-muted" id="JoiningDate">@CommonHelper.GetCommonDateFormat(Model?.JoiningDate ?? DateTime.MinValue)</td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Address:</th>
+                                                            <th><span style="color: #16989A !important;"> Address:</span></th>
                                                             <td class="text-muted" id="Address">@Model.Address</td>
                                                         </tr>
                                                     </tbody>
@@ -172,7 +170,7 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="col-xl-12 col-md-6">
-                                                <div class="card card-animate bg-primary">
+                                                <div class="card card-animate bg-teal">
                                                     <div class="card-body">
                                                         <div class="d-flex justify-content-between">
                                                             <div>
@@ -193,7 +191,7 @@
                                                             </div>
                                                         </div>
                                                     </div><!-- end card body -->
-                                                </div> <!-- end card-->
+                                                </div> <!-- end card -->
                                             </div>
                                         </div>
                                     </div>
@@ -298,66 +296,42 @@
                             </div>
                         </div>
 
-
                         <div class="tab-pane fade" id="documents" role="tabpanel">
                             <div class="card">
                                 <div class="card-header">
-                                    <div class="row align-items-center gy-3">
-                                        <div class="col-sm">
-                                            <h5 class="card-title mb-0 fw-bold">Documents</h5>
+                                    <div class="row align-items-center mb-3">
+                                        <div class="col-md-6">
+                                            <h5 class="card-title fm-fmheader mb-0">Documents</h5>
                                         </div>
-                                        <div class="col-sm-auto">
-                                            <div class="d-flex gap-1 flex-wrap">
-                                                <select asp-for="DocumentType" id="Documents" class="form-control form-select" style="width:200px;">
-                                                    <option>--Document Type--</option>
-                                                </select>
+                                        <div class="col-md-6">
+                                            <div class="d-flex justify-content-end align-items-center gap-2">
 
-                                                <input class="form-control d-none" id="UserID" value="@Model.Id" hidden>
-                                                <input class="form-control d-none" id="CreatedBy" value="@Model.FirstName @Model.LastName" hidden>
-                                                <input class="form-control d-none" type="file" id="formFile" accept="pdf">
-                                                <label for="formFile" class="btn button-teal">
-                                                    <i class="ri-upload-2-fill me-1 align-bottom"></i> Upload
-                                                    File
-                                                </label>
-                                                <label type="submit" class="btn btn-secondary" id="SubmitButton" onclick="UploadDocument()">
-                                                    <i class="ri-save-2-fill me-1 align-bottom"></i> Save
-                                                    File
-                                                </label>
+                                                <div class="flex-grow-1" style="max-width: 200px;">
+                                                    <select asp-for="DocumentType" class="form-control select2 select2-teal"
+                                                            data-dropdown-css-class="select2-teal" id="Documents">
+                                                    </select>
+                                                    <input type="hidden" id="UserID" value="@Model.Id">
+                                                    <input type="hidden" id="CreatedBy" value="@Model.FirstName @Model.LastName">
+                                                </div>
 
+                                                <div>
+                                                    <input type="file" class="d-none" id="formFile" accept="application/pdf">
+                                                    <label for="formFile" class="btn button-teal">
+                                                        <i class="ri-upload-2-fill me-1"></i> Upload
+                                                    </label>
+                                                </div>
+
+                                                <div>
+                                                    <button type="button" class="btn btn-secondary" id="SubmitButton" onclick="UploadDocument()">
+                                                        <i class="ri-save-2-fill me-1"></i> Save
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="table-responsive">
-                                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle dataTable no-footer dtr-inline">
-                                                    <thead class="button-teal text-center">
-                                                        <tr class="text-center">
-                                                            <th>DocumentType</th>
-                                                            <th>DocumentName</th>
-                                                            <th>CreatedOn</th>
-                                                            <th>CreatedBy</th>
-                                                            <th>Download</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody class="text-center" id="TableData"></tbody>
-                                                </table>
-                                                <div class="noresult" style="display: none">
-                                                    <div class="text-center">
-                                                        <lord-icon src="https://cdn.lordicon.com/msoeawqm.json" trigger="loop" colors="primary:#25a0e2,secondary:#00bd9d" style="width:75px;height:75px">
-                                                        </lord-icon>
-                                                        <h5 class="mt-2">Sorry! No Result Found</h5>
-                                                        <p class="text-muted mb-0">
-                                                            We've searched more than 150+ invoices We did not find any
-                                                            invoices for you search.
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <div id="UserDocumentTable" class="ag-theme-teal" style="height: 450px; width: 100%;"></div>
                                 </div>
                             </div>
                         </div>

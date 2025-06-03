@@ -332,25 +332,26 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
-        public async Task<JsonResult> DisplayDocumentList()
+        [HttpPost]
+        public async Task<JsonResult> DisplayDocumentList([FromBody] AGGridRequestModel DocumentRequest)
         {
             try
             {
                 Guid userid = _userSession.UserId;
-                List<DocumentInfoView> documentList = new List<DocumentInfoView>();
-                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetDocumentList?Userid=" + userid);
-                if (res.code == 200)
+                DocumentRequest.UserId = userid;
+                DocumentRequest.filters ??= new List<FilterModel>();
+
+                var DocumentDetails = await APIServices.AGPostAsync<DocumentInfoView>(DocumentRequest, "UserProfile/GetDocumentList");
+                return new JsonResult(new
                 {
-                    documentList = JsonConvert.DeserializeObject<List<DocumentInfoView>>(res.data.ToString());
-                }
-                return new JsonResult(documentList);
+                    rowsThisPage = DocumentDetails.Data,
+                    totalRowCount = DocumentDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
                 throw ex;
             }
-
         }
 
         [HttpPost]

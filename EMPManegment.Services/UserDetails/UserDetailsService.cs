@@ -53,9 +53,9 @@ namespace EMPManegment.Services.UserList
             return await UserList.GetDocumentType();
         }
 
-        public async Task<IEnumerable<DocumentInfoView>> GetDocumentList(Guid Userid)
+        public async Task<AGGridResponseModel<DocumentInfoView>> GetDocumentList(AGGridRequestModel DocumentRequest)
         {
-            return await UserList.GetDocumentList(Userid);
+            return await UserList.GetDocumentList(DocumentRequest);
         }
 
         public async Task<DocumentInfoView> UploadDocument(DocumentInfoView UploadDocument)

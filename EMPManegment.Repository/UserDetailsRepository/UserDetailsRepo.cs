@@ -351,43 +351,49 @@ namespace EMPManegment.Repository.UserListRepository
                 throw ex;
             }
         }
-        public async Task<IEnumerable<DocumentInfoView>> GetDocumentList(Guid Userid)
+        public async Task<AGGridResponseModel<DocumentInfoView>> GetDocumentList(AGGridRequestModel DocumentRequest)
         {
             try
             {
-                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+                var filterConditions = string.Join(" AND ", DocumentRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = DocumentRequest.SortModel?.FirstOrDefault()?.ColId ?? "CreatedOn";
+                string sortDirection = DocumentRequest.SortModel?.FirstOrDefault()?.Sort ?? "desc";
 
-                var sqlPar = new SqlParameter[]
+                var parameters = new List<SqlParameter>
                 {
-                   new SqlParameter("@UserId", Userid),
+                    new SqlParameter("@UserId", DocumentRequest.UserId),
+                    new SqlParameter("@SortColumn", sortColumn),
+                    new SqlParameter("@SortDirection", sortDirection),
+                    new SqlParameter("@PageSize", DocumentRequest.PageSize),
+                    new SqlParameter("@Skip", DocumentRequest.StartRow),
+                    new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                    new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
-                var DS = DbHelper.GetDataSet("GetDocumentList", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+                var dataSet = DbHelper.GetDataSet("GetDocumentList", CommandType.StoredProcedure, parameters.ToArray(), _configuration.GetConnectionString("EMPDbconn"));
 
-                List<DocumentInfoView> DocumentList = new List<DocumentInfoView>();
-
-                if (DS != null && DS.Tables.Count > 0)
+                var DocumentList = dataSet.Tables[0].AsEnumerable().Select(row => new DocumentInfoView
                 {
-                    foreach (DataRow row in DS.Tables[0].Rows)
-                    {
-                        var userDocDetails = new DocumentInfoView
-                        {
-                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
-                            Id = row["Id"] != DBNull.Value ? (int)row["Id"] : 0,
-                            DocumentType = row["DocumentType"]?.ToString(),
-                            DocumentName = row["DocumentName"]?.ToString(),
-                            CreatedBy = row["CreatedBy"]?.ToString(),
-                            CreatedOn = row["CreatedOn"] != DBNull.Value ? (DateTime)row["CreatedOn"] : DateTime.MinValue,
+                    UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                    Id = row["Id"] != DBNull.Value ? (int)row["Id"] : 0,
+                    DocumentType = row["DocumentType"]?.ToString(),
+                    DocumentName = row["DocumentName"]?.ToString(),
+                    CreatedOn = Convert.ToDateTime(row["CreatedOn"]),
+                    CreatedBy = row["CreatedBy"]?.ToString(),
+                }).ToList();
 
-                        };
-                        DocumentList.Add(userDocDetails);
-                    }
-                }
-                return DocumentList;
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<DocumentInfoView>
+                {
+                    Data = DocumentList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the document list.", ex);
             }
         }
 
@@ -538,7 +544,8 @@ namespace EMPManegment.Repository.UserListRepository
                         Userdata.CountryId = row["CountryId"] != DBNull.Value ? (Int32)row["CountryId"] : 0;
                         Userdata.RoleId = row["RoleId"] != DBNull.Value ? (Guid)row["RoleId"] : Guid.Empty; ;
                         Userdata.ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty;
-                    };
+                    }
+                    ;
                 }
                 return Userdata;
             }

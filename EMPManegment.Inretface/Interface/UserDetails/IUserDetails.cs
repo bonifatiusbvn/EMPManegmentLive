@@ -3,6 +3,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.VendorModels;
@@ -23,7 +24,7 @@ namespace EMPManegment.Inretface.Interface.UserList
         Task<UserResponceModel> EnterOutTime(UserAttendanceModel UserOutTime);
         Task<UserResponceModel> ResetPassword(PasswordResetView ResetPassword);
         Task<IEnumerable<EmpDocumentView>> GetDocumentType();
-        Task<IEnumerable<DocumentInfoView>> GetDocumentList(Guid Userid);
+        Task<AGGridResponseModel<DocumentInfoView>> GetDocumentList(AGGridRequestModel DocumentRequest);
         Task<DocumentInfoView> UploadDocument(DocumentInfoView UploadDocument);
         Task<UserResponceModel> UserLockScreen(LoginRequest UserLockScreen);
         Task<UserResponceModel> UserBirsthDayWish(Guid UserId);

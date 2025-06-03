@@ -6,6 +6,7 @@ using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels;
 using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -121,12 +122,16 @@ namespace EMPManagment.API.Controllers
             return Ok(new { code = (int)HttpStatusCode.OK, data = getDocumentType.ToList() });
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route("GetDocumentList")]
-        public async Task<IActionResult> GetDocumentList(Guid Userid)
+        public async Task<AGGridResponseModel<DocumentInfoView>> GetDocumentList(AGGridRequestModel DocumentRequest)
         {
-            IEnumerable<DocumentInfoView> getDocumentList = await UserListServices.GetDocumentList(Userid);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = getDocumentList.ToList() });
+            var DocumentList = await UserListServices.GetDocumentList(DocumentRequest);
+            return new AGGridResponseModel<DocumentInfoView>
+            {
+                Data = DocumentList.Data,
+                RecordsTotal = DocumentList.RecordsTotal,
+            };
         }
 
         [HttpPost]
