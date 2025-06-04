@@ -54,7 +54,7 @@ function btnCreateProjectDetail() {
         formData.append("ProjectHead", $("#projectHead").val());
         formData.append("ProjectStartDate", $("#projectStartDate").val());
         formData.append("ProjectEndDate", $("#projectEndDate").val());
-        formData.append("ProjectImage", $("#projectImage")[0].files[0]);
+       
         formData.append("Area", $("#txtProjectArea").val());
         formData.append("BuildingName", $("#txtBuildingName").val());
         formData.append("State", $("#ProjectState").val());
@@ -62,6 +62,10 @@ function btnCreateProjectDetail() {
         formData.append("Country", $("#projectCountry").val());
         formData.append("Pincode", $("#txtProjectPincode").val());
         formData.append("ProjectPath", $("#projectPath").val());
+        var fileInput = document.getElementById("fileUpload");
+        if (fileInput.files.length > 0) {
+            formData.append("ProjectImage", fileInput.files[0]);
+        }
         $.ajax({
             url: '/Project/CreateProject',
             type: 'Post',
@@ -620,12 +624,14 @@ function fn_UpdateProjectDetail() {
         formData.append("Pincode", $("#txtProjectPincode").val());
         formData.append("ProjectPath", $("#projectPath").val());
         formData.append("UpdatedBy", $("#textProjectUserId").val());
-        var imageName = $("#currentImageName").text().trim();
-        var imageFile = $("#projectImage")[0].files[0];
-        if (imageName && !imageFile) {
-            formData.append("ProjectImageName", imageName);
-        } else if (imageFile) {
-            formData.append("ProjectImage", imageFile);
+
+        var fileInput = document.getElementById("fileUpload");
+        var existingImageName = $("#currentProjectImageName").text().trim();
+
+        if (fileInput.files.length > 0) {
+            formData.append("ProjectImage", fileInput.files[0]);
+        } else {
+            formData.append("ProjectImageName", existingImageName);
         }
 
         $.ajax({

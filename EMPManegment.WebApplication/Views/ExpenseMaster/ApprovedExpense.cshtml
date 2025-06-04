@@ -100,21 +100,6 @@
             <div class="card-body p-0">
                 <div id="UserExpenseApproveTable" class="ag-theme-teal" style="height: 550px; width: 100%;"></div>
             </div>
-            @* <div class="card-body p-0">
-                <div>
-                    <div class="row g-3">
-                        <div class="col-xxl-5 col-sm-12">
-                            <div class="tab-content">
-                                <div class="tab-pane fade show active" role="tabpanel">
-                                    <!---Partial View--->
-                                    <div id="AllUserExpensePartial">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> *@
             <!--end Edit Expense modal-->
             <!-- Modal -->
             <div class="modal fade zoomIn" id="AddExpenseModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -138,8 +123,9 @@
                                                 </p>
                                             </div>
                                             <div class="d-flex justify-content-between align-items-center" style="margin-top:-12px;">
-                                                <input type="text" class="form-control" id="txtexpensetype" name="txtexpensetype" placeholder="Enter Expense Type">
-                                                <input type="hidden" id="txtexpensetypeHidden" name="txtexpensetypeHidden">
+                                                <select id="txtexpensetype" name="txtexpensetype" class="form-control select2 select2-teal"
+                                                        data-dropdown-css-class="select2-teal">
+                                                </select>
                                                 <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtexpensetypeid">
                                                 <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtaccount" value="Debit">
                                                 <input type="hidden" class="text-muted text-uppercase fw-semibold" id="txtExpenseUserId" value="@ViewBag.UserId">
@@ -242,44 +228,6 @@
             dateInput.value = formattedToday;
         });
     });
-
-    // document.addEventListener('DOMContentLoaded', function () {
-    //     const approveExpenseBetweenMonth = document.getElementById('approveExpensebetweenMonth');
-    //     const searchDateInputs = document.querySelectorAll('.date-input');
-    //     const approveExpenseradios = document.querySelectorAll('input[name="flexRadioDefault"]');
-    //     const approveExpenseSearchButton = document.getElementById('approveExpenseSearchDate');
-    //     const navLinks = document.querySelectorAll('.nav-link');
-
-    //     function toggleApprovedExpenseDateInputs() {
-    //         clearApprovedExpenseDates();
-    //         if (approveExpenseBetweenMonth.checked) {
-    //             searchDateInputs.forEach(input => input.style.display = 'flex');
-    //             approveExpenseSearchButton.style.display = 'block';
-    //         } else {
-    //             searchDateInputs.forEach(input => input.style.display = 'none');
-    //             approveExpenseSearchButton.style.display = 'none';
-    //         }
-    //     }
-
-    //     approveExpenseradios.forEach(radio => {
-    //         radio.addEventListener('change', toggleApprovedExpenseDateInputs);
-    //     });
-
-    //     navLinks.forEach(link => {
-    //         link.addEventListener('click', function () {
-    //             approveExpenseBetweenMonth.checked = false;
-    //             toggleApprovedExpenseDateInputs();
-    //         });
-    //     });
-
-    //     toggleApprovedExpenseDateInputs();
-    // });
-
-    // function clearApprovedExpenseDates() {
-    //     document.getElementById('approveExpenseStartDate').value = '';
-    //     document.getElementById('approveExpenseEndDate').value = '';
-    // }
-
 </script>
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/expensemaster.js" asp-append-version="true"></script>

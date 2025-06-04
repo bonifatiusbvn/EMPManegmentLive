@@ -8,7 +8,7 @@ function DisplayAddExpenseModel() {
 $(document).ready(function () {
     GetExpenseTotalAmount();
     ApprovedExpenseList();
-    GetExpenseTypeList();
+   // GetExpenseTypeList();
 });
 
 function clearText() {
@@ -42,100 +42,208 @@ function preventEmptyValue(input) {
     }
 }
 
-function GetExpenseTypeList() {
-    $.ajax({
-        url: '/ExpenseMaster/GetExpenseTypeList',
-        method: 'GET',
-        success: function (result) {
-            var expenseTypes = result.map(function (data) {
-                return {
-                    label: data.type,
-                    value: data.id
-                };
-            });
+//function GetExpenseTypeList() {
+//    $.ajax({
+//        url: '/ExpenseMaster/GetExpenseTypeList',
+//        method: 'GET',
+//        success: function (result) {
+//            var expenseTypes = result.map(function (data) {
+//                return {
+//                    label: data.type,
+//                    value: data.id
+//                };
+//            });
 
-            // Sort alphabetically by label
-            expenseTypes.sort(function (a, b) {
-                return a.label.localeCompare(b.label);
-            });
+//            // Sort alphabetically by label
+//            expenseTypes.sort(function (a, b) {
+//                return a.label.localeCompare(b.label);
+//            });
 
-            function setupAutocomplete(inputId, hiddenId) {
-                $(inputId).autocomplete({
-                    source: expenseTypes,
-                    minLength: 0,
-                    focus: function (event, ui) {
-                        if (ui?.item) {
-                            $(inputId).val(ui.item.label);
-                        }
-                        event.preventDefault(); // Prevent value insertion on focus
-                    },
-                    select: function (event, ui) {
-                        if (ui?.item) {
-                            $(inputId).val(ui.item.label);
-                            $(hiddenId).val(ui.item.value);
-                        }
-                        event.preventDefault(); // Prevent default behavior
-                        return false;
-                    }
-                }).focus(function () {
-                    $(this).autocomplete("search", "");
-                });
-            }
+//            function setupAutocomplete(inputId, hiddenId) {
+//                $(inputId).autocomplete({
+//                    source: expenseTypes,
+//                    minLength: 0,
+//                    focus: function (event, ui) {
+//                        if (ui?.item) {
+//                            $(inputId).val(ui.item.label);
+//                        }
+//                        event.preventDefault(); // Prevent value insertion on focus
+//                    },
+//                    select: function (event, ui) {
+//                        if (ui?.item) {
+//                            $(inputId).val(ui.item.label);
+//                            $(hiddenId).val(ui.item.value);
+//                        }
+//                        event.preventDefault(); // Prevent default behavior
+//                        return false;
+//                    }
+//                }).focus(function () {
+//                    $(this).autocomplete("search", "");
+//                });
+//            }
 
-            // Apply to both input sets
-            setupAutocomplete("#txtexpensetype", "#txtexpensetypeHidden");
-            setupAutocomplete("#Editexpensetype", "#EditexpensetypeHidden");
-        },
-        error: function (xhr, status, error) {
-            console.error("Failed to fetch expense types:", error);
-            toastr.error("Failed to fetch expense types.");
-        }
-    });
-}
+//            // Apply to both input sets
+//            setupAutocomplete("#txtexpensetype", "#txtexpensetypeHidden");
+//            setupAutocomplete("#Editexpensetype", "#EditexpensetypeHidden");
+//        },
+//        error: function (xhr, status, error) {
+//            console.error("Failed to fetch expense types:", error);
+//            toastr.error("Failed to fetch expense types.");
+//        }
+//    });
+//}
+
 
 $(document).ready(function () {
-    function GetUsersList() {
-        $.ajax({
-            url: '/Task/GetUserName',
-            method: 'GET',
-            success: function (result) {
-                var UserList = result.map(function (data) {
-                    return {
-                        label: data.firstName + ' ' + data.lastName + ' (' + data.userName + ')',
-                        value: data.id
-                    };
-                });
-
-                function setupAutocomplete(inputId, hiddenId) {
-                    $(inputId).autocomplete({
-                        source: UserList,
-                        minLength: 0,
-                        focus: function (event, ui) {
-                            event.preventDefault();
-                            $(inputId).val(ui.item.label);
-                        },
-                        select: function (event, ui) {
-                            $(inputId).val(ui.item.label);
-                            $(hiddenId).val(ui.item.value);
-                            event.preventDefault();
-                            return false;
-                        }
-                    }).focus(function () {
-                        $(this).autocomplete("search");
-                    });
-                }
-
-                setupAutocomplete("#txtExpenseUsername", "#txtExpenseUsernameHidden");
-                setupAutocomplete("#EditExpenseUserName", "#EditExpenseUserNameHidden");
-            },
-            error: function (err) {
-                toastr.error("Failed to fetch User List: ", err);
+    $('#txtexpensetype').select2({
+        placeholder: 'Select Expense Type',
+        width: '100%',
+        dropdownParent: $('#AddExpenseModel'), 
+        ajax: {
+            url: '/ExpenseMaster/GetExpenseTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
             }
-        });
-    }
+        }
+    });
 
-    GetUsersList();
+    $(' #Editexpensetype').select2({
+        placeholder: 'Select Expense Type',
+        width: '100%',
+        dropdownParent: $('#EditExpenseModel'),
+        ajax: {
+            url: '/ExpenseMaster/GetExpenseTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            }
+        }
+    });
+
+    $('#txtExpensepaymenttype').select2({
+        placeholder: 'Select Payment type',
+        width: '100%',
+        dropdownParent: $('#EditExpenseModel'),
+        ajax: {
+            url: '/ExpenseMaster/GetPaymentTypeList',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {debugger
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.type
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+    $('#txtExpenseUsername').select2({
+        placeholder: 'Select Employee',
+        width: '100%',
+        dropdownParent: $('#AddExpenseModel'),
+        ajax: {
+            url: '/Task/GetUserName',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                debugger
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.firstName + ' ' + item.lastName + ' (' + item.userName + ')',
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+    $('#EditExpenseUserName').select2({
+        placeholder: 'Select Employee',
+        width: '100%',
+        dropdownParent: $('#EditExpenseModel'),
+        ajax: {
+            url: '/Task/GetUserName',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                debugger
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.firstName + ' ' + item.lastName + ' (' + item.userName + ')',
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
 });
+
+//$(document).ready(function () {
+
+//    function GetUsersList() {
+//        $.ajax({
+//            url: '/Task/GetUserName',
+//            method: 'GET',
+//            success: function (result) {
+//                var UserList = result.map(function (data) {
+//                    return {
+//                        label: data.firstName + ' ' + data.lastName + ' (' + data.userName + ')',
+//                        value: data.id
+//                    };
+//                });
+
+//                function setupAutocomplete(inputId, hiddenId) {
+//                    $(inputId).autocomplete({
+//                        source: UserList,
+//                        minLength: 0,
+//                        focus: function (event, ui) {
+//                            event.preventDefault();
+//                            $(inputId).val(ui.item.label);
+//                        },
+//                        select: function (event, ui) {
+//                            $(inputId).val(ui.item.label);
+//                            $(hiddenId).val(ui.item.value);
+//                            event.preventDefault();
+//                            return false;
+//                        }
+//                    }).focus(function () {
+//                        $(this).autocomplete("search");
+//                    });
+//                }
+
+//                setupAutocomplete("#txtExpenseUsername", "#txtExpenseUsernameHidden");
+//                setupAutocomplete("#EditExpenseUserName", "#EditExpenseUserNameHidden");
+//            },
+//            error: function (err) {
+//                toastr.error("Failed to fetch User List: ", err);
+//            }
+//        });
+//    }
+
+//    GetUsersList();
+//});
 
 function SelectExpenseTypeId() {
     document.getElementById("txtexpensetypeid").value = document.getElementById("txtexpensetype").value;
@@ -166,7 +274,7 @@ function GetParameterByName(name, url) {
 function AddMyExpenseDetails() {
     if ($('#userexpenseform').valid()) {
         var formData = new FormData();
-        formData.append("ExpenseType", $("#txtexpensetypeHidden").val());
+        formData.append("ExpenseType", $("#txtexpensetype").val());
         formData.append("Description", $("#txtDescription").val());
         formData.append("BillNumber", $("#txtbillno").val());
         formData.append("Date", $("#txtdate").val());
@@ -204,14 +312,14 @@ function AddMyExpenseDetails() {
 function AddAllUserExpenseDetails() {
     if ($('#formexpensedetails').valid()) {
         var formData = new FormData();
-        formData.append("ExpenseType", $("#txtexpensetypeHidden").val());
+        formData.append("ExpenseType", $("#txtexpensetype").val());
         formData.append("Description", $("#txtDescription").val());
         formData.append("BillNumber", $("#txtbillno").val());
         formData.append("Date", $("#txtdate").val());
         formData.append("Account", $("#txtaccount").val());
         formData.append("TotalAmount", $("#txttotalamount").val());
         formData.append("Image", $("#txtimage")[0].files[0]);
-        formData.append("UserId", $("#txtExpenseUsernameHidden").val());
+        formData.append("UserId", $("#txtExpenseUsername").val());
         $.ajax({
             url: '/ExpenseMaster/AddexpenseDetails',
             type: 'Post',
@@ -257,35 +365,69 @@ function EditExpenseDetails(Id) {
         dataType: 'json',
         success: function (response) {
             $('#EditExpenseModel').modal('show');
-            $('#Editexpensetype').val(response.expenseTypeName);
-            $('#EditexpensetypeHidden').val(response.expenseType);
             $('#Editid').val(response.id);
             $('#EditDescription').val(response.description);
             $('#Editbillno').val(response.billNumber);
             $('#Editdate').val(response.date);
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
-            $('#txtExpensepaymenttype').val(response.paymentTypeName);
-            $('#EditExpensepaymenttypeid').val(response.paymentType);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
+
+            setSelectedExpenseType(response.expenseType, response.expenseTypeName);
+            setSelectedPaymentType(response.paymentType, response.paymentTypeName);
         },
         error: function () {
             toastr.error("Data not found");
         }
     });
 }
+function setSelectedExpenseType(expenseTypeId, expenseTypeName) {
+    if (!expenseTypeName || expenseTypeName === "null") {
+        return;
+    }
 
+    const $dropdown = $('#Editexpensetype');
+
+    $dropdown.empty();
+
+    const newOption = new Option(expenseTypeName, expenseTypeId, true, true);
+    $dropdown.append(newOption).trigger('change');
+}
+function setSelectedPaymentType(PaymentTypeId, PaymentTypeName) {
+    if (!PaymentTypeName || PaymentTypeName === "null") {
+        return;
+    }
+
+    const $dropdown = $('#txtExpensepaymenttype');
+
+    $dropdown.empty();
+
+    const newOption = new Option(PaymentTypeName, PaymentTypeId, true, true);
+    $dropdown.append(newOption).trigger('change');
+}
+function setSelectedUser(UserId, UserName) {
+    if (!UserName || UserName === "null") {
+        return;
+    }
+
+    const $dropdown = $('#EditExpenseUserName');
+
+    $dropdown.empty();
+
+    const newOption = new Option(UserName, UserId, true, true);
+    $dropdown.append(newOption).trigger('change');
+}
 function UpdateExpenseDetails() {
     if ($('#EditExpenseForm').valid()) {
         var formData = new FormData();
         formData.append("Id", $("#Editid").val());
-        formData.append("ExpenseType", $("#EditexpensetypeHidden").val());
+        formData.append("ExpenseType", $("#Editexpensetype").val());
         formData.append("Description", $("#EditDescription").val());
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
         formData.append("TotalAmount", $("#Edittotalamount").val());
-        formData.append("PaymentType", $("#EditExpensepaymenttypeid").val());
+        formData.append("PaymentType", $("#txtExpensepaymenttype").val());
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
@@ -328,8 +470,6 @@ function EditAllUserExpenseDetails(Id) {
         dataType: 'json',
         success: function (response) {
             $('#EditExpenseModel').modal('show');
-            $('#Editexpensetype').val(response.expenseTypeName);
-            $('#EditexpensetypeHidden').val(response.expenseType);
             $('#Editid').val(response.id);
             $('#EditDescription').val(response.description);
             $('#Editbillno').val(response.billNumber);
@@ -337,10 +477,11 @@ function EditAllUserExpenseDetails(Id) {
             $('#Edittotalamount').val(response.totalAmount);
             $('#Editaccount').val(response.account);
             $('#EditExpensepaymenttype').val(response.paymentType);
-            $('#EditExpenseUserName').val(response.fullName);
-            $('#EditExpenseUserNameHidden').val(response.userId);
             $('#EditIsPaid').val(response.isPaid ? "True" : "False");
             $('#EditIsApproved').val(response.isApproved ? "True" : "False");
+
+            setSelectedExpenseType(response.expenseType, response.expenseTypeName);
+            setSelectedUser(response.userId, response.fullName);
         },
         error: function () {
             toastr.error("Data not found");
@@ -351,7 +492,7 @@ function UpdateExpenseListDetails() {
     if ($('#EditExpenseForm').valid()) {
         var formData = new FormData();
         formData.append("Id", $("#Editid").val());
-        formData.append("ExpenseType", $("#EditexpensetypeHidden").val());
+        formData.append("ExpenseType", $("#Editexpensetype").val());
         formData.append("Description", $("#EditDescription").val());
         formData.append("BillNumber", $("#Editbillno").val());
         formData.append("Date", $("#Editdate").val());
@@ -360,7 +501,7 @@ function UpdateExpenseListDetails() {
         formData.append("IsPaid", $("#EditIsPaid").val());
         formData.append("IsApproved", $("#EditIsApproved").val());
         formData.append("Account", $("#Editaccount").val());
-        formData.append("UserId", $("#EditExpenseUserNameHidden").val());
+        formData.append("UserId", $("#EditExpenseUserName").val());
 
         $.ajax({
             url: '/ExpenseMaster/UpdateExpenseDetails',
@@ -1651,7 +1792,23 @@ $(document).ready(function () {
 
     initGrid();
 });
+document.addEventListener('change', function (e) {
+    if (e.target && e.target.name === 'check_Box') {
+        toggleApproveAllExpensesButton();
+    }
+});
 
+function toggleApproveAllExpensesButton() {
+
+    const isAnyChecked = document.querySelectorAll('input[name="check_Box"]:checked').length > 0;
+
+    const btn = document.getElementById('Approve-actions');
+    btn.style.display = isAnyChecked ? 'inline-block' : 'none';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('Approve-actions').style.display = 'none';
+});
 function GetExpenseTotalAmount() {
     var userId = {
         UserId: $("#txtuserid").val(),
@@ -1873,30 +2030,7 @@ function ApprovedExpenseList() {
         }]
     });
 }
-$(document).ready(function () {
-    $('#txtExpensepaymenttype').select2({
-        placeholder: 'Select Payment type',
-        width: '100%',
-        dropdownAutoWidth: true,
-        allowClear: true,
-        ajax: {
-            url: '/ExpenseMaster/GetPaymentTypeList',
-            dataType: 'json',
-            delay: 250,
-            processResults: function (data) {
-                return {
-                    results: data.map(item => ({
-                        id: item.id,
-                        text: item.type
-                    }))
-                };
-            },
-            error: function (xhr, status, error) {
-                console.error("Error fetching vendor list:", error);
-            }
-        }
-    });
-});
+
 function GetPayExpense() {
     if ($("#GetPayForm").valid()) {
         var formData = new FormData();
@@ -2136,6 +2270,19 @@ $(document).ready(function () {
     function getMyExpenseDatasource() {
         return {
             getRows: function (params) {
+
+                const currentDate = new Date();
+                const currentMonthValue = currentDate.getFullYear() + '-' + String(currentDate.getMonth() + 1).padStart(2, '0');
+
+                let selectMonthlyExpense = "";
+
+                if (selectedMonthFilter === "currentMonthRadio") {
+                    selectMonthlyExpense = currentMonthValue;
+                } else if (selectedMonthFilter === "lastMonthRadio") {
+                    const lastMonthDate = new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1);
+                    selectMonthlyExpense = lastMonthDate.getFullYear() + '-' + String(lastMonthDate.getMonth() + 1).padStart(2, '0');
+                }
+
                 const request = {
                     StartRow: params.startRow,
                     PageSize: params.endRow - params.startRow,
@@ -2153,7 +2300,7 @@ $(document).ready(function () {
                     UnapproveFilter: selectedTab === "Unapprove" ? true : false,
                     Approvefilter: selectedTab === "Approve" ? true : false,
                     AccountFilter: selectedTab === "Credit" ? "Credit" : "",
-                    Month: selectedMonthFilter === "lastMonthRadio" ? "Last" : selectedMonthFilter === "currentMonthRadio" ? "Current" : "",
+                    Month: selectMonthlyExpense,
                     StartDate: startDate,
                     EndDate: endDate,
                 };
@@ -2336,6 +2483,7 @@ $(document).ready(function () {
     const myGridElement = document.querySelector('#MyExpenseTable');
     agGrid.createGrid(myGridElement, MyExpenseGridOptions);
 
+    // Tab click handling
     $('.nav-link').on('click', function () {
         selectedTab = this.id;
         MyExpenseGridOptions.api.purgeInfiniteCache();
@@ -2349,12 +2497,13 @@ $(document).ready(function () {
         endDate = null;
     });
 
+    // Radio (month) filter handling
     $('.nav-radio').on('change', function () {
         selectedMonthFilter = this.id;
         const isBetweenSelected = $('#betweenMonthRadio').is(':checked');
 
         if (isBetweenSelected) {
-            $('#dateFilterContainer').show(); 
+            $('#dateFilterContainer').show();
         } else {
             $('#dateFilterContainer').hide();
             $('#txtstartdatebox').val('');
@@ -2362,7 +2511,8 @@ $(document).ready(function () {
             startDate = null;
             endDate = null;
         }
-        selectedTab = '';
+
+        selectedTab = ''; // Clear tab when date filter is used
         MyExpenseGridOptions.api.purgeInfiniteCache();
     });
 

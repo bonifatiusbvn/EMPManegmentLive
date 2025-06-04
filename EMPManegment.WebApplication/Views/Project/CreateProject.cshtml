@@ -8,10 +8,6 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 <style>
-    .auth-bg-cover {
-        width: 1800px;
-        margin-left: -300px;
-    }
 
     .Projectform-container {
         background: rgba(255, 255, 255, 0.9);
@@ -39,11 +35,6 @@
     }
 
     @@media only screen and (max-width: 768px) {
-        .auth-bg-cover {
-            width: 330px;
-            margin-left: 55px;
-            background: none;
-        }
 
         .Add_Members {
             margin-left: 150px;
@@ -57,11 +48,6 @@
     }
 
     @@media only screen and (min-width: 768px) and (max-width: 1024px) {
-        .auth-bg-cover {
-            width: 700px;
-            margin-left: 46px;
-            background: none;
-        }
 
         .Add_Members {
             margin-left: 435px;
@@ -69,12 +55,6 @@
     }
 
     @@media only screen and (min-width: 1024px) and (max-width: 1370px) {
-        .auth-bg-cover {
-            width: 670px;
-            margin-left: 55px;
-            background: none;
-            margin-top: -210px;
-        }
 
         .Add_Members {
             margin-left: 35px;
@@ -250,7 +230,6 @@
                                     {
                                         <select id="projectCountry" name="projectCountry" class="form-control select2 select2-teal"
                                                 data-dropdown-css-class="select2-teal" onchange="fn_getProjectState('ProjectState',null,this)">
-                                            <option selected value="">--Select Country--</option>
                                         </select>
                                     }
                                     <input type="hidden" id="txtprojectCountry" value="" />
@@ -268,7 +247,6 @@
                                     {
                                         <select id="ProjectState" name="ProjectState" class="form-control select2 select2-teal"
                                                 data-dropdown-css-class="select2-teal" onchange="fn_getProjectcitiesbystateId('ProjectCity', null, this)">
-                                            <option value="">--Select State--</option>
                                         </select>
                                     }
                                     <input type="hidden" id="txtProjectState" value="" />
@@ -286,7 +264,6 @@
                                     {
                                         <select id="ProjectCity" name="ProjectCity" class="form-control select2 select2-teal"
                                                 data-dropdown-css-class="select2-teal">
-                                            <option value="">--Select City--</option>
                                         </select>
                                     }
                                     <input type="hidden" id="txtProjectCity" value="" />
@@ -318,6 +295,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <span id="currentProjectImageName" class="d-none">@Model.ProjectImage</span>
                                @*  <div class="mb-3">
                                     <label class="form-label" for="project-thumbnail-img">Thumbnail Image</label>
                                     <input class="form-control mb-3" id="projectImage" type="file" accept="image/png, image/gif, image/jpeg">
@@ -464,7 +442,30 @@
 </div>
 <!-- ckeditor -->
 <!-- dropzone js -->
-<script>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+
+     $(document).ready(function () {
+        let countryId = $('#projectCountry').val();
+        let stateId = '@Model.State';
+        let cityId = '@Model.City';
+
+        if (countryId) {
+            fn_getProjectState('ProjectState', countryId, null, function () {
+                if (stateId) {
+                    $('#ProjectState').val(stateId).trigger('change');
+
+                    fn_getProjectcitiesbystateId('ProjectCity', stateId, null, function () {
+                        if (cityId) {
+                            $('#ProjectCity').val(cityId).trigger('change');
+                        }
+                    });
+                }
+            });
+        }
+    });
+
     document.addEventListener("DOMContentLoaded", function () {
         var today = new Date().toISOString().split('T')[0];
         document.getElementById("projectdeadline").value = today;
@@ -496,6 +497,7 @@
         document.getElementById('imagePreview').innerHTML = '<p class="text-muted">Logo removed. You can upload a new one.</p>';
         document.getElementById('IsLogoRemoved').value = 'true'; // signal to remove on server
     }
+
 </script>
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
+
 <script src="~/moduls/projectdetailsscript.js" asp-append-version="true"></script>

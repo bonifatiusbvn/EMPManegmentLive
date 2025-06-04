@@ -16,6 +16,15 @@ $(document).ready(function () {
                     if (!params.data || !params.data.id) {
                         return '';
                     }
+                    var colorClasses = [
+                        { bgClass: 'bg-primary-subtle', textClass: 'text-primary' },
+                        { bgClass: 'bg-secondary-subtle', textClass: 'text-secondary' },
+                        { bgClass: 'bg-success-subtle', textClass: 'text-success' },
+                        { bgClass: 'bg-info-subtle', textClass: 'text-info' },
+                        { bgClass: 'bg-warning-subtle', textClass: 'text-warning' },
+                        { bgClass: 'bg-danger-subtle', textClass: 'text-danger' },
+                        { bgClass: 'bg-dark-subtle', textClass: 'text-dark' }
+                    ];
                     var profileImageHtml;
                     if (params.data.companyLogo && params.data.companyLogo.trim() !== '') {
                         profileImageHtml = '<img src="/Content/Image/' + params.data.companyLogo + '" style="height: 40px; width: 40px; border-radius: 50%;" ' +
@@ -149,12 +158,9 @@ function AddCompanyDetails() {
         formData.append("PinCode", $("#txtPincode").val());
         formData.append("Address", $("#txtCompanyAddress").val());
         formData.append("Gst", $("#txtcompanygst").val());
-        const imgElement = document.getElementById('companylogo');
-        const altText = imgElement.alt;
-        var file = $("#companylogo").attr("src");
-        if (file && file !== "assets/images/new-document.png") {
-            var blob = dataURLToBlob(file);
-            formData.append("CompanyLogo", blob, altText);
+        var fileInput = document.getElementById("fileUpload");
+        if (fileInput.files.length > 0) {
+            formData.append("CompanyLogo", fileInput.files[0]);
         }
 
         $.ajax({
@@ -220,21 +226,16 @@ function UpdateCompanyDetails() {
         formData.append("Address", $("#txtCompanyAddress").val());
         formData.append("UpdatedBy", $("#txtCompanyUpdatedby").val());
         formData.append("Gst", $("#txtcompanygst").val());
-        var imageName = $("#currentCompanyImageName").text().trim();
-        const imageFile = document.getElementById('companylogo');
-        if (imageName && (imageFile == null)) {
-            formData.append("CompanyImageName", imageName);
+
+        var fileInput = document.getElementById("fileUpload");
+        var existingImageName = $("#currentCompanyImageName").text().trim();
+
+        if (fileInput.files.length > 0) {
+            formData.append("CompanyLogo", fileInput.files[0]);
+        } else {
+            formData.append("CompanyImageName", existingImageName);
         }
-        else {
-            if (imageFile != null) {
-                const altImgText = imageFile.alt;
-                var file = $("#companylogo").attr("src");
-                if (file && file !== "assets/images/new-document.png") {
-                    var blob = dataURLToBlob(file);
-                    formData.append("CompanyLogo", blob, altImgText);
-                }
-            }
-        }
+
         $.ajax({
             url: '/Company/UpdateCompanyDetails',
             type: 'POST',
@@ -243,7 +244,6 @@ function UpdateCompanyDetails() {
             processData: false,
             contentType: false,
             success: function (Result) {
-
                 Swal.fire({
                     title: Result.message,
                     icon: 'success',
@@ -253,9 +253,8 @@ function UpdateCompanyDetails() {
                     window.location = '/Company/CompanyList';
                 });
             },
-        })
-    }
-    else {
+        });
+    } else {
         toastr.warning("Kindly fill all datafield");
     }
 }

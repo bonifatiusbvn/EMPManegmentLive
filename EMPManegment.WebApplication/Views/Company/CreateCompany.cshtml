@@ -112,11 +112,7 @@
                                 onchange="fn_getCompanyState('CompanyState',null,this)" required>
                             @if (Model.CountryName != null)
                             {
-                                <option value="@Model.Country">@Model.CountryName</option>
-                            }
-                            else
-                            {
-                                <option value="">--Select Country--</option>
+                                <option value="@Model.Country" selected>@Model.CountryName</option>
                             }
                         </select>
                     </div>
@@ -129,11 +125,7 @@
                                 onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)" required>
                             @if (Model.StateName != null)
                             {
-                                <option value="@Model.State">@Model.StateName</option>
-                            }
-                            else
-                            {
-                                <option value="">--Select State--</option>
+                                <option value="@Model.State" selected>@Model.StateName</option>
                             }
                         </select>
                     </div>
@@ -145,11 +137,7 @@
                                 data-dropdown-css-class="select2-teal" required>
                             @if (Model.CityName != null)
                             {
-                                <option value="@Model.City">@Model.CityName</option>
-                            }
-                            else
-                            {
-                                <option value="">--Select City--</option>
+                                <option value="@Model.City" selected>@Model.CityName</option>
                             }
                         </select>
                     </div>
@@ -195,7 +183,7 @@
                             </div>
                         </div>
                     </div>
-
+                    <span id="currentCompanyImageName" class="d-none">@Model.CompanyLogo</span>
                     <input type="hidden" name="IsLogoRemoved" id="IsLogoRemoved" value="false" />
 
                     @*                     <div class="col-12 mb-3">
@@ -247,6 +235,29 @@
 
 <script type="text/javascript">
     var userPermissions = '@Html.Raw(Json.Serialize(UserSession.FormPermisionData))';
+
+
+        $(document).ready(function () {
+        let countryId = $('#CompanyCountry').val();
+        let stateId = '@Model.State';
+        let cityId = '@Model.City';
+
+        if (countryId) {
+            fn_getCompanyState('CompanyState', countryId, null, function () {
+                if (stateId) {
+                    $('#CompanyState').val(stateId).trigger('change');
+
+                    fn_getCompanycitiesbystateId('CompanyCity', stateId, null, function () {
+                        if (cityId) {
+                            $('#CompanyCity').val(cityId).trigger('change');
+                        }
+                    });
+                }
+            });
+        }
+    });
+
+
     $(document).ready(function () {
 
         if ($("#textViewMode").val() === "True") {
