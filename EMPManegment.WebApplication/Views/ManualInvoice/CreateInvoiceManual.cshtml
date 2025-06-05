@@ -206,30 +206,7 @@
                                                         }
 
                                                     </select>
-                                                    <div id="DollarModal" class="modal fade" tabindex="-1" role="dialog">
-                                                        <div class="modal-dialog" role="document">
-                                                            <div class="modal-content">
-                                                                <form id="AddDollarAmountForm">
-                                                                    <div class="modal-header bg-primary-subtle p-3">
-                                                                        <h5 class="modal-title">$Price</h5>
-                                                                        <button type="button" class="btn-close" onclick="CloseDollarModel()"></button>
-                                                                    </div>
-                                                                    <div class="modal-body">
-                                                                        <div class="hstack gap-3 align-items-start">
-                                                                            <div class="flex-grow-1">
-                                                                                <label class="form-label">1$ = <span class="text-danger">*</span></label>
-                                                                                <input type="text" id="txtDollarAmount" value="@Model.DollarPrice" placeholder="(₹)" />
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="modal-footer">
-                                                                        <button type="button" class="btn btn-light" onclick="CloseDollarModel()">Close</button>
-                                                                        <button type="button" class="btn button-teal" onclick="SaveDollarAmount()">Save</button>
-                                                                    </div>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                   
 
                                                 </th>
                                                 <th>
@@ -463,6 +440,30 @@
                     </div>
                 </div>
             </form>
+        </div>
+        <div id="DollarModal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <form id="AddDollarAmountForm">
+                        <div class="modal-header bg-teal p-3">
+                            <h5 class="modal-title" style="color:white;">$Price</h5>
+                            <button type="button" class="btn-close" onclick="CloseDollarModel()"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="hstack gap-3 align-items-start">
+                                <div class="flex-grow-1">
+                                    <label class="form-label">1$ = <span class="text-danger">*</span></label>
+                                    <input type="text" id="txtDollarAmount" value="@Model.DollarPrice" placeholder="(₹)" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" onclick="CloseDollarModel()">Close</button>
+                            <button type="button" class="btn button-teal" onclick="SaveDollarAmount()">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>

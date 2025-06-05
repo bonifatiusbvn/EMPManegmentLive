@@ -946,3 +946,7 @@
     background-color: #16989A !important;
     color: white !important;
 }
+label:not(.form-check-label):not(.custom-file-label) {
+    font-size: 13px !important;
+    font-weight: 400 !important;
+}

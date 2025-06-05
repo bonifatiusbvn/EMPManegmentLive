@@ -224,10 +224,22 @@ $(document).ready(function () {
                 maxlength: "phone number must be 10 digits long"
             },
             addressInput: "Please Enter Address",
+        },
+        errorPlacement: function (error, element) {
+
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container'));
+            }
+            else {
+                error.insertAfter(element);
+            }
         }
     })
     $('#btnUpdateDetails').on('click', function () {
         $("#frmuserDetails").validate();
+    });
+    $('.select2').on('change', function () {
+        $(this).valid();
     });
 });
 
@@ -1061,8 +1073,20 @@ $(document).ready(function () {
             drpCuCity: "Please Select City",
             passwordinput: "Please Enter Password",
             confirmpasswordinput: "Please Enter Confirm Password",
+        },
+        errorPlacement: function (error, element) {
+
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container'));
+            }
+            else {
+                error.insertAfter(element);
+            }
         }
     })
+    $('.select2').on('change', function () {
+        $(this).valid();
+    });
 });
 function CreateUser() {
     var form = document.getElementById('CreateUserForm');

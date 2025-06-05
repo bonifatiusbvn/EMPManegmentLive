@@ -610,34 +610,30 @@ $(document).ready(function () {
 
     $("#CreateInvoiceForm").validate({
         rules: {
-            textVendorName: "required",
-            textCompanyName: "required",
-            txtInvoicepaymentmethod: "required",
-            textDispatchThrough: "required",
-        },
-        highlight: function (element) {
-            if (element.id === "txtInvoicepaymentmethod" || element.id === "textDispatchThrough") {
-                $(element).addClass('is-invalid');
-            }
-        },
-        unhighlight: function (element) {
-            if (element.id === "txtInvoicepaymentmethod" || element.id === "textDispatchThrough") {
-                $(element).removeClass('is-invalid');
-            }
-        },
-        errorPlacement: function (error, element) {
-            if (element.attr("id") === "textVendorName" || element.attr("id") === "textCompanyName") {
-                error.insertAfter(element);
-            }
+            ddlVendorName: "required",
+            ddlinvompanyName: "required",
+            ddlInvoicepaymentmethod: "required",
+            ddlInvoicepaymenttype: "required",
         },
         messages: {
-            textVendorName: "Select Vendor Name",
-            textCompanyName: "Select Company Name",
-            txtInvoicepaymentmethod: "",
-            textDispatchThrough: "",
+            ddlVendorName: "Select Vendor Name",
+            ddlinvompanyName: "Select Company Name",
+            ddlInvoicepaymentmethod: "Select Payment Method",
+            ddlInvoicepaymenttype: "Select Payment type",
+        },
+        errorPlacement: function (error, element) {
+
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container'));
+            }
+            else {
+                error.insertAfter(element);
+            }
         }
     });
-
+    $('.select2').on('change', function () {
+        $(this).valid();
+    });
 
     $('#ddlinvompanyName,#txtInvoiceCompanyName').select2({
         placeholder: 'Select Company',

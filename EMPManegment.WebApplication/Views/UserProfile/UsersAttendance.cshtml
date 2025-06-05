@@ -147,36 +147,37 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form id="frmadduserdetails">
+                    <form id="AddUserAttendanceForm">
                         <div class="mb-3">
-                            <label for="customername-field" class="form-label" hidden>AttandanceId</label>
-                            <input id="txtattandanceId" class="form-control" hidden />
-                            <input id="txtuserId" class="form-control" hidden />
+                            <label for="txtattandanceId" class="form-label" hidden>AttendanceId</label>
+                            <input id="txtattandanceId" name="txtattandanceId" class="form-control" hidden />
+                            <input id="txtuserId" name="txtuserId" class="form-control" hidden />
                         </div>
 
                         <div class="mb-3">
-                            <label for="customername-field" class="form-label">UserName<span class="text-danger">*</span></label>
+                            <label for="ddlusername" class="form-label">UserName<span class="text-danger">*</span></label>
                             <select class="form-control select2 select2-teal"
                                     data-dropdown-css-class="select2-teal" id="ddlusername" name="ddlusername">
                             </select>
-                            <input type="hidden" id="txtuserName" class="form-control" />
+                            <input type="hidden" id="txtuserName" name="txtuserName" class="form-control" />
                         </div>
 
                         <div class="mb-3">
-                            <label for="email-field" class="form-label">Date<span class="text-danger">*</span></label>
+                            <label for="txtDate" class="form-label">Date<span class="text-danger">*</span></label>
                             <input type="date" id="txtDate" name="txtDate" class="form-control material_blue" />
                         </div>
 
                         <div class="mb-3">
-                            <label for="phone-field" class="form-label">Intime<span class="text-danger">*</span></label>
+                            <label for="txtIntime" class="form-label">Intime<span class="text-danger">*</span></label>
                             <input type="datetime-local" id="txtIntime" name="txtIntime" class="form-control material_blue" />
                         </div>
 
                         <div class="mb-3">
-                            <label for="date-field" class="form-label">OutTime</label>
-                            <input type="datetime-local" id="txtOutTime" class="form-control material_blue" />
+                            <label for="txtOutTime" class="form-label">OutTime</label>
+                            <input type="datetime-local" id="txtOutTime" name="txtOutTime" class="form-control material_blue" />
                         </div>
                     </form>
+
                 </div>
                 <div class="modal-footer">
                     <div class="hstack gap-2 justify-content-end">
@@ -198,6 +199,8 @@
     </h4>
 </div>
 
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
 
      window.userFormPermissions = @Html.Raw(Json.Serialize(UserSession.FormPermisionData));
@@ -224,9 +227,4 @@
 
 </script>
 
-<script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="~/moduls/userattendancescript.js" asp-append-version="true"></script>
-
-
-
-

@@ -50,7 +50,7 @@
                                         {
                                             <select class="form-control select2 select2-teal"
                                                     data-dropdown-css-class="select2-teal"
-                                                    id="ddlVendorName">
+                                                    id="ddlVendorName" name="ddlVendorName">
                                             </select>
                                         }
                                         <input type="hidden" id="txtVendorName" />
@@ -87,7 +87,7 @@
                                         {
                                             <select class="form-control select2 select2-teal"
                                                     data-dropdown-css-class="select2-teal"
-                                                    id="ddlinvompanyName">
+                                                    id="ddlinvompanyName" name="ddlinvompanyName">
                                             </select>
                                         }
                                         <input type="hidden" id="txtCompanyName" />
@@ -227,7 +227,11 @@
                                         <label class="form-label">Payment Method <span class="text-danger">*</span></label>
                                         <select class="form-control select2 select2-teal"
                                                 data-dropdown-css-class="select2-teal"
-                                                id="ddlInvoicepaymentmethod">
+                                                id="ddlInvoicepaymentmethod" name="ddlInvoicepaymentmethod">
+                                            @if (Model.PaymentMethod != null)
+                                            {
+                                                <option value="@Model.PaymentMethod" selected>@Model.PaymentMethodName</option>
+                                            }
                                         </select>
                                         <input type="hidden" id="txtCompanyName" />
                                     </div>
@@ -235,10 +239,13 @@
                                         <label class="form-label">Payment Status<span class="text-danger">*</span></label>
                                         <select class="form-control select2 select2-teal"
                                                 data-dropdown-css-class="select2-teal"
-                                                id="ddlInvoicepaymenttype">
+                                                id="ddlInvoicepaymenttype" name="ddlInvoicepaymenttype">
+                                            @if (Model.PaymentStatus != null)
+                                            {
+                                                <option value="@Model.PaymentStatus" selected>@Model.PaymentStatusName</option>
+                                            }
                                         </select>
                                         <input type="hidden" id="txtCompanyName" />
-
                                     </div>
                                 </div>
                             </div>

@@ -7,7 +7,7 @@
         var imageUrl = !string.IsNullOrEmpty(@m.Image) ? Url.Content($"~/{@m.Image}") : null;
         var initials = (!string.IsNullOrEmpty(@m.FirstName) && !string.IsNullOrEmpty(@m.LastName)) ? $"{@m.FirstName[0]}{@m.LastName[0]}".ToUpper() : null;
 
-        <div class="mx-n4 px-4" style="height: 40px;">
+        <div class="mx-n4 px-4" style="height: 50px;">
             <div class="vstack1 gap-3">
                 <div class="d-flex align-items-center">
                     <div class="avatar-xs flex-shrink-0 me-3">

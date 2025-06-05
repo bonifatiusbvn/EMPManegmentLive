@@ -394,13 +394,29 @@ $(document).ready(function () {
             textCompanyName: "required",
             textInvoiceNo: "required",
             textInvoiceDate: "required",
+            txtpaymentmethod: "required",
+            txtpaymenttype: "required",
         },
         messages: {
             textVendorName: "Enter Vendor Name",
             textCompanyName: "Enter Company Name",
             textInvoiceNo: "Please Enter InvoiceNo",
             textInvoiceDate: "Please Select Date",
+            txtpaymentmethod: "Select Payment Method",
+            txtpaymenttype: "Select Payment type",
+        },
+        errorPlacement: function (error, element) {
+
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container'));
+            }
+            else {
+                error.insertAfter(element);
+            }
         }
+    });
+    $('.select2').on('change', function () {
+        $(this).valid();
     });
 });
 function InsertManualInvoiceDetails() {

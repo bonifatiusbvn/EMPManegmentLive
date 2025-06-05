@@ -101,7 +101,7 @@
 
                     <div class="col-md-4 mb-3">
                         <label for="drpCuCountry" class="form-label required-field">Country</label>
-                        <select id="drpCuCountry" class="form-control select2 select2-teal"
+                        <select id="drpCuCountry" name="drpCuCountry" class="form-control select2 select2-teal"
                                 data-dropdown-css-class="select2-teal"
                                 onchange="fn_getUserState('drpCuState',null,this)" required>
                             <option selected value="">--Select Country--</option>
@@ -111,7 +111,7 @@
                     <!-- State -->
                     <div class="col-md-4 mb-3">
                         <label for="drpCuState" class="form-label required-field">State</label>
-                        <select id="drpCuState" class="form-control select2 select2-teal"
+                        <select id="drpCuState" name="drpCuState" class="form-control select2 select2-teal"
                                 data-dropdown-css-class="select2-teal"
                                 onchange="fn_getUsercitiesbystateId('drpCuCity', null, this)" required>
                             <option value="">--Select State--</option>
@@ -121,7 +121,7 @@
                     <!-- City -->
                     <div class="col-md-4 mb-3">
                         <label for="drpCuCity" class="form-label required-field">City</label>
-                        <select id="drpCuCity" class="form-control select2 select2-teal"
+                        <select id="drpCuCity" name="drpCuCity" class="form-control select2 select2-teal"
                                 data-dropdown-css-class="select2-teal" required>
                             <option value="">--Select City--</option>
                         </select>

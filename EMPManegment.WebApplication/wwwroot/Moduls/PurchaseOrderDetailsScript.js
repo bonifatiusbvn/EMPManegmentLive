@@ -387,35 +387,28 @@ $(document).ready(function () {
             textVendorName: "required",
             textCompanyName: "required",
             txtPOpaymentmethod: "required",
-            textDescription: "required",
+            txtPOpaymenttype: "required",
             textDeliveryStatus: "required",
         },
-        highlight: function (element) {
-            if (element.id === "txtPOpaymentmethod" || element.id === "textDeliveryStatus") {
-                $(element).addClass('is-invalid');
-            }
-        },
-        unhighlight: function (element) {
-            if (element.id === "txtPOpaymentmethod" || element.id === "textDeliveryStatus") {
-                $(element).removeClass('is-invalid');
-            }
-        },
         errorPlacement: function (error, element) {
-            if (element.attr("name") === "textVendorName" ||
-                element.attr("name") === "textCompanyName" ||
-                element.attr("name") === "textDescription") {
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container'));
+            }
+            else {
                 error.insertAfter(element);
             }
         },
         messages: {
             textVendorName: "Select Vendor Name",
             textCompanyName: "Select Company Name",
-            txtPOpaymentmethod: "",
-            textDescription: "Please Enter Description",
-            textDeliveryStatus: "",
+            txtPOpaymentmethod: "Select Payment Method",
+            txtPOpaymenttype : "Select Payment Type",
+            textDeliveryStatus: "Enter Delivery Status",
         }
     });
-
+    $('.select2').on('change', function () {
+        $(this).valid();
+    });
 
 
     $("#UpdateOrderDetailsForm").validate({

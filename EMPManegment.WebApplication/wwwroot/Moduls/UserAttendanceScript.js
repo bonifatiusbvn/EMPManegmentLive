@@ -1482,8 +1482,7 @@ function DisplayAddUserModel() {
 
 function btnSaveUserAttendance() {
     siteloadershow();
-
-    if ($('#frmadduserdetails').valid()) {
+    if ($("#AddUserAttendanceForm").valid()) {
         var formData = new FormData();
         formData.append("UserId", $("#ddlusername").val());
         formData.append("Date", $("#txtDate").val());
@@ -1522,4 +1521,40 @@ function btnSaveUserAttendance() {
     }
 }
 
+$(document).ready(function () {
+    $("#AddUserAttendanceForm").validate({
+        rules: {
+            ddlusername: {
+                required: true
+            },
+            txtDate: {
+                required: true
+            },
+            txtIntime: {
+                required: true
+            }
+        },
+        messages: {
+            ddlusername: "Please select a User Name",
+            txtDate: "Please enter a Date",
+            txtIntime: "Please enter an Intime"
+        },
+        errorPlacement: function (error, element) {
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container')); // for select2
+            } else {
+                error.insertAfter(element);
+            }
+        },
+        highlight: function (element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element) {
+            $(element).removeClass('is-invalid');
+        }
+    });
 
+    $('.select2').on('change', function () {
+        $(this).valid(); // re-validate select2 on change
+    });
+});
