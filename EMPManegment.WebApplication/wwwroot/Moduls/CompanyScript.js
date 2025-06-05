@@ -298,8 +298,20 @@ $(document).ready(function () {
             CompanyCountry: "Please Enter Country",
             txtPincode: "Please Enter Pincode",
             txtCompanyAddress: "Please Enter Address",
+        },
+        errorPlacement: function (error, element) {
+
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container'));
+            }
+            else {
+                error.insertAfter(element);
+            }
         }
     })
+    $('.select2').on('change', function () {
+        $(this).valid();
+    });
 });
 
 function deleteCompany(Id) {

@@ -12,7 +12,19 @@
                    : string.Empty;
 }
 <style>
+    #txtcompanyname-error, #txtcompanycontactnumber-error, #txtcompanyemail-error, #CompanyCountry-error, #CompanyState-error,
+    #CompanyCity-error, #txtPincode-error, #txtCompanyAddress-error {
+        color: #dc3545;
+        font-size: 90%;
+    }
 
+    label.failed {
+        color: #dc3545;
+    }
+
+    .is-invalid {
+        border: 1px solid #dc3545;
+    }
 
     #imagePreview img {
         max-width: 150px;
@@ -79,22 +91,22 @@
                     <!-- Company Name -->
                     <div class="col-md-6 mb-3">
                         <label for="txtcompanyname" class="form-label required-field">Company Name</label>
-                        <input type="text" class="form-control" id="txtcompanyname"
-                               value="@Model.CompnyName" placeholder="Enter company name" required>
+                        <input type="text" class="form-control" id="txtcompanyname" name="txtcompanyname"
+                               value="@Model.CompnyName" placeholder="Enter company name">
                     </div>
 
                     <!-- Email -->
                     <div class="col-md-6 mb-3">
                         <label for="txtcompanyemail" class="form-label required-field">Email</label>
-                        <input type="email" class="form-control" id="txtcompanyemail"
-                               value="@Model.Email" placeholder="Enter company email" required>
+                        <input type="email" class="form-control" id="txtcompanyemail" name="txtcompanyemail"
+                               value="@Model.Email" placeholder="Enter company email">
                     </div>
 
                     <!-- Contact Number -->
                     <div class="col-md-6 mb-3">
                         <label for="txtcompanycontactnumber" class="form-label required-field">Contact Number</label>
-                        <input type="text" class="form-control" id="txtcompanycontactnumber"
-                               value="@Model.ContactNumber" placeholder="Enter contact number" required>
+                        <input type="text" class="form-control" id="txtcompanycontactnumber" name="txtcompanycontactnumber"
+                               value="@Model.ContactNumber" placeholder="Enter contact number">
                     </div>
 
                     <!-- GST -->
@@ -107,9 +119,9 @@
                     <!-- Country -->
                     <div class="col-md-3 mb-3">
                         <label for="CompanyCountry" class="form-label required-field">Country</label>
-                        <select id="CompanyCountry" class="form-control select2 select2-teal"
+                        <select id="CompanyCountry" name="CompanyCountry" class="form-control select2 select2-teal"
                                 data-dropdown-css-class="select2-teal"
-                                onchange="fn_getCompanyState('CompanyState',null,this)" required>
+                                onchange="fn_getCompanyState('CompanyState',null,this)">
                             @if (Model.CountryName != null)
                             {
                                 <option value="@Model.Country" selected>@Model.CountryName</option>
@@ -120,9 +132,9 @@
                     <!-- State -->
                     <div class="col-md-3 mb-3">
                         <label for="CompanyState" class="form-label required-field">State</label>
-                        <select id="CompanyState" class="form-control select2 select2-teal"
+                        <select id="CompanyState" name="CompanyState" class="form-control select2 select2-teal"
                                 data-dropdown-css-class="select2-teal"
-                                onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)" required>
+                                onchange="fn_getCompanycitiesbystateId('CompanyCity', null, this)">
                             @if (Model.StateName != null)
                             {
                                 <option value="@Model.State" selected>@Model.StateName</option>
@@ -133,8 +145,8 @@
                     <!-- City -->
                     <div class="col-md-3 mb-3">
                         <label for="CompanyCity" class="form-label required-field">City</label>
-                        <select id="CompanyCity" class="form-control select2 select2-teal"
-                                data-dropdown-css-class="select2-teal" required>
+                        <select id="CompanyCity" name="CompanyCity" class="form-control select2 select2-teal"
+                                data-dropdown-css-class="select2-teal">
                             @if (Model.CityName != null)
                             {
                                 <option value="@Model.City" selected>@Model.CityName</option>
@@ -145,14 +157,14 @@
                     <!-- Pincode -->
                     <div class="col-md-3 mb-3">
                         <label for="txtPincode" class="form-label required-field">PinCode</label>
-                        <input type="number" class="form-control" id="txtPincode"
-                               value="@Model.PinCode" placeholder="Enter pincode" required>
+                        <input type="number" class="form-control" id="txtPincode" name="txtPincode"
+                               value="@Model.PinCode" placeholder="Enter pincode">
                     </div>
 
                     <!-- Address -->
                     <div class="col-12 mb-3">
                         <label for="txtCompanyAddress" class="form-label required-field">Address</label>
-                        <textarea class="form-control" id="txtCompanyAddress" rows="3"
+                        <textarea class="form-control" id="txtCompanyAddress" name="txtCompanyAddress" rows="3"
                                   placeholder="Enter company address" required>@Model.Address</textarea>
                     </div>
 

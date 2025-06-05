@@ -13,15 +13,23 @@
                    : string.Empty;
 }
 <style>
-    .form-container {
-        background: rgba(255, 255, 255, 0.9);
-        width: 1600px;
-        margin-top: -50px;
-        margin-left: -70px;
+    #companynameInput-error, #contactnumberInput-error, #phonenumberInput-error, #emailidInput-error, #ddlVendorType-error,
+    #VendorCountry-error, #VendorState-error, #VendorCity-error,
+    #AddressidInput-error, #pincodeidInput-error, #firstnameInput-error, #lastnameInput-error, #CompanyType-error,
+    #companyemailInput-error, #worknumberInput-error, #banknameInput-error, #branchInput-error, #accountnameInput-error,
+    #accountnumberInput-error, #ifscInput-error, #GSTNumberInput-error, #banknameInput-error, #branchInput-error,
+    #accountnameInput-error, #accountnumberInput-error, #ifscInput-error, #GSTNumberInput-error
+    {
+        color: #dc3545;
+        font-size: 90%;
     }
 
-    .Bank_Details {
-        height: 455px;
+    label.failed {
+        color: #dc3545;
+    }
+
+    .is-invalid {
+        border: 1px solid #dc3545;
     }
 
     #vendorImagePreview {
@@ -47,10 +55,6 @@
     }
 
     @@media only screen and (max-width: 768px) {
-
-        .Bank_Details {
-            height: 600px;
-        }
 
         #vendorImagePreview {
             height: 160px;
@@ -139,7 +143,7 @@
 <!-- end page title -->
 <div class="fm-container col-lg-12">
     <div class="auth-page-wrapper py-3 d-flex justify-content-center align-items-center min-vh-100">
-        <form id="createVendorform" autocomplete="off" class="form-container">
+        <form id="createVendorform" autocomplete="off">
             <div class="row">
                 <input type="hidden" class="form-control" id="textViewMode" value="@ViewBag.ViewMode.ToString()" readonly />
                 <div class="col-lg-8">
@@ -401,7 +405,7 @@
                         <!-- end card body -->
                     </div>
                     <!-- end card -->
-                    <div class="card Bank_Details  fm-card">
+                    <div class="card  fm-card">
                         <div class="card-header fm-card-header">
                             Bank Details
                         </div>

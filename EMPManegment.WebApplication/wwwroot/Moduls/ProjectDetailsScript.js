@@ -3,30 +3,42 @@ $(document).ready(function () {
     GetAllUserProjectDetailsList();
 
     GetMemberList();
+
+    $('#projectMemberDropdown').select2({
+        placeholder: 'Select Members',
+        allowClear: true,
+        tags: true,
+        dropdownCssClass: 'select2-teal',
+        dropdownParent: $('#inviteMembersModal'),
+        width: '100%'
+    });
 });
 
 function GetMemberList() {
     $.ajax({
         url: '/Task/GetUserName',
-        success: function (result) {
-            var dropdown = $('#projectMemberDropdown');
-            dropdown.empty();
-            $.each(result, function (i, data) {
-                dropdown.append('<option class="User-dropdown-item-custom" data-value="' + data.id + '">' + data.firstName + ' ' + data.lastName + '</option>');
-            });
-            dropdown.css("width", "300px");
-            dropdown.select2({
-                placeholder: 'Select Member',
-                closeOnSelect: false,
-                allowClear: true,
-                tags: false,
-                tokenSeparators: [',', ' ']
-            }).on('select2:select', function (e) {
-                $(this).next('.select2-container').find('.select2-search__field').val('');
-            });
+        method: 'GET',
+        success: function (response) {
+
+            var $dropdown = $('#projectMemberDropdown');
+            $dropdown.empty();
+
+            if (Array.isArray(response)) {
+                response.forEach(item => {
+                    const fullName = `${item.firstName} ${item.lastName}`;
+                    $dropdown.append(new Option(fullName, item.id, false, false));
+                });
+            }
+
+            $dropdown.trigger('change.select2');
+        },
+        error: function (xhr, status, error) {
+            console.error('Error fetching member list:', error);
         }
     });
 }
+
+
 
 $(document).ready(function () {
     $('#projectPriority').select2({
@@ -54,7 +66,7 @@ function btnCreateProjectDetail() {
         formData.append("ProjectHead", $("#projectHead").val());
         formData.append("ProjectStartDate", $("#projectStartDate").val());
         formData.append("ProjectEndDate", $("#projectEndDate").val());
-       
+
         formData.append("Area", $("#txtProjectArea").val());
         formData.append("BuildingName", $("#txtBuildingName").val());
         formData.append("State", $("#ProjectState").val());
@@ -133,6 +145,15 @@ $(document).ready(function () {
             projectCountry: "Please Enter Project Country",
             ProjectState: "Please Enter Project State",
             ProjectCity: "Please Enter Project City",
+        },
+        errorPlacement: function (error, element) {
+
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container'));
+            }
+            else {
+                error.insertAfter(element);
+            }
         }
     });
     $("#frmprojectdetails").validate({
@@ -151,6 +172,10 @@ $(document).ready(function () {
     });
     $('#projectDetails').on('click', function () {
         $('#frmprojectdetails').valid();
+    });
+
+    $('.select2').on('change', function () {
+        $(this).valid();
     });
 });
 
@@ -219,7 +244,7 @@ function invitemember() {
     $(selectElement.options).each(function () {
         var option = this;
         if (option.selected) {
-            var memberName = option.value.trim();
+            var memberName = option.text.trim();
 
             var objData = {
                 Fullname: memberName
@@ -259,6 +284,8 @@ function invitemember() {
                 }
                 else {
                     toastr.warning(Result.message);
+                    $("#inviteMembersModal").modal('hide');
+                    showProjectMembers(proProjectId)
                 }
             },
         })

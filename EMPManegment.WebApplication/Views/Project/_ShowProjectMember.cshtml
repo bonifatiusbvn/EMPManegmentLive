@@ -27,7 +27,7 @@
             </td>
             <td>@item.Fullname</td>
             <td>
-                @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))
+                @if (UserSession.FormPermisionData.Any(a => a.FormName == "Projec tDetails" && a.Delete == true))
                 {
                     <a class="btn text-danger btndeletedoc" data-user-id="@item.UserId"><i class="fas fa-trash"></i></a>
                 }
@@ -35,6 +35,3 @@
         </tr>
     }
 }
-
-
-

@@ -115,7 +115,7 @@ namespace EMPManagment.API.Controllers
             try
             {
                 var result = ProjectDetail.AddMemberToProject(AddMember);
-                if (result.Result.Code != (int)HttpStatusCode.NotFound && result.Result.Code != (int)HttpStatusCode.InternalServerError)
+                if (result.Result.Code == (int)HttpStatusCode.OK)
                 {
                     response.Code = (int)HttpStatusCode.OK;
                     response.Message = result.Result.Message;

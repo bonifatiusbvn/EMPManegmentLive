@@ -11,12 +11,14 @@
         <div class="card-header">
             <div class="row g-2">
                 <div class="col-lg-6">
-                    <h5 class="card-title mb-0">Team Members</h5>
+                    <h5 class="card-title mb-0 fm-fmheader">Team Members</h5>
                 </div>
-                <div class="col-lg-6">
-                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Add == true)))
+                <div class="col-lg-6" style="text-align:end;"> 
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Projec tDetails" && a.Add == true))
                     {
-                        <button class="btn btn-block btn-warning" style="margin-left: 640px;width: 141px;" onclick="openmemberpop()"><i class="fa-solid fa-circle-plus me-1"></i>Add Member</button>
+                        <button type="button" class="btn button-teal" onclick="openmemberpop()">
+                            <i class="ri-share-line me-1 align-bottom"></i>Invite Member
+                        </button>
                     }
                 </div>
             </div>
@@ -28,7 +30,7 @@
                         <th>FullName</th>
                         <th>Designation</th>
                         <th>Projects</th>
-                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))
+                        @if (UserSession.FormPermisionData.Any(a => a.FormName == "Projec tDetails" && (a.Delete == true)))
                         {
                             <th>Action</th>
                         }
@@ -58,18 +60,15 @@
                                         @item.Fullname
                                     </div>
                                 </div>
-
                             </td>
                             <td>
-                                <a href="#" class="text-muted">
                                     @item.Designation
-                                </a>
                             </td>
                             <td>
                                 @item.ProjectTitle
                             </td>
 
-                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "GetProjectDetails" && (a.Delete == true)))
+                            @if (UserSession.FormPermisionData.Any(a => a.FormName == "Projec tDetails" && (a.Delete == true)))
                             {
                                 <td>
                                     <a class="btn text-danger btndeletedoc" data-user-id="@item.UserId"><i class="fas fa-trash"></i></a>

@@ -437,8 +437,20 @@ $(document).ready(function () {
             accountnumberInput: "Please Enter BankAccountNo",
             ifscInput: "Please Enter BankIfsc",
             GSTNumberInput: "Please Enter Gstnumber",
+        },
+        errorPlacement: function (error, element) {
+
+            if (element.hasClass("select2-hidden-accessible")) {
+                error.insertAfter(element.next('.select2-container'));
+            }
+            else {
+                error.insertAfter(element);
+            }
         }
     })
+    $('.select2').on('change', function () {
+        $(this).valid();
+    });
 });
 
 function editnexttoPersonalDetails() {

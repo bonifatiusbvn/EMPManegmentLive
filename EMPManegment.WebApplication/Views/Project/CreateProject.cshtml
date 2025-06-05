@@ -8,13 +8,12 @@
     Layout = "~/Views/Shared/_HomeLayout.cshtml";
 }
 <style>
-
-    .Projectform-container {
-        background: rgba(255, 255, 255, 0.9);
-        width: 1600px;
-        margin-left: -80px;
+    #projectPriority-error, #projectTitle-error, #projectDescription-error, #projectStatus-error, #projectdeadline-error,
+    #txtBuildingName-error, #txtProjectArea-error, #txtProjectPincode-error, #projectCountry-error, #ProjectState-error, #ProjectCity-error,
+    #projectType-error, #projectHead-error, #projectLocation-error, #projectStartDate-error {
+        color: #dc3545;
+        font-size: 90%;
     }
-
     .Add_Members {
         margin-left: 200px;
     }
@@ -78,7 +77,7 @@
 <!-- end page title -->
 <div class="fm-container col-lg-12">
     <div class="auth-page-wrapper  py-3 d-flex justify-content-center align-items-center min-vh-100">
-        <div class="row Projectform-container">
+        <div class="row">
             <div class="col-lg-8">
                 <form id="formprojectdetails">
                     <div class="card fm-card">
@@ -296,35 +295,6 @@
                                     </div>
                                 </div>
                                 <span id="currentProjectImageName" class="d-none">@Model.ProjectImage</span>
-                               @*  <div class="mb-3">
-                                    <label class="form-label" for="project-thumbnail-img">Thumbnail Image</label>
-                                    <input class="form-control mb-3" id="projectImage" type="file" accept="image/png, image/gif, image/jpeg">
-                                    @if (Model.ProjectImage != null)
-                                    {
-                                        <div id="imagePreviewContainer">
-                                            <div id="currentImageName" style="margin-bottom: 10px;" hidden>
-                                                @System.IO.Path.GetFileName(Model.ProjectImage)
-                                            </div>
-                                            <div style="position: relative; display: inline-block;">
-                                                <img src="~/Content/Projects/@Model.ProjectImage" id="projectImagePreview" style="height: 200px;width: 200px;border:2px solid grey;" />
-                                                <div style="position: absolute; top: 5px; right: 5px;">
-                                                    <button type="button" id="deleteImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color:red;">&times;</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                    else
-                                    {
-                                        <div id="imagePreviewContainer" style="display: none;">
-                                            <div style="position: relative;">
-                                                <img src="#" id="projectImagePreview" style="height: 200px;width: 200px;border:2px solid grey;" />
-                                                <div style="position: absolute; top: 5px; right: 5px;">
-                                                    <button type="button" id="deleteImageButton" style="background-color: transparent; border: none; font-size: 16px; cursor: pointer; color: red;margin-right: 840px;">&times;</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    }
-                                </div> *@
                             </div>
                         </div>
                     </div>

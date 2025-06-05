@@ -303,9 +303,13 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 {
                     if (AddMember.ProjectMemberList.Count > 0)
                     {
+                        List<string> alreadyExistMembers = new List<string>();
+
                         foreach (var item in AddMember.ProjectMemberList)
                         {
                             var userId = await Context.TblUsers.FirstOrDefaultAsync(a => (a.FirstName + " " + a.LastName) == item.Fullname);
+                            if (userId == null) continue;
+
                             bool isMemberAlreadyExists = Context.TblProjectMembers.Any(x => x.UserId == userId.Id && x.ProjectId == AddMember.ProjectId);
 
                             if (isMemberAlreadyExists)
@@ -314,9 +318,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
                                 if (projectDetail.IsDeleted == false)
                                 {
-                                    response.Message = item.Fullname + " already exists in project.";
-                                    response.Code = (int)HttpStatusCode.NotFound;
-                                    return response;
+                                    alreadyExistMembers.Add(item.Fullname);
                                 }
                                 else
                                 {
@@ -326,8 +328,6 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                     projectDetail.UpdatedBy = AddMember.UpdatedBy;
                                     Context.TblProjectMembers.Update(projectDetail);
                                     await Context.SaveChangesAsync();
-
-                                    response.Message = "Project member is added successfully!";
                                 }
                             }
                             else
@@ -344,27 +344,38 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
                                 Context.TblProjectMembers.Add(projectmodel);
                                 await Context.SaveChangesAsync();
-                                response.Message = "Project member is added successfully!";
                             }
                         }
+
                         response.Data = project;
+
+                        if (alreadyExistMembers.Count > 0)
+                        {
+                            response.Code = (int)HttpStatusCode.PartialContent; 
+                            response.Message = string.Join(", ", alreadyExistMembers) + " already exist(s) in the project.";
+                        }
+                        else
+                        {
+                            response.Code = (int)HttpStatusCode.OK;
+                            response.Message = "All project members were added successfully!";
+                        }
                     }
                     else
                     {
-                        response.Code = (int)HttpStatusCode.NotFound;
-                        response.Message = "Select member you want to add.";
+                        response.Code = (int)HttpStatusCode.BadRequest;
+                        response.Message = "Select members you want to add.";
                     }
                 }
                 else
                 {
-                    response.Code = (int)HttpStatusCode.InternalServerError;
+                    response.Code = (int)HttpStatusCode.NotFound;
                     response.Message = "Project not found.";
                 }
             }
             catch (Exception ex)
             {
-                response.Code = (int)HttpStatusCode.NotFound;
-                response.Message = "Error in adding member to project.";
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error in adding member(s) to the project.";
             }
             return response;
         }
