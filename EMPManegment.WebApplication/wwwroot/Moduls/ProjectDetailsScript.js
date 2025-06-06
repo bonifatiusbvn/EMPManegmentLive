@@ -294,8 +294,14 @@ function invitemember() {
         toastr.warning("Select member you want to add!");
     }
 }
-
-function showProjectMembers(ProjectId) {
+$(document).ready(function () {
+    var ShowProjectMemberProjectId = $('#ShowProjectMemberProjectId').val();
+    if (ShowProjectMemberProjectId) {
+        showProjectMembers(ShowProjectMemberProjectId)
+        showProjectDocuments(ShowProjectMemberProjectId)
+    }
+})
+function showProjectMembers(ProjectId) {debugger
     var formData = new FormData();
     formData.append("ProjectId", ProjectId);
     $.ajax({
@@ -312,12 +318,11 @@ function showProjectMembers(ProjectId) {
     })
 }
 
-let isProjectGridInitialized = false; // global flag
+let isProjectGridInitialized = false;
 
 function showTeamsPagination(ProjectId) {
     const myGridElement = document.querySelector('#ProjectMembersTable');
 
-    // ✅ Prevent multiple initialization
     if (isProjectGridInitialized) {
         return;
     }
@@ -435,37 +440,87 @@ function showTeamsPagination(ProjectId) {
                 if (!params.data || !params.data.id) {
                     return '';
                 }
-                return `<a class="btn" data-user-id="${params.data.id}"><i class="fas fa-trash" style="color: #16989A;"></i></a>`;
+                return `<a class="btn" onclick="EditProjectMemberDesignation('${params.data.id}')"><i class="fa-regular fa-pen-to-square" style="color: #16989A;"></i></a><a class="btn" onclick="deleteProjectMember('${params.data.userId}')"><i class="fas fa-trash" style="color: #16989A;"></i></a>`;
             }
         });
     }
 
     agGrid.createGrid(myGridElement, ProjectMemberGridOptions);
 
-    // ✅ Set flag to true so this function can't run again
     isProjectGridInitialized = true;
 }
 
+function EditProjectMemberDesignation(projectMemberId) {
+    $.ajax({
+        url: '/Project/EditProjectMemberDesignation?ProjectMemberId=' + projectMemberId,
+        type: 'GET',
+        dataType: 'json',
+        success: function (result) {
+            if (result) {
+                $("#UpdateMembersDesignationModal").modal('show');
+                $('#ProjectMemberDesignation').val(result.projectDesignation);
+                $('#ProjectUserId').val(result.userId);
+                $('#ProjectId').val(result.projectId);
+            } else {
+                alert("Failed to load project member details.");
+            }
+        },
+        error: function () {
+            alert("An error occurred while fetching data.");
+        }
+    });
+}
 
 
-//function showTeams(ProjectId, page) {
-//    var formData = new FormData();
-//    formData.append("ProjectId", ProjectId);
-//    formData.append("page", page);
-//    $.ajax({
-//        url: '/Project/ShowTeam',
-//        type: 'Post',
-//        dataType: 'json',
-//        data: formData,
-//        processData: false,
-//        contentType: false,
-//        complete: function (Result) {
-//            $('#dvshowteam').html(Result.responseText);
-//        },
-//    })
-//}
+function UpdateProjectMemberDesignation() {
+    if ($("#UpdateMembersDesignationForm").valid()) {
+        var ProjectId = $('#ProjectId').val()
+        var UpdateDesignationdata = {
+            ProjectId: ProjectId,
+            UserId: $('#ProjectUserId').val(),
+            ProjectDesignation: $('#ProjectMemberDesignation').val(),
+            UpdatedBy: $('#ProjectUpdatedBy').val(),
+        }
+        var form_data = new FormData();
+        form_data.append("UpdateDesignation", JSON.stringify(UpdateDesignationdata));
 
+        $.ajax({
+            url: '/Project/UpdateProjectMemberDesignation',
+            type: 'Post',
+            data: form_data,
+            dataType: 'json',
+            processData: false,
+            contentType: false,
+            success: function (Result) {
+                if (Result.code == 200) {
+                    Swal.fire({
+                        title: Result.message,
+                        icon: 'success',
+                        confirmButtonColor: '#3085d6',
+                        confirmButtonText: 'OK',
+                    }).then(function () {
+                        window.location = '/Project/ProjectDetails/?Id=' + ProjectId;
+                    });
+                }
+                else {
+                    toastr.warning(Result.message);
+                    $("#UpdateMembersDesignationModal").modal('hide');
+                }
+            },
+        })
+    }
+}
+$(document).ready(function () {
 
+    $("#UpdateMembersDesignationForm").validate({
+        rules: {
+            ProjectMemberDesignation: "required",
+        },
+        messages: {
+            ProjectMemberDesignation: "Please Enter Project Designation",
+        },
+    })
+});
 
 function addProjectDocument() {
     var document = $("#txtDocumentName")[0].files[0];
@@ -522,27 +577,11 @@ function showProjectDocuments(ProjectId) {
     })
 }
 
-//function showuploadDocuments(ProjectId) {
-//    var formData = new FormData();
-//    formData.append("ProjectId", ProjectId);
-//    $.ajax({
-//        url: '/Project/ShowUploadedDocuments',
-//        type: 'Post',
-//        dataType: 'json',
-//        data: formData,
-//        processData: false,
-//        contentType: false,
-//        complete: function (Result) {
-//            $('#dvuploadDocuments').html(Result.responseText);
-//        },
-//    })
-//}
-let isProjectDocumentGridInitialized = false; // global flag
+let isProjectDocumentGridInitialized = false;
 
 function showuploadDocuments(ProjectId) {
     const myProjectDocumentGridElement = document.querySelector('#ProjectDocumentTable');
 
-    // ✅ Prevent multiple initialization
     if (isProjectDocumentGridInitialized) {
         return;
     }

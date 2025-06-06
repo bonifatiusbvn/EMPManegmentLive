@@ -153,9 +153,10 @@
                                 <div class="card-header align-items-center d-flex border-bottom-dashed">
                                     <div class="row w-100">
                                         <div class="col-6 d-flex align-items-center">
-                                            <h3 class="card-title mb-0" id="showProjectMembers" onclick="showProjectMembers('@Model.ProjectId')" style="color:#16989A;font-weight:600;">
+                                            <h3 class="card-title mb-0" id="showProjectMembers" style="color:#16989A;font-weight:600;">
                                                 Project Members
                                             </h3>
+                                            <input type="hidden" value="@Model.ProjectId" id="ShowProjectMemberProjectId" />
                                         </div>
                                         @if (UserSession.FormPermisionData.Any(a => a.FormName == "Projec tDetails" && a.Add == true))
                                         {
@@ -183,7 +184,7 @@
                                 <div class="card-header align-items-center d-flex border-bottom-dashed">
                                     <div class="row w-100">
                                         <div class="col-6 d-flex align-items-center">
-                                            <h3 class="card-title" id="showProjectDocuments" onclick="showProjectDocuments('@Model.ProjectId')" style="color:#16989A;font-weight:600;">Attachments</h3>
+                                            <h3 class="card-title" id="showProjectDocuments" style="color:#16989A;font-weight:600;">Attachments</h3>
                                         </div>
                                         <div class="col-6 text-end">
                                             <button type="button" class="btn button-teal" onclick="docmodalopen()">
@@ -242,7 +243,7 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-8 mb-3">
-                       @*  <label class="form-label">Select Multiple Members</label> *@
+                        @*  <label class="form-label">Select Multiple Members</label> *@
                         <select class="form-control multiple-select select2-teal"
                                 data-dropdown-css-class="select2-teal"
                                 multiple="multiple"
@@ -368,6 +369,33 @@
     </div>
 </div>
 <!-- end modal -->
+<!-- Update Designation modal -->
+<div class="modal fade" id="UpdateMembersDesignationModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-teal p-3">
+                <h4 class="modal-title" style="color:white;">Member Designation</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="UpdateMembersDesignationForm">
+                    <div class="mb-3">
+                        <label for="ProjectMemberDesignation" class="form-label required-field">Project Designation</label>
+                        <input type="text" class="form-control" id="ProjectMemberDesignation" name="ProjectMemberDesignation" placeholder="Project Designation" />
+                        <input type="hidden" id="ProjectUserId" />
+                        <input type="hidden" id="ProjectId" />
+                        <input type="hidden" id="ProjectUpdatedBy" value="@_userSession.UserId" />
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer" style="text-align:end;">
+                <button type="button" class="btn btn-secondary" id="close-modal" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn button-teal" onclick="UpdateProjectMemberDesignation()">Update</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+</div>
 
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

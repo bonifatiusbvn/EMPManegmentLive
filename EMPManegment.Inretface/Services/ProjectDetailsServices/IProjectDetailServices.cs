@@ -21,12 +21,16 @@ namespace EMPManegment.Inretface.Services.ProjectDetailsServices
         Task<IEnumerable<EmpDetailsView>> GetAllMembers();
         Task<UserResponceModel> AddMemberToProject(ProjectMemberMasterView AddMemberToProject);
         Task<AGGridResponseModel<ProjectView>> GetProjectMember(AGGridRequestModel ProjectMemberRequest);
+        Task<List<ProjectView>> ShowProjectMemberList(Guid ProjectId);
         Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocumentToProject);
         Task<AGGridResponseModel<ProjectDocumentView>> GetProjectDocument(AGGridRequestModel ProjectDocumentRequest);
+        Task<List<ProjectDocumentView>> ShowProjectDocumentList(Guid ProjectId);
         string CheckProjectName();
         Task<UserResponceModel> MemberIsDeleted(ProjectMemberUpdate projectMember);
         Task<UserResponceModel> DeleteProjectDocument(Guid DocumentId);
         Task<IEnumerable<ProjectDetailView>> GetProjectsList();
         Task<UserResponceModel> UpdateProjectDetails(ProjectDetailView updateProject);
+        Task<ProjectMemberUpdate> EditProjectMemberDesignation(Guid ProjectMemberId);
+        Task<UserResponceModel> UpdateProjectMemberDesignation(ProjectMemberMasterView UpdateDesignation);
     }
 }

@@ -11,6 +11,8 @@ public partial class TblProjectMember
 
     public Guid? UserId { get; set; }
 
+    public string? ProjectDesignation { get; set; }
+
     public bool? IsDeleted { get; set; }
 
     public DateTime? CreatedOn { get; set; }

@@ -47,8 +47,10 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
     }
     public class ProjectMemberUpdate
     {
+        public Guid? Id { get; set; }
         public Guid? ProjectId { get; set; }
         public Guid? UserId { get; set; }
+        public string? ProjectDesignation { get; set; }
         public Guid? UpdatedBy { get; set; }
     }
     public class ProjectMemberMasterView
@@ -56,6 +58,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public Guid Id { get; set; }
 
         public Guid? ProjectId { get; set; }
+        public Guid? UserId { get; set; }
 
         public string? ProjectType { get; set; }
 
@@ -83,7 +86,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
         public string? Designation { get; set; }
         public string? ProjectDescription { get; set; } = null!;
         public bool? IsDeleted { get; set; }
-
+        public string? ProjectDesignation { get; set; }
         public int TotalTask { get; set; }
         public string? ShortName { get; set; }
         public List<ProjectMember>? ProjectMemberList { get; set; }
@@ -91,6 +94,7 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
     public class ProjectMember
     {
         public string? Fullname { get; set; }
+        public string? ProjectDesignation { get; set; }
     }
 
     public class ProjectRequest

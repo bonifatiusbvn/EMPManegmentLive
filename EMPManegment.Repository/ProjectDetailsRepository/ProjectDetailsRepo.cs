@@ -325,6 +325,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                 {
                                     projectDetail.IsDeleted = false;
                                     projectDetail.ProjectId = project.ProjectId;
+                                    projectDetail.ProjectDesignation = userId.Designation;
                                     projectDetail.UpdatedOn = DateTime.Now;
                                     projectDetail.UpdatedBy = AddMember.UpdatedBy;
                                     Context.TblProjectMembers.Update(projectDetail);
@@ -338,6 +339,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                                     Id = Guid.NewGuid(),
                                     ProjectId = project.ProjectId,
                                     UserId = userId.Id,
+                                    ProjectDesignation = userId.Designation,
                                     IsDeleted = false,
                                     CreatedBy = AddMember.UpdatedBy,
                                     CreatedOn = DateTime.Now,
@@ -411,7 +413,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                     LastName = row["LastName"]?.ToString(),
                     Image = row["Image"]?.ToString(),
                     UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
-                    Designation = row["Designation"]?.ToString(),
+                    Designation = row["ProjectDesignation"]?.ToString(),
                 }).ToList();
 
                 int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
@@ -427,7 +429,34 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 throw new Exception("An error occurred while retrieving the project member.", ex);
             }
         }
+        public async Task<List<ProjectView>> ShowProjectMemberList(Guid ProjectId)
+        {
+            try
+            {
+                var ProjectMemberList = (from a in Context.TblProjectMembers
+                                         join b in Context.TblProjectMasters on a.ProjectId equals b.ProjectId
+                                         join c in Context.TblUsers on a.UserId equals c.Id
+                                         where a.IsDeleted != true && a.ProjectId == ProjectId
+                                         select new ProjectView
+                                         {
+                                             Id = a.Id,
+                                             ProjectId = a.ProjectId,
+                                             Fullname = c.FirstName + " " + c.LastName,
+                                             FirstName = c.FirstName,
+                                             LastName = c.LastName,
+                                             Image = c.Image,
+                                             UserId = a.UserId,
+                                             Designation = a.ProjectDesignation,
+                                             ProjectTitle = b.ProjectTitle
+                                         }).ToList();
 
+                return ProjectMemberList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public async Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocument)
         {
             UserResponceModel response = new UserResponceModel();
@@ -500,7 +529,31 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 throw new Exception("An error occurred while retrieving the project member.", ex);
             }
         }
+        public async Task<List<ProjectDocumentView>> ShowProjectDocumentList(Guid ProjectId)
+        {
+            try
+            {
+                var ProjectDocumentList = (from a in Context.TblProjectDocuments
+                                         join c in Context.TblUsers on a.UserId equals c.Id
+                                         where a.ProjectId == ProjectId
+                                         select new ProjectDocumentView
+                                         {
+                                             Id = a.Id,
+                                             ProjectId = a.ProjectId,
+                                             FullName = c.FirstName + " " + c.LastName,
+                                             FirstName = c.FirstName,
+                                             LastName = c.LastName,
+                                             DocumentName = a.DocumentName,
+                                             Date = a.Date
+                                         }).ToList();
 
+                return ProjectDocumentList;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
         public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
         {
             try
@@ -715,6 +768,57 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 response.Code = (int)HttpStatusCode.InternalServerError;
             }
             return response;
+        }
+
+        public async Task<ProjectMemberUpdate> EditProjectMemberDesignation(Guid ProjectMemberId)
+        {
+            try
+            {
+                var ProjectMember = Context.TblProjectMembers.Where(e => e.Id == ProjectMemberId).FirstOrDefault();
+                var ProjectMemberDetails = new ProjectMemberUpdate()
+                {
+                    Id = ProjectMember.Id,
+                    UserId = ProjectMember.UserId,
+                    ProjectId = ProjectMember.ProjectId,
+                    ProjectDesignation = ProjectMember.ProjectDesignation,
+                };
+                return ProjectMemberDetails;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<UserResponceModel> UpdateProjectMemberDesignation(ProjectMemberMasterView UpdateDesignation)
+        {
+            var response = new UserResponceModel();
+            try
+            {
+                var ProjectMember = Context.TblProjectMembers.Where(e => e.ProjectId == UpdateDesignation.ProjectId && e.UserId == UpdateDesignation.UserId).FirstOrDefault();
+                if (ProjectMember == null)
+                {
+                    response.Code = 400;
+                    response.Message = "Error in updating project designation!";
+                }
+                else
+                {
+                    ProjectMember.ProjectDesignation = UpdateDesignation.ProjectDesignation;
+                    ProjectMember.UpdatedOn = DateTime.Now;
+                    ProjectMember.UpdatedBy = UpdateDesignation.UpdatedBy;
+
+                    Context.TblProjectMembers.Update(ProjectMember);
+                    Context.SaveChanges();
+
+                    response.Code = 200;
+                    response.Message = "Project member designation updated successfully.";
+                }
+                return response;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

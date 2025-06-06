@@ -49,6 +49,12 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.GetProjectMember(ProjectMemberRequest);
         }
+
+        public async Task<List<ProjectView>> ShowProjectMemberList(Guid ProjectId)
+        {
+            return await ProjectDetails.ShowProjectMemberList(ProjectId);
+        }
+
         public async Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocument)
         {
             return await ProjectDetails.AddDocumentToProject(AddDocument);
@@ -56,6 +62,11 @@ namespace EMPManegment.Services.ProjectDetails
         public async Task<AGGridResponseModel<ProjectDocumentView>> GetProjectDocument(AGGridRequestModel ProjectDocumentRequest)
         {
             return await ProjectDetails.GetProjectDocument(ProjectDocumentRequest);
+        }
+
+        public async Task<List<ProjectDocumentView>> ShowProjectDocumentList(Guid ProjectId)
+        {
+            return await ProjectDetails.ShowProjectDocumentList(ProjectId);
         }
 
         public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)
@@ -77,10 +88,12 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.DeleteProjectDocument(DocumentId);
         }
+
         public async Task<IEnumerable<ProjectDetailView>> GetProjectsList()
         {
             return await ProjectDetails.GetProjectsList();
         }
+
         public async Task<UserResponceModel> UpdateProjectDetails(ProjectDetailView updateProject)
         {
             return await ProjectDetails.UpdateProjectDetails(updateProject);
@@ -89,6 +102,16 @@ namespace EMPManegment.Services.ProjectDetails
         public async Task<IEnumerable<ProjectView>> GetProjectNameList(string? search)
         {
             return await ProjectDetails.GetProjectNameList(search);
+        }
+
+        public async Task<ProjectMemberUpdate> EditProjectMemberDesignation(Guid ProjectMemberId)
+        {
+            return await ProjectDetails.EditProjectMemberDesignation(ProjectMemberId);
+        }
+
+        public async Task<UserResponceModel> UpdateProjectMemberDesignation(ProjectMemberMasterView UpdateDesignation)
+        {
+            return await ProjectDetails.UpdateProjectMemberDesignation(UpdateDesignation);
         }
     }
 }

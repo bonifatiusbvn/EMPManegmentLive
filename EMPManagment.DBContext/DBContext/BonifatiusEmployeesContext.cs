@@ -97,8 +97,8 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    { }
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAdress>(entity =>
@@ -534,6 +534,7 @@ public partial class BonifatiusEmployeesContext : DbContext
 
             entity.Property(e => e.Id).ValueGeneratedNever();
             entity.Property(e => e.CreatedOn).HasColumnType("date");
+            entity.Property(e => e.ProjectDesignation).HasMaxLength(50);
             entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
             entity.HasOne(d => d.Project).WithMany(p => p.TblProjectMembers)

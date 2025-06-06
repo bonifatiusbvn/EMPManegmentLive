@@ -294,7 +294,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProjectView> ProjectMembersList = new List<ProjectView>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/ShowProjectMemberList?ProjectId=" + ProjectId);
                 if (postuser.data != null)
                 {
                     ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
@@ -369,7 +369,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProjectView> ProjectMembersList = new List<ProjectView>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/ShowProjectMemberList?ProjectId=" + ProjectId);
                 if (postuser.data != null)
                 {
                     ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
@@ -481,7 +481,7 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 List<ProjectDocumentView> ProjectDocumentsList = new List<ProjectDocumentView>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectDocument?ProjectId=" + ProjectId);
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/ShowProjectDocumentList?ProjectId=" + ProjectId);
                 if (postuser.data != null)
                 {
                     ProjectDocumentsList = JsonConvert.DeserializeObject<List<ProjectDocumentView>>(postuser.data.ToString());
@@ -709,6 +709,52 @@ namespace EMPManegment.Web.Controllers
                 else
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> EditProjectMemberDesignation(Guid ProjectMemberId)
+        {
+            try
+            {
+                var response = await APIServices.GetAsync("", $"ProjectDetails/EditProjectMemberDesignation?ProjectMemberId={ProjectMemberId}");
+
+                if (response.code == 200 && response.data != null)
+                {
+                    var projectDetails = JsonConvert.DeserializeObject<ProjectMemberUpdate>(response.data.ToString());
+                    return new JsonResult(projectDetails);
+                }
+
+                return new JsonResult(null);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, "Internal server error: " + ex.Message);
+            }
+        }
+
+        [FormPermissionAttribute("GetProjectDetails-Edit")]
+        [HttpPost]
+        public async Task<IActionResult> UpdateProjectMemberDesignation()
+        {
+            try
+            {
+                var memberDesignation = HttpContext.Request.Form["UpdateDesignation"];
+                var UpdateDesignation = JsonConvert.DeserializeObject<ProjectMemberMasterView>(memberDesignation);
+                ApiResponseModel postuser = await APIServices.PostAsync(UpdateDesignation, "ProjectDetails/UpdateProjectMemberDesignation");
+                UserResponceModel responseModel = new UserResponceModel();
+                if (postuser.code == 200)
+                {
+                    return Ok(new { postuser.message, postuser.code });
+                }
+                else
+                {
+                    return Ok(new { postuser.message, postuser.code });
                 }
             }
             catch (Exception ex)

@@ -148,6 +148,14 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpPost]
+        [Route("ShowProjectMemberList")]
+        public async Task<IActionResult> ShowProjectMemberList(Guid ProjectId)
+        {
+            List<ProjectView> emplist = await ProjectDetail.ShowProjectMemberList(ProjectId);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = emplist.ToList() });
+        }
+
+        [HttpPost]
         [Route("AddDocumentToProject")]
         public async Task<IActionResult> AddDocumentToProject(ProjectDocumentView AddDocument)
         {
@@ -184,6 +192,14 @@ namespace EMPManagment.API.Controllers
                 Data = Documents.Data,
                 RecordsTotal = Documents.RecordsTotal
             };
+        }
+
+        [HttpPost]
+        [Route("ShowProjectDocumentList")]
+        public async Task<IActionResult> ShowProjectDocumentList(Guid ProjectId)
+        {
+            List<ProjectDocumentView> emplist = await ProjectDetail.ShowProjectDocumentList(ProjectId);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = emplist.ToList() });
         }
 
         [HttpPost]
@@ -280,6 +296,41 @@ namespace EMPManagment.API.Controllers
                 {
                     response.Code = projectDetails.Code;
                     response.Message = projectDetails.Message;
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(response.Code, response);
+        }
+
+        [HttpGet]
+        [Route("EditProjectMemberDesignation")]
+        public async Task<IActionResult> EditProjectMemberDesignation(Guid ProjectMemberId)
+        {
+            var result = ProjectDetail.EditProjectMemberDesignation(ProjectMemberId);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = result.Result });
+        }
+
+        [HttpPost]
+        [Route("UpdateProjectMemberDesignation")]
+        public async Task<IActionResult> UpdateProjectMemberDesignation(ProjectMemberMasterView UpdateDesignation)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var result = ProjectDetail.UpdateProjectMemberDesignation(UpdateDesignation);
+                if (result.Result.Code == 200)
+                {
+                    response.Code = result.Result.Code;
+                    response.Message = result.Result.Message;
+                }
+                else
+                {
+                    response.Message = result.Result.Message;
+                    response.Code = result.Result.Code;
                 }
             }
             catch (Exception ex)
