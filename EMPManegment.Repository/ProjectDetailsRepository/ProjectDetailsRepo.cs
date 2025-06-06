@@ -2,6 +2,7 @@
 using EMPManagment.API;
 using EMPManegment.EntityModels.Common;
 using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Models;
@@ -351,7 +352,7 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
 
                         if (alreadyExistMembers.Count > 0)
                         {
-                            response.Code = (int)HttpStatusCode.PartialContent; 
+                            response.Code = (int)HttpStatusCode.PartialContent;
                             response.Message = string.Join(", ", alreadyExistMembers) + " already exist(s) in the project.";
                         }
                         else
@@ -380,44 +381,50 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return response;
         }
 
-        public async Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId)
+        public async Task<AGGridResponseModel<ProjectView>> GetProjectMember(AGGridRequestModel ProjectMemberRequest)
         {
             try
             {
-                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
-                var sqlPar = new SqlParameter[]
+                var filterConditions = string.Join(" AND ", ProjectMemberRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = ProjectMemberRequest.SortModel?.FirstOrDefault()?.ColId ?? "FirstName";
+                string sortDirection = ProjectMemberRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
+
+                var parameters = new List<SqlParameter>
                 {
-                    new SqlParameter("@ProjectId", ProjectId),
+                new SqlParameter("@ProjectId", (object)ProjectMemberRequest.ProjectFilter ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", ProjectMemberRequest.PageSize),
+                new SqlParameter("@Skip", ProjectMemberRequest.StartRow),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
-                var DS = DbHelper.GetDataSet("[GetProjectMember]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+                var dataSet = DbHelper.GetDataSet("GetProjectMember", CommandType.StoredProcedure, parameters.ToArray(), _configuration.GetConnectionString("EMPDbconn"));
 
-                List<ProjectView> projectMemberList = new List<ProjectView>();
-
-                if (DS != null && DS.Tables.Count > 0)
+                var ProjectList = dataSet.Tables[0].AsEnumerable().Select(row => new ProjectView
                 {
-                    foreach (DataRow row in DS.Tables[0].Rows)
-                    {
-                        var ProjectMember = new ProjectView
-                        {
-                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
-                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
-                            Fullname = row["Fullname"]?.ToString(),
-                            FirstName = row["FirstName"]?.ToString(),
-                            LastName = row["LastName"]?.ToString(),
-                            Image = row["Image"]?.ToString(),
-                            UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
-                            Designation = row["Designation"]?.ToString(),
-                            ProjectTitle = row["ProjectTitle"]?.ToString(),
-                        };
-                        projectMemberList.Add(ProjectMember);
-                    }
-                }
-                return projectMemberList;
+                    Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                    ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                    FirstName = row["FirstName"]?.ToString(),
+                    LastName = row["LastName"]?.ToString(),
+                    Image = row["Image"]?.ToString(),
+                    UserId = row["UserId"] != DBNull.Value ? (Guid)row["UserId"] : Guid.Empty,
+                    Designation = row["Designation"]?.ToString(),
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<ProjectView>
+                {
+                    Data = ProjectList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the project member.", ex);
             }
         }
 
@@ -448,40 +455,49 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             return response;
         }
 
-        public async Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId)
+        public async Task<AGGridResponseModel<ProjectDocumentView>> GetProjectDocument(AGGridRequestModel ProjectDocumentRequest)
         {
             try
             {
-                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
-                var sqlPar = new SqlParameter[]
+                var filterConditions = string.Join(" AND ", ProjectDocumentRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = ProjectDocumentRequest.SortModel?.FirstOrDefault()?.ColId ?? "FirstName";
+                string sortDirection = ProjectDocumentRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
+
+                var parameters = new List<SqlParameter>
                 {
-                    new SqlParameter("@ProjectId", ProjectId),
+                new SqlParameter("@ProjectId", (object)ProjectDocumentRequest.ProjectFilter ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", ProjectDocumentRequest.PageSize),
+                new SqlParameter("@Skip", ProjectDocumentRequest.StartRow),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
                 };
 
-                var DS = DbHelper.GetDataSet("[GetProjectDocument]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+                var dataSet = DbHelper.GetDataSet("GetProjectDocument", CommandType.StoredProcedure, parameters.ToArray(), _configuration.GetConnectionString("EMPDbconn"));
 
-                List<ProjectDocumentView> projectDocumentList = new List<ProjectDocumentView>();
-
-                if (DS != null && DS.Tables.Count > 0)
+                var ProjectDocumentList = dataSet.Tables[0].AsEnumerable().Select(row => new ProjectDocumentView
                 {
-                    foreach (DataRow row in DS.Tables[0].Rows)
-                    {
-                        var ProjectDocument = new ProjectDocumentView
-                        {
-                            Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
-                            ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
-                            DocumentName = row["DocumentName"]?.ToString(),
-                            FullName = row["FullName"]?.ToString(),
-                            Date = row["Date"] != DBNull.Value ? (DateTime)row["Date"] : DateTime.MinValue,
-                        };
-                        projectDocumentList.Add(ProjectDocument);
-                    }
-                }
-                return projectDocumentList;
+                    Id = row["Id"] != DBNull.Value ? (Guid)row["Id"] : Guid.Empty,
+                    ProjectId = row["ProjectId"] != DBNull.Value ? (Guid)row["ProjectId"] : Guid.Empty,
+                    DocumentName = row["DocumentName"]?.ToString(),
+                    Date = row["Date"] != DBNull.Value ? (DateTime)row["Date"] : DateTime.MinValue,
+                    FirstName = row["FirstName"]?.ToString(),
+                    LastName = row["LastName"]?.ToString(),
+                }).ToList();
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<ProjectDocumentView>
+                {
+                    Data = ProjectDocumentList,
+                    RecordsTotal = totalRecords
+                };
             }
             catch (Exception ex)
             {
-                throw ex;
+                throw new Exception("An error occurred while retrieving the project member.", ex);
             }
         }
 

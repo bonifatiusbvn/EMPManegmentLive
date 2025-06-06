@@ -1,31 +1,32 @@
-﻿using EMPManagment.Web.Helper;
+﻿using Aspose.Foundation.UriResolver.RequestResponses;
+using DocumentFormat.OpenXml.Drawing.Charts;
+using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
+using EMPManegment.EntityModels.ViewModels.Company;
+using EMPManegment.EntityModels.ViewModels.Invoice;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
+using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
+using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Evaluation;
 using Microsoft.Build.ObjectModelRemoting;
+using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using X.PagedList;
-using X.PagedList.Mvc;
-using EMPManegment.EntityModels.ViewModels.Invoice;
-using System.Linq;
-using EMPManegment.Web.Helper;
-using System.Collections.Generic;
-using Aspose.Foundation.UriResolver.RequestResponses;
-using Microsoft.CodeAnalysis;
-using DocumentFormat.OpenXml.Drawing.Charts;
-using EMPManegment.EntityModels.ViewModels.PurchaseOrderModels;
-using Microsoft.Build.Evaluation;
-using Microsoft.AspNetCore.Authorization;
 using X.PagedList.Extensions;
-using EMPManegment.EntityModels.ViewModels.Company;
+using X.PagedList.Mvc;
 #nullable disable
 namespace EMPManegment.Web.Controllers
 {
@@ -388,32 +389,48 @@ namespace EMPManegment.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ShowTeam(Guid ProjectId, int? page)
+        public async Task<IActionResult> ShowTeam([FromBody] AGGridRequestModel ProjectMembersRequest)
         {
             try
             {
-                ViewBag.ProjectId = ProjectId;
-                List<ProjectView> ProjectMembersList = new List<ProjectView>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
-                if (postuser.data != null)
+                ViewBag.ProjectId = ProjectMembersRequest.ProjectFilter;
+                ProjectMembersRequest.filters ??= new List<FilterModel>();
+
+                var ProjectMemberDetails = await APIServices.AGPostAsync<ProjectView>(ProjectMembersRequest, "ProjectDetails/GetProjectMember");
+
+                return new JsonResult(new
                 {
-                    ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
-                }
-                else
-                {
-                    ProjectMembersList = new List<ProjectView>();
-                    ViewBag.Error = "note found";
-                }
-                int pageSize = 5;
-                var pageNumber = page ?? 1;
-                var pagedList = ProjectMembersList.ToPagedList(pageNumber, pageSize);
-                return PartialView("~/Views/Project/_showTeam.cshtml", pagedList);
+                    rowsThisPage = ProjectMemberDetails.Data,
+                    totalRowCount = ProjectMemberDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
-
+            //try
+            //{
+            //    ViewBag.ProjectId = ProjectId;
+            //    List<ProjectView> ProjectMembersList = new List<ProjectView>();
+            //    ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectMember?ProjectId=" + ProjectId);
+            //    if (postuser.data != null)
+            //    {
+            //        ProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
+            //    }
+            //    else
+            //    {
+            //        ProjectMembersList = new List<ProjectView>();
+            //        ViewBag.Error = "note found";
+            //    }
+            //    int pageSize = 5;
+            //    var pageNumber = page ?? 1;
+            //    var pagedList = ProjectMembersList.ToPagedList(pageNumber, pageSize);
+            //    return PartialView("~/Views/Project/_showTeam.cshtml", pagedList);
+            //}
+            //catch (Exception ex)
+            //{
+            //    throw ex;
+            //}
         }
 
         [FormPermissionAttribute("GetProjectDetails-Add")]
@@ -460,6 +477,7 @@ namespace EMPManegment.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ShowProjectDocuments(Guid ProjectId)
         {
+
             try
             {
                 List<ProjectDocumentView> ProjectDocumentsList = new List<ProjectDocumentView>();
@@ -482,28 +500,24 @@ namespace EMPManegment.Web.Controllers
             }
         }
         [HttpPost]
-        public async Task<IActionResult> ShowUploadedDocuments(Guid ProjectId)
+        public async Task<IActionResult> ShowUploadedDocuments([FromBody] AGGridRequestModel ProjectDocumentRequest)
         {
             try
             {
-                List<ProjectDocumentView> ProjectDocumentsList = new List<ProjectDocumentView>();
-                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/GetProjectDocument?ProjectId=" + ProjectId);
-                if (postuser.data != null)
+                ProjectDocumentRequest.filters ??= new List<FilterModel>();
+
+                var ProjectMemberDetails = await APIServices.AGPostAsync<ProjectDocumentView>(ProjectDocumentRequest, "ProjectDetails/GetProjectDocument");
+
+                return new JsonResult(new
                 {
-                    ProjectDocumentsList = JsonConvert.DeserializeObject<List<ProjectDocumentView>>(postuser.data.ToString());
-                }
-                else
-                {
-                    ProjectDocumentsList = new List<ProjectDocumentView>();
-                    ViewBag.Error = "note found";
-                }
-                return PartialView("~/Views/Project/_showUploadDocument.cshtml", ProjectDocumentsList);
+                    rowsThisPage = ProjectMemberDetails.Data,
+                    totalRowCount = ProjectMemberDetails.RecordsTotal
+                });
             }
             catch (Exception ex)
             {
-                throw ex;
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
-
         }
 
         [HttpGet]

@@ -1,6 +1,7 @@
 ﻿using Azure;
 using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Company;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
@@ -136,10 +137,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetProjectMember")]
-        public async Task<IActionResult> GetProjectMember(Guid ProjectId)
+        public async Task<AGGridResponseModel<ProjectView>> GetProjectMember(AGGridRequestModel ProjectMemberRequest)
         {
-            IEnumerable<ProjectView> Members = await ProjectDetail.GetProjectMember(ProjectId);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = Members.ToList() });
+            var Members = await ProjectDetail.GetProjectMember(ProjectMemberRequest);
+            return new AGGridResponseModel<ProjectView>
+            {
+                Data = Members.Data,
+                RecordsTotal = Members.RecordsTotal
+            };
         }
 
         [HttpPost]
@@ -171,10 +176,14 @@ namespace EMPManagment.API.Controllers
 
         [HttpPost]
         [Route("GetProjectDocument")]
-        public async Task<IActionResult> GetProjectDocument(Guid ProjectId)
+        public async Task<AGGridResponseModel<ProjectDocumentView>> GetProjectDocument(AGGridRequestModel ProjectDocumentRequest)
         {
-            IEnumerable<ProjectDocumentView> Documents = await ProjectDetail.GetProjectDocument(ProjectId);
-            return Ok(new { code = (int)HttpStatusCode.OK, data = Documents.ToList() });
+            var Documents = await ProjectDetail.GetProjectDocument(ProjectDocumentRequest);
+            return new AGGridResponseModel<ProjectDocumentView>
+            {
+                Data = Documents.Data,
+                RecordsTotal = Documents.RecordsTotal
+            };
         }
 
         [HttpPost]

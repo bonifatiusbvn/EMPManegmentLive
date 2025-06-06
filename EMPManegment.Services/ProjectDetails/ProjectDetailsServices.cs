@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.Inretface.Interface.ProjectDetails;
@@ -44,17 +45,17 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.AddMemberToProject(AddMember);
         }
-        public async Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId)
+        public async Task<AGGridResponseModel<ProjectView>> GetProjectMember(AGGridRequestModel ProjectMemberRequest)
         {
-            return await ProjectDetails.GetProjectMember(ProjectId);
+            return await ProjectDetails.GetProjectMember(ProjectMemberRequest);
         }
         public async Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocument)
         {
             return await ProjectDetails.AddDocumentToProject(AddDocument);
         }
-        public async Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId)
+        public async Task<AGGridResponseModel<ProjectDocumentView>> GetProjectDocument(AGGridRequestModel ProjectDocumentRequest)
         {
-            return await ProjectDetails.GetProjectDocument(ProjectId);
+            return await ProjectDetails.GetProjectDocument(ProjectDocumentRequest);
         }
 
         public async Task<List<ProjectDetailView>> GetProjectListById(string? searchby, string? searchfor, Guid UserId)

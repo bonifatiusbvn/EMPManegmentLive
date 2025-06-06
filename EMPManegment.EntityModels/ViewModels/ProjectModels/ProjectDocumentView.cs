@@ -23,6 +23,8 @@ namespace EMPManegment.EntityModels.ViewModels.ProjectModels
 
         public Guid? CreatdBy { get; set; }
         public string? FullName { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
     }
     public class ProjectRequestModel
     {

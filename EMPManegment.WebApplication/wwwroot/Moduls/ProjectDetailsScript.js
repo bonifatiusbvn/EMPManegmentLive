@@ -1,4 +1,5 @@
-﻿
+﻿var Formdata = window.userFormPermissions || 0;
+
 $(document).ready(function () {
     GetAllUserProjectDetailsList();
 
@@ -311,26 +312,159 @@ function showProjectMembers(ProjectId) {
     })
 }
 
+let isProjectGridInitialized = false; // global flag
+
 function showTeamsPagination(ProjectId) {
-    showTeams(ProjectId, 1);
+    const myGridElement = document.querySelector('#ProjectMembersTable');
+
+    // ✅ Prevent multiple initialization
+    if (isProjectGridInitialized) {
+        return;
+    }
+
+    let ProjectMemberGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
+            {
+                headerName: "User Name",
+                field: "firstName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data?.id) return '';
+                    const colors = [
+                        { bg: 'bg-primary-subtle', text: 'text-primary' },
+                        { bg: 'bg-secondary-subtle', text: 'text-secondary' },
+                        { bg: 'bg-success-subtle', text: 'text-success' },
+                        { bg: 'bg-info-subtle', text: 'text-info' },
+                        { bg: 'bg-warning-subtle', text: 'text-warning' },
+                        { bg: 'bg-danger-subtle', text: 'text-danger' },
+                        { bg: 'bg-dark-subtle', text: 'text-dark' }
+                    ];
+
+                    let profileHtml;
+                    if (params.data.image?.trim()) {
+                        profileHtml = `<img src="/${params.data.image}" style="height: 40px; width: 40px; border-radius: 50%;">`;
+                    } else {
+                        const initials = `${params.data.firstName?.[0] || ''}${params.data.lastName?.[0] || ''}`.toUpperCase();
+                        const color = colors[Math.floor(Math.random() * colors.length)];
+                        profileHtml = `<div class="flex-shrink-0 avatar-xs me-2">
+                            <div class="avatar-title ${color.bg} ${color.text} rounded-circle fs-13" style="height: 40px; width: 40px;">${initials}</div>
+                        </div>`;
+                    }
+
+                    return `<div class="d-flex align-items-center">${profileHtml}
+                        <div class="flex-grow-1 tasks_name ml-2" style="color: #16989A !important; margin-left: 10px">${params.data.firstName} ${params.data.lastName}</div>
+                    </div>`;
+                }
+            },
+            {
+                headerName: "Designation",
+                field: "designation",
+                sortable: true,
+                filter: true
+            }
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            params.api.sizeColumnsToFit();
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        maxBlocksInCache: 2,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: ProjectMemberGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel?.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel?.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    ProjectFilter: ProjectId,
+                };
+
+                $.ajax({
+                    url: '/Project/ShowTeam',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const userPermissionArray = Formdata;
+    let canDelete = false;
+
+    for (let i = 0; i < userPermissionArray.length; i++) {
+        const permission = userPermissionArray[i];
+        if (permission.formName === "Projec tDetails") {
+            canDelete = permission.delete;
+            break;
+        }
+    }
+
+    if (canDelete) {
+        ProjectMemberGridOptions.columnDefs.push({
+            headerName: "Action",
+            field: "action",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) {
+                    return '';
+                }
+                return `<a class="btn" data-user-id="${params.data.id}"><i class="fas fa-trash" style="color: #16989A;"></i></a>`;
+            }
+        });
+    }
+
+    agGrid.createGrid(myGridElement, ProjectMemberGridOptions);
+
+    // ✅ Set flag to true so this function can't run again
+    isProjectGridInitialized = true;
 }
 
-function showTeams(ProjectId, page) {
-    var formData = new FormData();
-    formData.append("ProjectId", ProjectId);
-    formData.append("page", page);
-    $.ajax({
-        url: '/Project/ShowTeam',
-        type: 'Post',
-        dataType: 'json',
-        data: formData,
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
-            $('#dvshowteam').html(Result.responseText);
-        },
-    })
-}
+
+
+//function showTeams(ProjectId, page) {
+//    var formData = new FormData();
+//    formData.append("ProjectId", ProjectId);
+//    formData.append("page", page);
+//    $.ajax({
+//        url: '/Project/ShowTeam',
+//        type: 'Post',
+//        dataType: 'json',
+//        data: formData,
+//        processData: false,
+//        contentType: false,
+//        complete: function (Result) {
+//            $('#dvshowteam').html(Result.responseText);
+//        },
+//    })
+//}
+
 
 
 function addProjectDocument() {
@@ -388,22 +522,147 @@ function showProjectDocuments(ProjectId) {
     })
 }
 
-function showuploadDocuments(ProjectId) {
-    var formData = new FormData();
-    formData.append("ProjectId", ProjectId);
-    $.ajax({
-        url: '/Project/ShowUploadedDocuments',
-        type: 'Post',
-        dataType: 'json',
-        data: formData,
-        processData: false,
-        contentType: false,
-        complete: function (Result) {
-            $('#dvuploadDocuments').html(Result.responseText);
-        },
-    })
-}
+//function showuploadDocuments(ProjectId) {
+//    var formData = new FormData();
+//    formData.append("ProjectId", ProjectId);
+//    $.ajax({
+//        url: '/Project/ShowUploadedDocuments',
+//        type: 'Post',
+//        dataType: 'json',
+//        data: formData,
+//        processData: false,
+//        contentType: false,
+//        complete: function (Result) {
+//            $('#dvuploadDocuments').html(Result.responseText);
+//        },
+//    })
+//}
+let isProjectDocumentGridInitialized = false; // global flag
 
+function showuploadDocuments(ProjectId) {
+    const myProjectDocumentGridElement = document.querySelector('#ProjectDocumentTable');
+
+    // ✅ Prevent multiple initialization
+    if (isProjectDocumentGridInitialized) {
+        return;
+    }
+
+    let ProjectDocumentGridOptions = {
+        rowHeight: 50,
+        columnDefs: [
+            {
+                headerName: "Document Name",
+                field: "documentName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data?.id) return '';
+
+                    return params.data.documentName.substring(37);
+                }
+            },
+            {
+                headerName: "User Name",
+                field: "firstName",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data?.id) return '';
+
+                    return params.data.firstName + " " + params.data.lastName;
+                }
+            },
+            {
+                headerName: "Date",
+                field: "date",
+                sortable: true,
+                filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data?.id) return '';
+
+                    return getCommonDateformat(params.data.date);
+                }
+            },
+        ],
+        defaultColDef: {
+            sortable: true,
+            filter: true,
+            cellClass: 'ag-cell-default-style',
+            width: 175,
+        },
+        rowSelection: 'single',
+        rowClassRules: {
+            'selected-row': params => params.node.isSelected()
+        },
+        onGridReady: function (params) {
+            params.api.sizeColumnsToFit();
+        },
+        rowModelType: 'infinite',
+        cacheBlockSize: 10,
+        maxBlocksInCache: 2,
+        datasource: {
+            getRows: function (params) {
+                const request = {
+                    StartRow: params.startRow,
+                    PageSize: ProjectDocumentGridOptions.cacheBlockSize || 10,
+                    SearchType: "",
+                    SearchValue: "",
+                    SortModel: params.sortModel || [],
+                    SortColumn: (params.sortModel?.length > 0) ? params.sortModel[0].colId : "",
+                    SortDirection: (params.sortModel?.length > 0) ? params.sortModel[0].sort : "",
+                    filters: Object.entries(params.filterModel || {}).map(([key, value]) => ({
+                        colId: key,
+                        filterValue: value.filter
+                    })),
+                    ProjectFilter: ProjectId,
+                };
+
+                $.ajax({
+                    url: '/Project/ShowUploadedDocuments',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(request),
+                    success: function (response) {
+                        params.successCallback(response.rowsThisPage, response.totalRowCount);
+                    },
+                    error: function () {
+                        params.failCallback();
+                    }
+                });
+            }
+        }
+    };
+
+    const userPermissionArray = Formdata;
+    let canDelete = false;
+
+    for (let i = 0; i < userPermissionArray.length; i++) {
+        const permission = userPermissionArray[i];
+        if (permission.formName === "Projec tDetails") {
+            canDelete = permission.delete;
+            break;
+        }
+    }
+
+    if (canDelete) {
+        ProjectDocumentGridOptions.columnDefs.push({
+            headerName: "Action",
+            field: "action",
+            sortable: false,
+            filter: false,
+            cellRenderer: function (params) {
+                if (!params.data || !params.data.id) {
+                    return '';
+                }
+                return `<a onclick="DownloadProjectDocument('${params.data.documentName}')"><i class="fas fa-cloud-download-alt" style="color: #16989A;"></i></a><a onclick="deleteProjectDocument('${params.data.id}')"><i class="fas fa-trash" style="color: #16989A;margin-left:10px;"></i></a>`;
+            }
+        });
+    }
+
+    agGrid.createGrid(myProjectDocumentGridElement, ProjectDocumentGridOptions);
+
+    isProjectDocumentGridInitialized = true;
+}
 function GetAllUserProjectDetailsList(page) {
     const projectStatus = $("#ddlProjectStatus").val();
     const projectpriority = $("#ddlProjectPriority").val();

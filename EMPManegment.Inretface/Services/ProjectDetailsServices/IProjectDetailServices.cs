@@ -1,4 +1,5 @@
 ﻿using EMPManegment.EntityModels.View_Model;
+using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using System;
@@ -19,9 +20,9 @@ namespace EMPManegment.Inretface.Services.ProjectDetailsServices
         Task<ProjectDetailView> GetProjectDetailsById(Guid ProjectId);
         Task<IEnumerable<EmpDetailsView>> GetAllMembers();
         Task<UserResponceModel> AddMemberToProject(ProjectMemberMasterView AddMemberToProject);
-        Task<IEnumerable<ProjectView>> GetProjectMember(Guid ProjectId);
+        Task<AGGridResponseModel<ProjectView>> GetProjectMember(AGGridRequestModel ProjectMemberRequest);
         Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocumentToProject);
-        Task<IEnumerable<ProjectDocumentView>> GetProjectDocument(Guid ProjectId);
+        Task<AGGridResponseModel<ProjectDocumentView>> GetProjectDocument(AGGridRequestModel ProjectDocumentRequest);
         string CheckProjectName();
         Task<UserResponceModel> MemberIsDeleted(ProjectMemberUpdate projectMember);
         Task<UserResponceModel> DeleteProjectDocument(Guid DocumentId);

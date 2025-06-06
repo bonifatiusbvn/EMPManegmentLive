@@ -207,7 +207,8 @@
                 </div>
                 <!-- end tab pane -->
                 <div class="tab-pane fade" id="project-documents" role="tabpanel">
-                    <div id="dvuploadDocuments"></div>
+                    @* <div id="dvuploadDocuments"></div> *@
+                    <div id="ProjectDocumentTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
                 </div>
                 <!-- end tab pane -->
                 <div class="tab-pane fade" id="project-activities" role="tabpanel">
@@ -222,7 +223,8 @@
                 </div>
                 <!-- end tab pane -->
                 <div class="tab-pane fade" id="project-teams" role="tabpanel">
-                    <div id="dvshowteam"></div>
+                    @* <div id="dvshowteam"></div> *@
+                    <div id="ProjectMembersTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
                 </div>
             </div>
         </div>
@@ -365,12 +367,16 @@
         </div>
     </div>
 </div>
-
 <!-- end modal -->
+
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 
-<script src="~/moduls/projectdetailsscript.js" asp-append-version="true"></script>
 <script type="text/javascript">
-    document.getElementById("showProjectMembers").click();
-    document.getElementById("showProjectDocuments").click();
+     window.userFormPermissions = @Html.Raw(Json.Serialize(UserSession.FormPermisionData));
+
+    // document.getElementById("showProjectMembers").click();
+    // document.getElementById("showProjectDocuments").click();
 </script>
+
+<script src="~/moduls/projectdetailsscript.js" asp-append-version="true"></script>
