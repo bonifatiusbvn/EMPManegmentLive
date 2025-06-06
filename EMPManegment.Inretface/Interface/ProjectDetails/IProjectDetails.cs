@@ -35,5 +35,6 @@ namespace EMPManegment.Inretface.Interface.ProjectDetails
         Task<UserResponceModel> UpdateProjectDetails(ProjectDetailView updateProject);
         Task<ProjectMemberUpdate> EditProjectMemberDesignation(Guid ProjectMemberId);
         Task<UserResponceModel> UpdateProjectMemberDesignation(ProjectMemberMasterView UpdateDesignation);
+        Task<List<ProjectActivityDetailsModel>> GetProjectActivityDetails(Guid ProjectId);
     }
 }

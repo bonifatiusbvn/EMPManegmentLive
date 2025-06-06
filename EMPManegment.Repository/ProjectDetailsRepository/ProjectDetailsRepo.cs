@@ -534,18 +534,18 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             try
             {
                 var ProjectDocumentList = (from a in Context.TblProjectDocuments
-                                         join c in Context.TblUsers on a.UserId equals c.Id
-                                         where a.ProjectId == ProjectId
-                                         select new ProjectDocumentView
-                                         {
-                                             Id = a.Id,
-                                             ProjectId = a.ProjectId,
-                                             FullName = c.FirstName + " " + c.LastName,
-                                             FirstName = c.FirstName,
-                                             LastName = c.LastName,
-                                             DocumentName = a.DocumentName,
-                                             Date = a.Date
-                                         }).ToList();
+                                           join c in Context.TblUsers on a.UserId equals c.Id
+                                           where a.ProjectId == ProjectId
+                                           select new ProjectDocumentView
+                                           {
+                                               Id = a.Id,
+                                               ProjectId = a.ProjectId,
+                                               FullName = c.FirstName + " " + c.LastName,
+                                               FirstName = c.FirstName,
+                                               LastName = c.LastName,
+                                               DocumentName = a.DocumentName,
+                                               Date = a.Date
+                                           }).ToList();
 
                 return ProjectDocumentList;
             }
@@ -818,6 +818,52 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public async Task<List<ProjectActivityDetailsModel>> GetProjectActivityDetails(Guid ProjectId)
+        {
+            try
+            {
+                string dbConnectionStr = _configuration.GetConnectionString("EMPDbconn");
+
+                var sqlPar = new SqlParameter[]
+                {
+                   new SqlParameter("@ProjectId", ProjectId),
+                };
+
+                var DS = DbHelper.GetDataSet("GetProjectActivityList", CommandType.StoredProcedure, sqlPar, dbConnectionStr);
+
+                List<ProjectActivityDetailsModel> ProjectActivityList = new List<ProjectActivityDetailsModel>();
+
+                if (DS != null && DS.Tables.Count > 0)
+                {
+                    foreach (DataRow row in DS.Tables[0].Rows)
+                    {
+                        var ProjectActivities = new ProjectActivityDetailsModel
+                        {
+                            RecordId = row["RecordId"] != DBNull.Value ? (Guid)row["RecordId"] : Guid.Empty,
+                            RecordType = row["RecordType"]?.ToString(),
+                            Title = row["Title"]?.ToString(),
+                            TaskType = row["TaskType"]?.ToString(),
+                            TaskStatus = row["TaskStatus"]?.ToString(),
+                            TaskDate = row["TaskDate"] != DBNull.Value ? (DateTime)row["TaskDate"] : DateTime.MinValue,
+                            TaskEndDate = row["TaskEndDate"] != DBNull.Value ? (DateTime)row["TaskEndDate"] : DateTime.MinValue,
+                            TaskDetails = row["TaskDetails"]?.ToString(),
+                            UserName = row["UserName"]?.ToString(),
+                            FirstName = row["FirstName"]?.ToString(),
+                            LastName = row["LastName"]?.ToString(),
+                            Image = row["Image"]?.ToString(),
+                            ShippingAddress = row["ShippingAddress"]?.ToString(),
+                        };
+                        ProjectActivityList.Add(ProjectActivities);
+                    }
+                }
+                return ProjectActivityList;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving the project member.", ex);
             }
         }
     }

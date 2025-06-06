@@ -1,5 +1,6 @@
 ﻿using Aspose.Foundation.UriResolver.RequestResponses;
 using DocumentFormat.OpenXml.Drawing.Charts;
+using DocumentFormat.OpenXml.Spreadsheet;
 using EMPManagment.Web.Helper;
 using EMPManagment.Web.Models.API;
 using EMPManegment.EntityModels.View_Model;
@@ -760,6 +761,25 @@ namespace EMPManegment.Web.Controllers
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetProjectActivityDetails(Guid ProjectId)
+        {
+            try
+            {
+                List<ProjectActivityDetailsModel> projectActivitieslist = new List<ProjectActivityDetailsModel>();
+                ApiResponseModel response = await APIServices.PostAsync("", "ProjectDetails/GetProjectActivityDetails?ProjectId=" + ProjectId);
+                if (response.code == 200)
+                {
+                    projectActivitieslist = JsonConvert.DeserializeObject<List<ProjectActivityDetailsModel>>(response.data.ToString());
+                }
+                return PartialView("~/Views/Project/_ProjectActivityDetailsPartial.cshtml", projectActivitieslist);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
             }
         }
     }

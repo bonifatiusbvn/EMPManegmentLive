@@ -90,7 +90,7 @@
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
                                     <input type="hidden" value="@Model.ProjectId" id="txtprojectid" hidden />
-                                    <a class="nav-link active" data-bs-toggle="tab" href="#project-overview" onclick="projectActivity('@Model.ProjectId')">
+                                    <a class="nav-link active" data-bs-toggle="tab" href="#project-overview" onclick="projectInvoiceActivity('@Model.ProjectId')">
                                         Overview
                                     </a>
                                 </li>
@@ -208,23 +208,23 @@
                 </div>
                 <!-- end tab pane -->
                 <div class="tab-pane fade" id="project-documents" role="tabpanel">
-                    @* <div id="dvuploadDocuments"></div> *@
                     <div id="ProjectDocumentTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
                 </div>
                 <!-- end tab pane -->
                 <div class="tab-pane fade" id="project-activities" role="tabpanel">
                     <div class="card">
                         <div class="card-body">
-                            <div id="invoiceactivity">
-                            </div>
                             <div id="projectActivity">
                             </div>
+                            @* <div id="invoiceactivity">
+                            </div>
+                            <div id="projectActivity">
+                            </div> *@
                         </div>
                     </div>
                 </div>
                 <!-- end tab pane -->
                 <div class="tab-pane fade" id="project-teams" role="tabpanel">
-                    @* <div id="dvshowteam"></div> *@
                     <div id="ProjectMembersTable" class="ag-theme-teal" style="height: 600px; width: 100%;"></div>
                 </div>
             </div>

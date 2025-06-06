@@ -301,7 +301,8 @@ $(document).ready(function () {
         showProjectDocuments(ShowProjectMemberProjectId)
     }
 })
-function showProjectMembers(ProjectId) {debugger
+function showProjectMembers(ProjectId) {
+    debugger
     var formData = new FormData();
     formData.append("ProjectId", ProjectId);
     $.ajax({
@@ -840,10 +841,10 @@ function deleteProjectMember(userId) {
 
 $(document).ready(function () {
     var ProId = $('#txtprojectid').val();
-    projectActivity(ProId);
+    projectInvoiceActivity(ProId);
 })
 
-function projectActivity(ProId) {
+function projectInvoiceActivity(ProId) {
 
     $.ajax({
         url: '/Project/GetInvoiceActivity?ProId=' + ProId,
@@ -853,24 +854,37 @@ function projectActivity(ProId) {
         contentType: false,
         complete: function (Result) {
 
-            $('#projectActivity').html(Result.responseText);
             $('#projectActivityinoverview').html(Result.responseText);
-            projectinvoiceActivity(ProId)
         },
     })
 }
 
-function projectinvoiceActivity(ProId) {
+//function projectinvoiceActivity(ProId) {
+
+//    $.ajax({
+//        url: '/Task/GetProjectActivity?ProId=' + ProId,
+//        type: 'Get',
+//        dataType: 'json',
+//        processData: false,
+//        contentType: false,
+//        complete: function (Result) {
+
+//            $('#invoiceactivity').html(Result.responseText);
+//        },
+//    })
+//}
+
+
+function projectActivity(ProjectId) {
 
     $.ajax({
-        url: '/Task/GetProjectActivity?ProId=' + ProId,
-        type: 'Get',
+        url: '/Project/GetProjectActivityDetails?ProjectId=' + ProjectId,
+        type: 'Post',
         dataType: 'json',
         processData: false,
         contentType: false,
         complete: function (Result) {
-
-            $('#invoiceactivity').html(Result.responseText);
+            $('#projectActivity').html(Result.responseText);
         },
     })
 }

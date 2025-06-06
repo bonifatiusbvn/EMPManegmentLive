@@ -113,5 +113,10 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.UpdateProjectMemberDesignation(UpdateDesignation);
         }
+
+        public async Task<List<ProjectActivityDetailsModel>> GetProjectActivityDetails(Guid ProjectId)
+        {
+            return await ProjectDetails.GetProjectActivityDetails(ProjectId);
+        }
     }
 }

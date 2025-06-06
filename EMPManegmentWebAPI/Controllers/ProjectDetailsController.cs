@@ -340,5 +340,13 @@ namespace EMPManagment.API.Controllers
             }
             return StatusCode(response.Code, response);
         }
+
+        [HttpPost]
+        [Route("GetProjectActivityDetails")]
+        public async Task<IActionResult> GetProjectActivityDetails(Guid ProjectId)
+        {
+            List<ProjectActivityDetailsModel> ProjectActivities = await ProjectDetail.GetProjectActivityDetails(ProjectId);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = ProjectActivities.ToList() });
+        }
     }
 }
