@@ -40,11 +40,31 @@ function AddProductType() {
     }
 }
 $(document).ready(function () {
-    $('#txtProductTypeList,#txtProducts').select2({
+    $('#txtProductTypeList').select2({
         placeholder: 'Select Product Type',
         width: '100%',
         dropdownAutoWidth: true,
         allowClear: true,
+        ajax: {
+            url: '/ProductMaster/GetProduct',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.productName
+                    }))
+                };
+            }
+        }
+    });
+    $('#txtProducts').select2({
+        placeholder: 'Select Product Type',
+        width: '100%',
+        dropdownAutoWidth: true,
+        allowClear: true,
+        dropdownParent: $('#UpdateProductDetails'), 
         ajax: {
             url: '/ProductMaster/GetProduct',
             dataType: 'json',
@@ -230,23 +250,36 @@ function EditProductDetails(Id) {
             $('#txtGstPerUnit').val(response.gstPercentage);
             $('#txtGstAmount').val(response.gstAmount);
             $('#txtHSN').val(response.hsn);
-            $('#txtProducts').val(response.productTypeName);
-            $('#txtProductTypeidHidden').val(response.productType);
+            //$('#txtProducts').val(response.productTypeName);
+            //$('#txtProductTypeidHidden').val(response.productType);
             $('#txtshortdescription').val(response.productShortDescription);
             $('#txtproductImage').val(response.productImage);
+
+            setSelectedProductType(response.productType, response.productTypeName);
         },
         error: function () {
             toastr.error("Can't get Data");
         }
     });
 }
+function setSelectedProductType(productType, productTypeName) {
+    if (!productType || productTypeName === "null") {
+        return;
+    }
 
+    const $dropdown = $('#txtProducts');
+
+    $dropdown.empty();
+
+    const newOption = new Option(productTypeName, productType, true, true);
+    $dropdown.append(newOption).trigger('change');
+}
 function UpdateProductDetails() {
     if ($('#UpdateDetailsForm').valid()) {
         var formData = new FormData();
         formData.append("Id", $("#txtProductId").val());
         formData.append("ProductName", $("#txtProductName").val());
-        formData.append("ProductType", $("#txtProductTypeidHidden").val());
+        formData.append("ProductType", $("#txtProducts").val());
         formData.append("ProductDescription", $("#txtProductDescription").val());
         formData.append("ProductShortDescription", $("#txtshortdescription").val());
         formData.append("PerUnitPrice", $("#txtPerUnitPrice").val());
@@ -458,7 +491,7 @@ $(document).ready(function () {
                                     <span class="product-badge">NEW</span>
                                 </div>
                             </div>
-                            <div class="flex-grow-1 product-details">
+                            <div class="flex-grow-1 product-details" style="text-align: start;">
                                 <h5 class="fs-15 mb-2">
                                     <a href="/ProductMaster/ProductDetails/?ProductId=${params.data.id}" 
                                        class="text-decoration-none" style="color: #16989A; font-weight:600;">
@@ -564,14 +597,14 @@ $(document).ready(function () {
                 let buttons = '<div class="action-buttons-modern">';
                 if (canEdit) {
                     buttons += `
-                        <div class="action-btn edit" onclick="EditProductDetails('${params.data.id}')" title="Edit">
-                            <i class="fa-regular fa-pen-to-square fs-14"></i>
+                        <div onclick="EditProductDetails('${params.data.id}')" title="Edit" style="color: #16989A;">
+                            <i class="fa-regular fa-pen-to-square fs-16"></i>
                         </div>`;
                 }
                 if (canDelete) {
                     buttons += `
-                        <div class="action-btn delete" onclick="DeleteProductDetails('${params.data.id}')" title="Delete">
-                            <i class="fas fa-trash fs-14"></i>
+                        <div onclick="DeleteProductDetails('${params.data.id}')" title="Delete" style="color: #16989A;margin-left:5px;">
+                            <i class="fas fa-trash fs-16"></i>
                         </div>`;
                 }
                 buttons += '</div>';
