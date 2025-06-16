@@ -175,7 +175,7 @@ $(document).ready(function () {
         $('#frmprojectdetails').valid();
     });
 
-    $('.select2').on('change', function () {
+    $('#projectPriority,#projectStatus,#projectCountry,#ProjectState,#ProjectCity').on('change', function () {
         $(this).valid();
     });
 });
@@ -733,9 +733,30 @@ function GetAllUserProjectDetailsList(page) {
     });
 }
 
-// Trigger on filter changes
-$('#ddlProjectStatus').change(() => GetAllUserProjectDetailsList(1));
-$('#ddlProjectPriority').change(() => GetAllUserProjectDetailsList(1));
+$(document).ready(function () {
+
+    $('#ddlProjectStatus').select2({
+        placeholder: 'Project Status',
+        width: '100%',
+        allowClear: true
+    });
+
+    $('#ddlProjectPriority').select2({
+        placeholder: 'Project Priority',
+        width: '100%',
+        allowClear: true
+    });
+
+    $('#ddlProjectStatus').on('change', function () {
+        GetAllUserProjectDetailsList(1);
+    });
+
+    $('#ddlProjectPriority').on('change', function () {
+        GetAllUserProjectDetailsList(1);
+    });
+});
+
+
 
 // Trigger on search (Enter key)
 $(document).on("keyup", "#txtProjectSearch", function (e) {
@@ -765,12 +786,13 @@ $(document).on("click", "#toggleDateFilter", function (e) {
 
 // Reset all filters
 $(document).on("click", "#btnResetFilters", function () {
-    $("#ddlProjectStatus").val("-- Status --").trigger('change');
-    $("#ddlProjectPriority").val("-- Priority --").trigger('change');
+    $("#ddlProjectStatus").empty();
+    $("#ddlProjectPriority").empty();
     $("#txtStartDate").val("");
     $("#txtEndDate").val("");
     $("#txtProjectSearch").val("");
     GetAllUserProjectDetailsList(1);
+    $("#dateFilterContainer").hide();
 });
 
 // Initial load
