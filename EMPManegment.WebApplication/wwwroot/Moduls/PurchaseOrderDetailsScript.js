@@ -294,7 +294,7 @@ $(document).ready(function () {
 
                 if (canDelete) {
                     buttons += `
-                    <a class="btn text-danger" onclick="deletePurchaseOrderDetails('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                    <a onclick="deletePurchaseOrderDetails('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
                 }
                 return buttons;
             }

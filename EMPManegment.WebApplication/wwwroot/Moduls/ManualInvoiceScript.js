@@ -799,8 +799,8 @@ $(document).ready(function () {
                         <i class="fa-regular fa-pen-to-square"></i></a>`;
                 }
                 if (canDelete) {
-                    buttons += `<a onclick="deleteManualInvoice('${params.data.id}')" class="btn text-danger">
-                        <i class="fas fa-trash"></i></a>`;
+                    buttons += `<a onclick="deleteManualInvoice('${params.data.id}')">
+                        <i class="fas fa-trash" style="margin-left:10px;"></i></a>`;
                 }
                 return buttons;
             }

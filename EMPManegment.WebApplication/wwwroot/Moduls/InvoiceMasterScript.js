@@ -542,12 +542,12 @@ $(document).ready(function () {
 
                 let buttons = '';
                 if (canEdit) {
-                    buttons += `<a href="/Invoice/CreateInvoice?Id=${params.data.id}" class="btn text-info editbtn">
+                    buttons += `<a href="/Invoice/CreateInvoice?Id=${params.data.id}">
                         <i class="fa-regular fa-pen-to-square"></i></a>`;
                 }
                 if (canDelete) {
-                    buttons += `<a onclick="fn_deleteInvoice('${params.data.id}')" class="btn text-danger">
-                        <i class="fas fa-trash"></i></a>`;
+                    buttons += `<a onclick="fn_deleteInvoice('${params.data.id}')">
+                        <i class="fas fa-trash" style="margin-left:10px;"></i></a>`;
                 }
                 return buttons;
             }

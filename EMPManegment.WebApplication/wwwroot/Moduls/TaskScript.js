@@ -833,7 +833,7 @@ $(document).ready(function () {
 
                 if (canDelete) {
                     buttons += `
-        <a onclick="DeleteTask('${params.data.id}')" class="text-danger" title="Delete">
+        <a onclick="DeleteTask('${params.data.id}')" title="Delete">
             <i class="fas fa-trash"></i>
         </a>`;
                 }

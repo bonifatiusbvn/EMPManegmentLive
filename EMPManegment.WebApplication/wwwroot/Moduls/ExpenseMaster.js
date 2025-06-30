@@ -1580,7 +1580,7 @@ $(document).ready(function () {
                         buttons += `<a onclick="EditAllUserExpenseDetails('${params.data.id}')"><i class="fa-regular fa-pen-to-square"></i></a>`;
                     }
                     if (canDelete) {
-                        buttons += `<a class="btn text-danger" onclick="deleteExpense('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                        buttons += `<a onclick="deleteExpense('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
                     }
                     return buttons;
                 }
@@ -2473,7 +2473,7 @@ $(document).ready(function () {
 
                 if (canDelete) {
                     buttons += `
-                    <a class="btn text-danger" onclick="deleteExpense('${params.data.id}')"><i class="fas fa-trash"></i></a>`;
+                    <a onclick="deleteExpense('${params.data.id}')"><i class="fas fa-trash" style="margin-left:10px;"></i></a>`;
                 }
                 return buttons;
             }
