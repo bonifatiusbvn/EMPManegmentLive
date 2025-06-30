@@ -165,7 +165,7 @@
             <!-- Right navbar links -->
             <ul class="navbar-nav ml-auto">
                 <div class="dropdown notifications-menu" id="notificationDropdown">
-                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false" style="margin-right:15px; margin-top:9px;">
+                    <button type="button" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" id="page-header-notifications-dropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-haspopup="true" aria-expanded="false" style="margin-top:9px;">
                         <i class='bx bx-bell fs-22' style="margin-left: -5px;"></i>
                         <span class="position-absolute topbar-badge fs-10 translate-middle badge rounded-pill bg-danger" id="CountunreadNotification"><span class="visually-hidden">unread messages</span></span>
                     </button>
@@ -248,7 +248,11 @@
                         </div>
                     </div>
                 </div>
-
+                <div class="dropdown notifications-menu" id="notificationDropdown">
+                    <a asp-action="ChatMessages" asp-controller="Home" class="btn btn-icon btn-topbar btn-ghost-secondary rounded-circle" style="margin-top:9px;">
+                        <i class="bx bx-comment-detail fs-22" style="margin-left: -5px;"></i>
+                    </a>
+                </div>
                 <li class="nav-item dropdown">
                     <div class="dropdown ms-sm-3 header-item topbar-user" style="height:60px;">
                         <button type="button" class="btn" id="page-header-user-dropdown" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
