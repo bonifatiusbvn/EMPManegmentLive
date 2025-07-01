@@ -225,7 +225,7 @@ function GetAllNotifications() {
         url: '/Home/GetUserAllNotifications',
         type: 'GET',
         dataType: 'html',
-        complete: function (Result) {
+        complete: function (Result) {debugger
             $('#userAllNotificationId').html(Result.responseText);
             var totalcount = $('#totalNotificationCount').val();
             $('#CountAllNotification').text(totalcount);
@@ -236,7 +236,9 @@ function GetAllNotifications() {
                 $('#CountunreadNotification').text(totalcount);
             }
             var UnreadMessages = $('#TotalUnreadMessages').val();
+            debugger
             $("#CountUnreadMessage").text(UnreadMessages);
+            $("#CountunreadMessageNotification").text(UnreadMessages);
             var totalTasks = $('#totalTotalTasks').val();
             $("#CountTotalTask").text(totalTasks);
         },
