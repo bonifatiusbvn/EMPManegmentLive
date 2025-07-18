@@ -2491,7 +2491,7 @@ $(document).ready(function () {
         $('.nav-radio').prop('checked', false);
         selectedMonthFilter = "";
         $('#dateFilterContainer').hide();
-        $('#txtstartdatebox').val('');
+        $('# ').val('');
         $('#txtenddatebox').val('');
         startDate = null;
         endDate = null;

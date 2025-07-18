@@ -958,7 +958,8 @@ function ResetMyAttendanceData() {
     $('#txtMyAttendanceSearch').val('');
     MyAttendancestartDate = null;
     MyAttendanceendDate = null;
-    MyAttendanceMonth = null;
+    $('#txtmonth').val('');
+    MyAttendanceMonth = new Date().toISOString().slice(0, 7);
     $('#dateFilterContainer').hide();
     $('#AttendanceMonthFilterContainer').hide();
     MyAttendanceGridOptions.api.setFilterModel(null);
@@ -984,7 +985,7 @@ function GetMySearchAttendanceList() {
 function fn_SearchMyAttendanceList(UserPermissionData) {
     if ($('#txtmonth').val() == "" && $("#txtstartdate").val() == "" && $("#txtenddate").val() == "") {
         toastr.warning("Select the Month or UserName");
-    } else {
+    } else {   
         selectedMonth = $('#txtmonth').val();
         selectedStartDate = $("#txtstartdate").val();
         selectedEndDate = $("#txtenddate").val();

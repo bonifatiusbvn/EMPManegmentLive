@@ -55,7 +55,7 @@
                     <span>Purchase Request #</span> <span class="fw-bold">@firstItem.PrNo</span>
                 </h5>
                 <p class="text-muted small mb-0">
-                    <i class="ri-calendar-line me-1"></i> @DateTime.Now.ToString("dd MMM yyyy")
+                    <i class="ri-calendar-line me-1"></i> @firstItem.PrDate?.ToString("dd MMM yyyy")
                 </p>
             </div>
             <div class="d-print-none">

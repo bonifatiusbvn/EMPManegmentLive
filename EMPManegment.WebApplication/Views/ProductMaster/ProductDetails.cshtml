@@ -226,8 +226,8 @@
             <div class="modal fade zoomIn" id="UpdateProductDetails" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content border-0">
-                        <div class="modal-header p-3 bg-primary-subtle">
-                            <h5 class="modal-title" id="exampleModalLabel">Update Product</h5>
+                        <div class="modal-header p-3 bg-teal">
+                            <h5 class="modal-title" id="exampleModalLabel" style="color:white;">Update Product</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" id="close-modal"></button>
                         </div>
                         <form class="tablelist-form" autocomplete="off" id="UpdateDetailsForm">
@@ -256,8 +256,9 @@
                                     <!--end col-->
                                     <div class="col-lg-6">
                                         <label class="form-label">IsWithGST</label>
-                                        <div class="form-check form-switch">
-                                            <input class="form-check-input font-22" id="txtIsWithGst" type="checkbox" style="margin-left: 5px;font-size: 22px;">
+                                        <div class="custom-control custom-switch">
+                                            <input class="custom-control-input toggle-checkbox" id="txtIsWithGst" type="checkbox" style="margin-left: 5px;font-size: 22px;">
+                                            <label class="custom-control-label" for="txtIsWithGst"></label>
                                         </div>
                                     </div>
                                     <!--end col-->
@@ -287,8 +288,8 @@
                             </div>
                             <div class="modal-footer">
                                 <div class="hstack gap-2 justify-content-end">
-                                    <button type="button" class="btn btn-light" id="close-modal" data-bs-dismiss="modal">Close</button>
-                                    <button type="button" class="btn button-teal" onclick="UpdateProductDetails()" id="UpdateDetailsBtn">Update Product</button>
+                                    <button type="button" class="btn btn-secondary" id="close-modal" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn button-teal" onclick="UpdateProductDetails()" id="UpdateDetailsBtn"><i class="ri-edit-line me-1"></i>Update</button>
                                 </div>
                             </div>
                         </form>
