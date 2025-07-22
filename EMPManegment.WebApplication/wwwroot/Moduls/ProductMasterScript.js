@@ -64,7 +64,7 @@ $(document).ready(function () {
         width: '100%',
         dropdownAutoWidth: true,
         allowClear: true,
-        dropdownParent: $('#UpdateProductDetails'), 
+        dropdownParent: $('#UpdateProductDetails'),
         ajax: {
             url: '/ProductMaster/GetProduct',
             dataType: 'json',
@@ -465,48 +465,33 @@ var Formdata = window.userFormPermissions || 0;
 let ProductGridOptions = [];
 $(document).ready(function () {
     ProductGridOptions = {
-        rowHeight: 130,
-        headerHeight: 45,
+        rowHeight: 50,
         suppressCellFocus: true,
         suppressRowClickSelection: true,
         animateRows: true,
         rowStyle: { 'border-bottom': '1px solid rgba(22, 152, 154, 0.05)' },
         columnDefs: [
             {
-                headerName: "PRODUCT DETAILS",
+                headerName: "Product Name",
                 field: "productName",
                 sortable: true,
                 filter: true,
-                flex: 3,
-                minWidth: 350,
                 cellRenderer: function (params) {
-                    if (!params.data || !params.data.id) return '';
+                    if (!params.data?.id) return '';
 
-                    return `
-                        <div class="product-card-modern d-flex align-items-center">
-                            <div class="flex-shrink-0 me-3 position-relative">
-                                <div class="product-image-container">
-                                    <img src="/${params.data.productImage}" alt="${params.data.productName}" 
-                                         class="img-fluid h-100 w-100" />
-                                    <span class="product-badge">NEW</span>
-                                </div>
-                            </div>
-                            <div class="flex-grow-1 product-details" style="text-align: start;">
-                                <h5 class="fs-15 mb-2">
-                                    <a href="/ProductMaster/ProductDetails/?ProductId=${params.data.id}" 
-                                       class="text-decoration-none" style="color: #16989A; font-weight:600;">
-                                        ${params.data.productName}
-                                    </a>
-                                </h5>
-                                <span class="product-category">${params.data.productTypeName}</span>
-                                <p class="product-description mb-0">
-                                    ${params.data.productShortDescription}
-                                </p>
-                            </div>
-                        </div>
-                    `;
+                    let profileHtml;
+                    profileHtml = `<img src="/${params.data.productImage}" style="height: 40px; width: 40px; border-radius: 50%;">`;
+
+                    return '<a href="/ProductMaster/ProductDetails/?ProductId=' + params.data.id +
+                        '" class="link-primary" style="display: flex; align-items: center;">' +
+                        profileHtml +
+                        '<span style="margin-left: 10px; color: #16989A !important;">' +
+                        params.data.productName +
+                        '</span></a>';
                 }
             },
+            { headerName: "Type", field: "productTypeName", sortable: true, filter: true },
+            { headerName: "Description", field: "productShortDescription", sortable: true, filter: true },
             {
                 headerName: "PRICE",
                 field: "perUnitPrice",
@@ -515,7 +500,7 @@ $(document).ready(function () {
                 flex: 1,
                 minWidth: 120,
                 cellRenderer: function (params) {
-                    return params.value ? `<div class="product-price">$${params.value}</div>` : '';
+                    return params.value ? `<div>${params.value}</div>` : '';
                 }
             },
         ],

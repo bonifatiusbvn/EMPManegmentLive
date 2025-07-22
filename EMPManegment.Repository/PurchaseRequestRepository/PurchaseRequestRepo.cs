@@ -301,7 +301,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                 var filterConditions = string.Join(" AND ", PurchaseRequest.filters.Select(f =>
                                     $"{f.ColId} LIKE '%{f.FilterValue}%'"));
                 string sortColumn = PurchaseRequest.SortModel?.FirstOrDefault()?.ColId ?? "Date";
-                string sortDirection = PurchaseRequest.SortModel?.FirstOrDefault()?.Sort ?? "asc";
+                string sortDirection = PurchaseRequest.SortModel?.FirstOrDefault()?.Sort ?? "desc";
 
                 var parameters = new List<SqlParameter>
                 {
@@ -332,7 +332,7 @@ namespace EMPManegment.Repository.PurchaseRequestRepository
                     IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
                     IsDeleted = row["IsDeleted"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsDeleted"]) : null,
                     PrNo = row["PrNo"].ToString(),
-                    Date = Convert.ToDateTime(row["Date"]),
+                    Date = row["Date"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(row["Date"]),
 
                 }).ToList();
 

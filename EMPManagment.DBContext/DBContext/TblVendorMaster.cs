@@ -39,17 +39,19 @@ public partial class TblVendorMaster
 
     public string? VendorCompanyLogo { get; set; }
 
-    public string VendorBankName { get; set; } = null!;
+    public string? VendorBankName { get; set; }
 
-    public string VendorBankBranch { get; set; } = null!;
+    public string? VendorBankBranch { get; set; }
 
-    public string VendorAccountHolderName { get; set; } = null!;
+    public string? VendorAccountHolderName { get; set; }
 
-    public string VendorBankAccountNo { get; set; } = null!;
+    public string? VendorBankAccountNo { get; set; }
 
-    public string VendorBankIfsc { get; set; } = null!;
+    public string? VendorBankIfsc { get; set; }
 
     public string VendorGstnumber { get; set; } = null!;
+
+    public string? VendorPannumber { get; set; }
 
     public DateTime? CreatedOn { get; set; }
 

@@ -10,7 +10,6 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
 {
     public class VendorDetailsView
     {
-
         public Guid Vid { get; set; }
         public string VendorFirstName { get; set; } = null!;
         public string VendorLastName { get; set; } = null!;
@@ -30,18 +29,18 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public string? VendorCompanyEmail { get; set; }
         public string? VendorCompanyNumber { get; set; }
         public string? VendorCompanyLogo { get; set; }
-        public string? VendorBankAccountNo { get; set; }
         public string? VendorBankName { get; set; }
-        public string VendorBankBranch { get; set; } = null!;
-        public string VendorAccountHolderName { get; set; } = null!;
+        public string? VendorBankBranch { get; set; }
+        public string? VendorAccountHolderName { get; set; }
+        public string? VendorBankAccountNo { get; set; }
         public string? VendorBankIfsc { get; set; }
-        public string? VendorGstnumber { get; set; }
+        public string VendorGstnumber { get; set; } = null!;
+        public string? VendorPannumber { get; set; }
         public int VendorTypeId { get; set; }
         public string? VendorTypeName { get; set; } 
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }
         public Guid? UpdatedBy { get; set; }
-
         public DateTime? UpdatedOn { get; set; }
         public string? FullAddress { get; set; }
         public string? Image { get; set; }

@@ -32,6 +32,7 @@ namespace EMPManegment.EntityModels.ViewModels.VendorModels
         public string VendorAccountHolderName { get; set; } = null!;
         public string? VendorBankIfsc { get; set; }
         public string? VendorGstnumber { get; set; }
+        public string? VendorPannumber { get; set; }
         public int VendorTypeId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string? CreatedBy { get; set; }

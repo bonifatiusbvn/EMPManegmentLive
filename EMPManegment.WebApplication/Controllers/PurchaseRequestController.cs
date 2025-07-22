@@ -217,6 +217,15 @@ namespace EMPManegment.Web.Controllers
 
                 var CompanyDetails = await APIServices.AGPostAsync<PurchaseRequestModel>(PurchaseRequest, "PurchaseRequest/GetPRList");
 
+                string ProjectIdString = UserSession.ProjectId;
+                Guid? ProjectId = !string.IsNullOrEmpty(ProjectIdString) ? Guid.Parse(ProjectIdString) : (Guid?)null;
+
+                if(ProjectId != null)
+                {
+                    CompanyDetails.Data = CompanyDetails.Data.Where(e => e.ProjectId == ProjectId).ToList(); 
+                    CompanyDetails.RecordsTotal = CompanyDetails.Data.Where(e => e.ProjectId == ProjectId).Count(); 
+                }
+
                 return new JsonResult(new
                 {
                     rowsThisPage = CompanyDetails.Data,

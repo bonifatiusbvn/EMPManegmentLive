@@ -303,6 +303,16 @@ namespace EMPManegment.Web.Controllers
                 InvoiceRequest.filters ??= new List<FilterModel>();
 
                 var InvoiceDetails = await APIServices.AGPostAsync<InvoiceViewModel>(InvoiceRequest, "Invoice/GetInvoiceDetailsList");
+
+                string ProjectIdString = UserSession.ProjectId;
+                Guid? ProjectId = !string.IsNullOrEmpty(ProjectIdString) ? Guid.Parse(ProjectIdString) : (Guid?)null;
+
+                if (ProjectId != null)
+                {
+                    InvoiceDetails.Data = InvoiceDetails.Data.Where(e => e.ProjectId == ProjectId).ToList();
+                    InvoiceDetails.RecordsTotal = InvoiceDetails.Data.Where(e => e.ProjectId == ProjectId).Count();
+                }
+
                 return new JsonResult(new
                 {
                     rowsThisPage = InvoiceDetails.Data,

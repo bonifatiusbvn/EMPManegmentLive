@@ -175,6 +175,7 @@ function VendorDetails(Id) {
             $('#VendorAccountHolderName').text(response.vendorAccountHolderName);
             $('#VendorBankIfsc').text(response.vendorBankIfsc);
             $('#VendorGstnumber').text(response.vendorGstnumber);
+            $('#VendorPannumber').text(response.vendorPannumber);
         },
         error: function () {
             toastr.error("Can't get Data");
@@ -234,6 +235,7 @@ function UpdateVendorDetails() {
         formData.append("VendorBankAccountNo", $("#accountnumberInput").val());
         formData.append("VendorBankIfsc", $("#ifscInput").val());
         formData.append("VendorGstnumber", $("#GSTNumberInput").val());
+        formData.append("VendorPannumber", $("#PANNumberInput").val());
         formData.append("UpdatedBy", $("#txtUpdatedby").val());
         var imageName = $("#currentVendorImageName").text().trim();
         var imageFile = $("#companylogoInput")[0].files[0];
@@ -291,6 +293,7 @@ function AddVendorDetails() {
         formData.append("VendorBankAccountNo", $("#accountnumberInput").val());
         formData.append("VendorBankIfsc", $("#ifscInput").val());
         formData.append("VendorGstnumber", $("#GSTNumberInput").val());
+        formData.append("VendorPannumber", $("#PANNumberInput").val());
         formData.append("VendorCompanyLogo", $("#companylogoInput")[0].files[0]);
 
 
@@ -370,18 +373,8 @@ $(document).ready(function () {
                 minlength: 10,
                 maxlength: 10
             },
-            banknameInput: "required",
-            branchInput: "required",
-            accountnameInput: "required",
-            accountnumberInput: "required",
-            ifscInput: "required",
             GSTNumberInput: "required",
-            banknameInput: "required",
-            branchInput: "required",
-            accountnameInput: "required",
-            accountnumberInput: "required",
-            ifscInput: "required",
-            GSTNumberInput: "required",
+            PANNumberInput: "required",
         },
         messages: {
             companynameInput: "Please Enter Company",
@@ -425,18 +418,8 @@ $(document).ready(function () {
                 minlength: "Work number must be 10 digits long",
                 maxlength: "Work number must be 10 digits long"
             },
-            banknameInput: "Please Enter BankName",
-            branchInput: "Please Enter BankBranch",
-            accountnameInput: "Please Enter AccountHolderName",
-            accountnumberInput: "Please Enter BankAccountNo",
-            ifscInput: "Please Enter BankIfsc",
             GSTNumberInput: "Please Enter Gstnumber",
-            banknameInput: "Please Enter BankName",
-            branchInput: "Please Enter BankBranch",
-            accountnameInput: "Please Enter AccountHolderName",
-            accountnumberInput: "Please Enter BankAccountNo",
-            ifscInput: "Please Enter BankIfsc",
-            GSTNumberInput: "Please Enter Gstnumber",
+            PANNumberInput: "Please Enter Pannumber",
         },
         errorPlacement: function (error, element) {
 

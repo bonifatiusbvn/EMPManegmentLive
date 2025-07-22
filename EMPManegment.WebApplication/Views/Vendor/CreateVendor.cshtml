@@ -214,6 +214,20 @@
                                         <input type="number" class="form-control" autocomplete="off" value="@Model.VendorPhone" id="phonenumberInput" name="phonenumberInput" placeholder="Enter your number">
                                     </div>
                                 </div>
+                                <!--end col-->
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <label for="AddressidInput" class="form-label required-field">Address </label>
+                                        @if (Model.VendorAddress != null)
+                                        {
+                                            <textarea type="text" class="form-control" id="AddressidInput" name="AddressidInput" rows="3" placeholder="Enter your Address">@Model.VendorAddress</textarea>
+                                        }
+                                        else
+                                        {
+                                            <textarea type="text" class="form-control" id="AddressidInput" name="AddressidInput" rows="3" placeholder="Enter your Address"></textarea>
+                                        }
+                                    </div>
+                                </div>
                                 <div class="col-lg-4">
                                     <div class="mb-3">
                                         <label for="ddlCountry" class="form-label required-field">Country</label>
@@ -274,20 +288,7 @@
                                         <input type="hidden" id="txtcity" name="txtcity" value="" />
                                     </div>
                                 </div>
-                                <!--end col-->
-                                <div class="col-lg-12">
-                                    <div class="mb-3">
-                                        <label for="AddressidInput" class="form-label required-field">Address </label>
-                                        @if (Model.VendorAddress != null)
-                                        {
-                                            <textarea type="text" class="form-control" id="AddressidInput" name="AddressidInput" rows="3" placeholder="Enter your Address">@Model.VendorAddress</textarea>
-                                        }
-                                        else
-                                        {
-                                            <textarea type="text" class="form-control" id="AddressidInput" name="AddressidInput" rows="3" placeholder="Enter your Address"></textarea>
-                                        }
-                                    </div>
-                                </div>
+                               
                                 <!--end col-->
                                 <div class="col-lg-12">
                                     <div class="row mb-3">
@@ -396,35 +397,35 @@
                             <div class="row">
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="banknameInput" class="form-label required-field">Bank Name</label>
+                                        <label for="banknameInput" class="form-label">Bank Name</label>
                                         <input type="text" class="form-control" value="@Model.VendorBankName" autocomplete="off" id="banknameInput" name="banknameInput" placeholder="Enter your bank name">
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="branchInput" class="form-label required-field">Branch</label>
+                                        <label for="branchInput" class="form-label">Branch</label>
                                         <input type="text" class="form-control" value="@Model.VendorBankBranch" autocomplete="off" id="branchInput" name="branchInput" placeholder="Branch">
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-12">
                                     <div class="mb-3">
-                                        <label for="accountnameInput" class="form-label required-field">Account Holder Name</label>
+                                        <label for="accountnameInput" class="form-label">Account Holder Name</label>
                                         <input type="text" class="form-control" value="@Model.VendorAccountHolderName" autocomplete="off" id="accountnameInput" name="accountnameInput" placeholder="Enter account holder name">
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="accountnumberInput" class="form-label required-field">Account No</label>
+                                        <label for="accountnumberInput" class="form-label">Account No</label>
                                         <input type="number" class="form-control" value="@Model.VendorBankAccountNo" autocomplete="off" id="accountnumberInput" name="accountnumberInput" placeholder="Enter account number">
                                     </div>
                                 </div>
                                 <!--end col-->
                                 <div class="col-lg-6">
                                     <div class="mb-3">
-                                        <label for="ifscInput" class="form-label required-field">IFSC </label>
+                                        <label for="ifscInput" class="form-label">IFSC </label>
                                         <input type="text" class="form-control" value="@Model.VendorBankIfsc" autocomplete="off" id="ifscInput" name="ifscInput" placeholder="IFSC">
                                     </div>
                                 </div>
@@ -436,6 +437,12 @@
                                     </div>
                                 </div>
                                 <!--end col-->
+                                <div class="col-lg-6">
+                                    <div class="mb-3">
+                                        <label for="PANInput" class="form-label required-field">PAN No</label>
+                                        <input type="text" class="form-control" value="@Model.VendorPannumber" autocomplete="off" id="PANNumberInput" name="PANNumberInput" placeholder="PAN-Number">
+                                    </div>
+                                </div>
                             </div>
                             <!--end row-->
                         </div>

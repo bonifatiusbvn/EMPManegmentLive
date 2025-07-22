@@ -98,7 +98,6 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAdress>(entity =>
@@ -849,6 +848,9 @@ public partial class BonifatiusEmployeesContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("VendorGSTNumber");
             entity.Property(e => e.VendorLastName).HasMaxLength(20);
+            entity.Property(e => e.VendorPannumber)
+                .HasMaxLength(50)
+                .HasColumnName("VendorPANNumber");
             entity.Property(e => e.VendorPhone).HasMaxLength(15);
             entity.Property(e => e.VendorPinCode).HasMaxLength(10);
 

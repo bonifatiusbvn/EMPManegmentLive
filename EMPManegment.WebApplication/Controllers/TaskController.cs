@@ -263,6 +263,15 @@ namespace EMPManegment.Web.Controllers
 
                 var TaskDetails = await APIServices.AGPostAsync<TaskDetailsView>(TaskRequest, "UserHome/GetAllTaskList");
 
+                string ProjectIdString = UserSession.ProjectId;
+                Guid? ProjectId = !string.IsNullOrEmpty(ProjectIdString) ? Guid.Parse(ProjectIdString) : (Guid?)null;
+
+                if (ProjectId != null)
+                {
+                    TaskDetails.Data = TaskDetails.Data.Where(e => e.ProjectId == ProjectId).ToList();
+                    TaskDetails.RecordsTotal = TaskDetails.Data.Where(e => e.ProjectId == ProjectId).Count();
+                }
+
                 return new JsonResult(new
                 {
                     rowsThisPage = TaskDetails.Data,

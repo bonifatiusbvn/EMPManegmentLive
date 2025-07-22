@@ -25,6 +25,14 @@ $(document).ready(function () {
     });
 });
 
+function changeQuantity(delta, btn) {
+    var input = btn.parentElement.querySelector('.product-quantity');
+    var current = parseInt(input.value) || 1;
+    var newValue = current + delta;
+    input.value = (newValue >= 1) ? newValue : 1;
+    fn_updatePRProductAmount();
+}
+
 var Formdata = window.userFormPermissions || 0;
 let PurchaseRequestGridOptions = [];
 
@@ -52,27 +60,33 @@ $(document).ready(function () {
             { headerName: "Product Name", field: "productName", sortable: true, filter: true },
             { headerName: "Quantity", field: "quantity", sortable: true, filter: true },
             {
+                headerName: "Date", field: "date", sortable: true, filter: true,
+                cellRenderer: function (params) {
+                    if (!params.data || !params.data.prId) return '';
+                    return getCommonDateformat(params.data.date);
+                }
+            },
+            {
                 headerName: "Approve",
                 field: "isApproved",
                 sortable: true,
                 filter: true,
+                suppressMenu: true,
                 cellRenderer: function (params) {
                     if (!params.data || !params.data.prId) return '';
-
-                    const isChecked = params.data.isApproved;
+                    const isChecked = !!params.data.isApproved;
                     const checkboxId = 'chk_child_' + params.data.prId;
-
                     return `
-                        <div class="custom-control custom-checkbox">
-                        <input type="checkbox"
-                        class="custom-control-input custom-control-input-teal"
-                        id="${checkboxId}"
-                        data-id="${params.data.prId}"
-                        data-approved="${isChecked}"
-                        ${isChecked ? 'checked' : ''}>
-                        <label class="custom-control-label" for="${checkboxId}" style="margin-top: 11px;"></label>
-                        </div>
-                `;
+            <div class="custom-control custom-checkbox">
+                <input type="checkbox"
+                       class="custom-control-input custom-control-input-teal pr-approve-toggle"
+                       name="chk_child"
+                       id="${checkboxId}"
+                       data-id="${params.data.prId}"
+                       data-approved="${isChecked}"
+                       ${isChecked ? 'checked' : ''}>
+                <label class="custom-control-label" for="${checkboxId}" style="margin-top:11px;"></label>
+            </div>`;
                 }
             }
         ],
@@ -416,13 +430,26 @@ function preventEmptyValue(input) {
         input.value = 1;
     }
 }
-function ApproveUnapprovePR() {
+
+$(document).on('change', '.pr-approve-toggle', function (e) {
+    e.stopPropagation();
+    ApproveUnapprovePR(this);
+});
+
+function ApproveUnapprovePR(cbElement) {
+    const $cb = $(cbElement);
+    const prId = $cb.data('id');
+    const newState = $cb.is(':checked');
+    const oldState = toBool($cb.attr('data-approved'));
+
+    const verb = newState ? 'approve' : 'unapprove';
+
     Swal.fire({
-        title: "Are you sure you want to approve this purchase request?",
-        text: "You won't be able to revert this!",
+        title: `Are you sure you want to ${verb} this purchase request?`,
+        text: "You won't be able to revert this without another action.",
         icon: "warning",
         showCancelButton: true,
-        confirmButtonText: "Yes, enter it!",
+        confirmButtonText: `Yes, ${verb} it!`,
         cancelButtonText: "No, cancel!",
         confirmButtonClass: "btn btn-primary w-xs me-2 mt-2",
         cancelButtonClass: "btn btn-danger w-xs mt-2",
@@ -430,53 +457,53 @@ function ApproveUnapprovePR() {
         showCloseButton: true
     }).then((result) => {
         if (result.isConfirmed) {
-            let selectedIds = [];
-            $("input[name=chk_child]").each(function () {
-                selectedIds.push({
-                    PrId: $(this).attr("data-id"),
-                    IsApproved: $(this).is(":checked")
+            submitPRApproval([{ PrId: prId, IsApproved: newState }], function (Result) {
+                $cb.attr('data-approved', newState);
+                Swal.fire({
+                    title: Result.message,
+                    icon: "success",
+                    confirmButtonClass: "btn btn-primary w-xs mt-2",
+                    buttonsStyling: false
+                }).then(function () {
+                    window.location = '/PurchaseRequest/PurchaseRequests';
                 });
+            }, function (errMsg) {
+                $cb.prop('checked', oldState);
+                toastr.error(errMsg || "Failed to update Purchase Request.");
             });
-
-
-            var PRDetails = {
-                PRList: selectedIds
-            };
-
-            var form_data = new FormData();
-            form_data.append("PRIsApproved", JSON.stringify(PRDetails));
-
-            $.ajax({
-                url: '/PurchaseRequest/ApproveUnapprovePR',
-                type: 'POST',
-                processData: false,
-                contentType: false,
-                data: form_data,
-                success: function (Result) {
-                    if (Result.code == 200) {
-                        Swal.fire({
-                            title: Result.message,
-                            icon: "success",
-                            confirmButtonClass: "btn btn-primary w-xs mt-2",
-                            buttonsStyling: false
-                        }).then(function () {
-                            window.location = '/PurchaseRequest/PurchaseRequests';
-                        });
-                    } else {
-                        toastr.error(Result.message);
-                    }
-                }
-            });
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-            Swal.fire(
-                'Cancelled',
-                'User has no changes.😊',
-                'error'
-            ).then(function () {
-                window.location = '/PurchaseRequest/PurchaseRequests';
-            });
+        } else {
+            $cb.prop('checked', oldState);
         }
     });
+}
+
+function submitPRApproval(prItems, successCb, errorCb) {
+    var form_data = new FormData();
+    form_data.append("PRIsApproved", JSON.stringify({ PRList: prItems }));
+
+    $.ajax({
+        url: '/PurchaseRequest/ApproveUnapprovePR',
+        type: 'POST',
+        processData: false,
+        contentType: false,
+        data: form_data,
+        success: function (Result) {
+            if (Result && Result.code == 200) {
+                if (successCb) successCb(Result);
+            } else {
+                if (errorCb) errorCb(Result ? Result.message : null);
+            }
+        },
+        error: function (xhr, status, error) {
+            if (errorCb) errorCb(error);
+        }
+    });
+}
+
+function toBool(val) {
+    if (typeof val === 'boolean') return val;
+    if (val == null) return false;
+    return String(val).toLowerCase() === 'true' || val === '1' || val === 'yes';
 }
 
 function GetPurchaseRequestList() {

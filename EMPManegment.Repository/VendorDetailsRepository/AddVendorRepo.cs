@@ -76,6 +76,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                         VendorAccountHolderName = vendor.VendorAccountHolderName,
                         VendorBankAccountNo = vendor.VendorBankAccountNo,
                         VendorGstnumber = vendor.VendorGstnumber,
+                        VendorPannumber = vendor.VendorPannumber,
                         VendorBankIfsc = vendor.VendorBankIfsc,
                         VendorTypeId = vendor.VendorTypeId,
                         CreatedBy = vendor.CreatedBy,
@@ -137,6 +138,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                     VendorBankAccountNo = row["VendorBankAccountNo"]?.ToString(),
                     VendorBankIfsc = row["VendorBankIFSC"]?.ToString(),
                     VendorGstnumber = row["VendorGSTNumber"]?.ToString(),
+                    VendorPannumber = row["VendorPANNumber"]?.ToString(),
 
                 }).ToList();
 
@@ -253,7 +255,6 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                 var DS = DbHelper.GetDataSet("[GetVendorById]", System.Data.CommandType.StoredProcedure, sqlPar, dbConnectionStr);
 
                 VendorDetailsView vendordata = new VendorDetailsView();
-
                 if (DS != null && DS.Tables.Count > 0)
                 {
                     if (DS.Tables[0].Rows.Count > 0)
@@ -285,6 +286,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                             vendordata.VendorAccountHolderName = row["VendorAccountHolderName"]?.ToString();
                             vendordata.VendorBankIfsc = row["VendorBankIfsc"]?.ToString();
                             vendordata.VendorGstnumber = row["VendorGstnumber"]?.ToString();
+                            vendordata.VendorPannumber = row["VendorPannumber"]?.ToString();
                             vendordata.VendorTypeId = row["VendorTypeId"] != DBNull.Value ? (int)row["VendorTypeId"] : 0; ;
                             vendordata.VendorTypeName = row["VendorTypeName"]?.ToString();
                             vendordata.FullAddress = row["FullAddress"]?.ToString();
@@ -355,6 +357,7 @@ namespace EMPManegment.Repository.VendorDetailsRepository
                     Vendordata.VendorAccountHolderName = updateVendor.VendorAccountHolderName;
                     Vendordata.VendorBankIfsc = updateVendor.VendorBankIfsc;
                     Vendordata.VendorGstnumber = updateVendor.VendorGstnumber;
+                    Vendordata.VendorPannumber = updateVendor.VendorPannumber;
                     Vendordata.VendorCity = updateVendor.VendorCity;
                     Vendordata.VendorCountry = updateVendor.VendorCountry;
                     Vendordata.VendorState = updateVendor.VendorState;

@@ -49,6 +49,15 @@ namespace EMPManegment.Web.Controllers
                 PurchaseOrderRequest.filters ??= new List<FilterModel>();
 
                 var PurchaseOrderDetails = await APIServices.AGPostAsync<PurchaseOrderDetailView>(PurchaseOrderRequest, "PurchaseOrderDetails/GetPurchaseOrderList");
+               
+                string ProjectIdString = UserSession.ProjectId;
+                Guid? ProjectId = !string.IsNullOrEmpty(ProjectIdString) ? Guid.Parse(ProjectIdString) : (Guid?)null;
+
+                if (ProjectId != null)
+                {
+                    PurchaseOrderDetails.Data = PurchaseOrderDetails.Data.Where(e => e.ProjectId == ProjectId).ToList();
+                    PurchaseOrderDetails.RecordsTotal = PurchaseOrderDetails.Data.Where(e => e.ProjectId == ProjectId).Count();
+                }
 
                 return new JsonResult(new
                 {
