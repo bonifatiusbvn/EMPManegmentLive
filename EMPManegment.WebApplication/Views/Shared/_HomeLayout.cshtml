@@ -104,6 +104,7 @@
                     {
                         <select class="form-control select2 select2-teal"
                                 data-dropdown-css-class="select2-teal" id="drpProjectName" name="drpProjectName">
+                            <option value="All Project">All Project</option>
                             @if (UserProjects != null)
                             {
                                 foreach (var Project in UserProjects)
@@ -124,13 +125,12 @@
                                 }
                             }
                         </select>
-
                     }
                     else
                     {
                         <select class="form-control select2 select2-teal"
                                 data-dropdown-css-class="select2-teal" id="drpProjectName" name="drpProjectName">
-                            <option value="">All Project</option>
+                            <option value="All Project">All Project</option>
                             @if (UserProjects != null)
                             {
                                 foreach (var Project in UserProjects)

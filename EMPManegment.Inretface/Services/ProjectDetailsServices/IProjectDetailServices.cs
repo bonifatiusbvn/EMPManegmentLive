@@ -22,6 +22,7 @@ namespace EMPManegment.Inretface.Services.ProjectDetailsServices
         Task<UserResponceModel> AddMemberToProject(ProjectMemberMasterView AddMemberToProject);
         Task<AGGridResponseModel<ProjectView>> GetProjectMember(AGGridRequestModel ProjectMemberRequest);
         Task<List<ProjectView>> ShowProjectMemberList(Guid ProjectId);
+        Task<List<ProjectView>> ShowRemeberProjectMemberList(Guid ProjectId);
         Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocumentToProject);
         Task<AGGridResponseModel<ProjectDocumentView>> GetProjectDocument(AGGridRequestModel ProjectDocumentRequest);
         Task<List<ProjectDocumentView>> ShowProjectDocumentList(Guid ProjectId);

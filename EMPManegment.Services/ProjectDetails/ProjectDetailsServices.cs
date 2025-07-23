@@ -54,7 +54,10 @@ namespace EMPManegment.Services.ProjectDetails
         {
             return await ProjectDetails.ShowProjectMemberList(ProjectId);
         }
-
+        public async Task<List<ProjectView>> ShowRemeberProjectMemberList(Guid ProjectId)
+        {
+            return await ProjectDetails.ShowRemeberProjectMemberList(ProjectId);
+        }
         public async Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocument)
         {
             return await ProjectDetails.AddDocumentToProject(AddDocument);

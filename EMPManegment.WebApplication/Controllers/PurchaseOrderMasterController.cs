@@ -14,6 +14,7 @@ using EMPManegment.Web.Helper;
 using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Build.Graph;
 using Microsoft.CodeAnalysis;
 using Newtonsoft.Json;
 using System.Diagnostics;
@@ -49,7 +50,7 @@ namespace EMPManegment.Web.Controllers
                 PurchaseOrderRequest.filters ??= new List<FilterModel>();
 
                 var PurchaseOrderDetails = await APIServices.AGPostAsync<PurchaseOrderDetailView>(PurchaseOrderRequest, "PurchaseOrderDetails/GetPurchaseOrderList");
-               
+
                 string ProjectIdString = UserSession.ProjectId;
                 Guid? ProjectId = !string.IsNullOrEmpty(ProjectIdString) ? Guid.Parse(ProjectIdString) : (Guid?)null;
 

@@ -457,6 +457,32 @@ namespace EMPManegment.Repository.ProjectDetailsRepository
                 throw;
             }
         }
+
+        public async Task<List<ProjectView>> ShowRemeberProjectMemberList(Guid projectId)
+        {
+            try
+            {
+                var remainingUsers = (from u in Context.TblUsers
+                                      where !Context.TblProjectMembers
+                                            .Any(pm => pm.ProjectId == projectId && pm.UserId == u.Id && pm.IsDeleted != true)
+                                      select new ProjectView
+                                      {
+                                          UserId = u.Id,
+                                          Fullname = u.FirstName + " " + u.LastName,
+                                          FirstName = u.FirstName,
+                                          LastName = u.LastName,
+                                          Image = u.Image,
+                                          Designation = u.Designation
+                                      }).ToList();
+
+                return remainingUsers;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
         public async Task<UserResponceModel> AddDocumentToProject(ProjectDocumentView AddDocument)
         {
             UserResponceModel response = new UserResponceModel();

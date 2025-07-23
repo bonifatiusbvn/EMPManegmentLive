@@ -35,6 +35,7 @@ function ShowInvoiceDetailsByOrderId(OrderId) {
         }
     });
 }
+
 function fn_InsertInvoiceDetails() {
 
     if ($("#CreateInvoiceForm").valid()) {
@@ -574,10 +575,11 @@ $(document).ready(function () {
         $("#txtVendorName").val(vendorText === 'All Vendor' ? '' : vendorText);
         if (invoiceTableGrid.api) {
             invoiceTableGrid.api.onFilterChanged();
-        }
-    });
+    }
+
     $('#toggleDateFilter').click(e => {
-        e.stopPropagation();
+        e.stopPropagation();    });
+
         $('#dateFilterContainer').toggle();
     });
 
@@ -593,7 +595,9 @@ function ResetInvoiceFilters() {
     window.location = '/Invoice/Invoices';
 }
 function createInvoice() {
-    if ($("#txtInvoice").val() == "") {
+    var ProjectName = $('#drpProjectName').val();
+    
+    if (ProjectName == "All Project") {
         Swal.fire({
             title: "Kindly select project!",
             icon: 'warning',

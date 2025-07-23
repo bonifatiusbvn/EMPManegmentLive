@@ -1059,9 +1059,10 @@ function fn_InsertPurchaseOrderDetails() {
         toastr.warning("Kindly fill all data fields");
     }
 }
-function createPO() {
 
-    if ($("#drpProjectName").val() == "") {
+function createPO() {
+    var ProjectName = $("#drpProjectName").val();
+    if (ProjectName == "All Project") {
         Swal.fire({
             title: "Kindly select project on dashboard.",
             icon: 'warning',

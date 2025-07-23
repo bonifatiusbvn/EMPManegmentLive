@@ -156,6 +156,14 @@ namespace EMPManagment.API.Controllers
         }
 
         [HttpPost]
+        [Route("ShowRemeberProjectMemberList")]
+        public async Task<IActionResult> ShowRemeberProjectMemberList(Guid ProjectId)
+        {
+            List<ProjectView> emplist = await ProjectDetail.ShowRemeberProjectMemberList(ProjectId);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = emplist.ToList() });
+        }
+
+        [HttpPost]
         [Route("AddDocumentToProject")]
         public async Task<IActionResult> AddDocumentToProject(ProjectDocumentView AddDocument)
         {

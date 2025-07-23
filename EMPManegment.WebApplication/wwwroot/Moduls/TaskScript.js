@@ -8,9 +8,45 @@ function showadddetails() {
     ClearTextBox();
     GetTaskType();
 
-    $('#addtasks').modal('show');
+    var ProjectName = $("#drpProjectName").val();
+    if (ProjectName == "All Project") {
+        Swal.fire({
+            title: "Kindly select project on dashboard.",
+            icon: 'warning',
+            confirmButtonColor: '#3085d6',
+            confirmButtonText: 'OK',
+        });
+    }
+    else {
+        $('#addtasks').modal('show');
+    }
 }
 
+$(document).ready(function () {
+
+    $('#ddlusername').select2({
+        placeholder: 'Select Employee',
+        width: '100%',
+        dropdownParent: $('#addtasks'),
+        ajax: {
+            url: '/Task/GetUserName',
+            dataType: 'json',
+            delay: 250,
+            processResults: function (data) {
+                
+                return {
+                    results: data.map(item => ({
+                        id: item.id,
+                        text: item.firstName + ' ' + item.lastName + ' (' + item.userName + ')',
+                    }))
+                };
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching vendor list:", error);
+            }
+        }
+    });
+});
 
 function ClearTextBox() {
 
@@ -808,7 +844,7 @@ $(document).ready(function () {
             break;
         }
     }
-
+    
     if (canEdit || canDelete) {
         TaskGridOptions.columnDefs.push({
             headerName: "Action",

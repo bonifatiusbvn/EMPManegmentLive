@@ -16,9 +16,12 @@ $(document).ready(function () {
 });
 
 function GetMemberList() {
+
+    var ProjectId = $('#projectid').val();
+
     $.ajax({
-        url: '/Task/GetUserName',
-        method: 'GET',
+        url: '/Project/ShowRemeberProjectMemberList?ProjectId=' + ProjectId,
+        method: 'POST',
         success: function (response) {
 
             var $dropdown = $('#projectMemberDropdown');

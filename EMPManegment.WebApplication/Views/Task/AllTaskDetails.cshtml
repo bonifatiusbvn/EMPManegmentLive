@@ -192,7 +192,7 @@
             <div class=" modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header bg-teal p-3">
-                        <h5 class="modal-title" id="exampleModalLabel" style="color:white;">Create Deals</h5>
+                        <h5 class="modal-title" id="exampleModalLabel" style="color:white;">Create Task</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -203,7 +203,6 @@
                                     <option selected disabled value=""></option>
                                 </select>
                                 <input type="hidden" class="form-control" id="txtTaskType">
-
                             </div>
 
                             <div class="mb-3">
@@ -213,8 +212,11 @@
 
                             <div class="mb-3">
                                 <label for="ddlusername" class="form-label">Task ProvideTo <span class="text-danger">*</span></label>
-                                <select class="form-control" id="ddlusername" name="ddlusername">
+                                @*  <select class="form-control" id="ddlusername" name="ddlusername">
                                     <option selected disabled value=""></option>
+                                </select> *@
+                                <select id="ddlusername" name="ddlusername" class="form-control select2 select2-teal"
+                                        data-dropdown-css-class="select2-teal">
                                 </select>
                                 <input type="hidden" class="form-control" id="txtguserid">
 
@@ -421,19 +423,6 @@
 
 <script type="text/javascript">
     window.userFormPermissions = @Html.Raw(Json.Serialize(UserSession.FormPermisionData));
-
-    document.addEventListener('DOMContentLoaded', function () {
-        var modalElement = document.getElementById('addtasks');
-        modalElement.addEventListener('show.bs.modal', function (event) {
-            var now = moment().format('YYYY-MM-DD HH:mm');
-            document.getElementById('txtdatetime').value = now;
-            document.getElementById('txtenddatetime').value = now;
-        });
-    });
-
-    function formatDateTime(dateTimeString) {
-        return dateTimeString.replace(' ', 'T');
-    }
 </script>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>

@@ -313,7 +313,30 @@ namespace EMPManegment.Web.Controllers
                 throw ex;
             }
         }
-
+        [HttpPost]
+        public async Task<IActionResult> ShowRemeberProjectMemberList(Guid ProjectId)
+        {
+            try
+            {
+                List<ProjectView> RememberProjectMembersList = new List<ProjectView>();
+                ApiResponseModel postuser = await APIServices.PostAsync("", "ProjectDetails/ShowRemeberProjectMemberList?ProjectId=" + ProjectId);
+                if (postuser.data != null)
+                {
+                    RememberProjectMembersList = JsonConvert.DeserializeObject<List<ProjectView>>(postuser.data.ToString());
+                    RememberProjectMembersList = RememberProjectMembersList.ToList();
+                }
+                else
+                {
+                    RememberProjectMembersList = new List<ProjectView>();
+                    ViewBag.Error = "note found";
+                }
+                return new JsonResult(RememberProjectMembersList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
         [HttpPost]
         public async Task<IActionResult> ProjectHeadMemberList()
         {
