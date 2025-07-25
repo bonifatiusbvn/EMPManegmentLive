@@ -305,7 +305,7 @@ $(document).ready(function () {
     }
 })
 function showProjectMembers(ProjectId) {
-    debugger
+    
     var formData = new FormData();
     formData.append("ProjectId", ProjectId);
     $.ajax({
