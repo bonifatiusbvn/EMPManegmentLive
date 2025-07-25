@@ -508,7 +508,7 @@ function GetAllUserTaskDetail() {
         type: 'Get',
         dataType: 'json',
         contentType: 'application/json;charset=utf-8;',
-        success: function (result) {
+        success: function (result) {debugger
             var object = '';
             var pendingTask = result.filter(function (obj) {
                 return (obj.taskStatus == "Pending");
@@ -518,7 +518,7 @@ function GetAllUserTaskDetail() {
                 return (obj.taskStatus == null);
             });
 
-
+            debugger
             var totalPending = parseInt(pendingTask.length) + parseInt(nullTask.length);
 
             $("#Pendingtask").text(totalPending);
@@ -534,6 +534,7 @@ function GetAllUserTaskDetail() {
             $("#Completetask").text(completeTask.length);
 
             $("#Totaltask").text(result.length);
+            debugger
         },
     });
 };

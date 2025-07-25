@@ -341,6 +341,7 @@ function showTeamsPagination(ProjectId) {
                 filter: true,
                 cellRenderer: function (params) {
                     if (!params.data?.id) return '';
+
                     const colors = [
                         { bg: 'bg-primary-subtle', text: 'text-primary' },
                         { bg: 'bg-secondary-subtle', text: 'text-secondary' },
@@ -351,20 +352,33 @@ function showTeamsPagination(ProjectId) {
                         { bg: 'bg-dark-subtle', text: 'text-dark' }
                     ];
 
-                    let profileHtml;
-                    if (params.data.image?.trim()) {
-                        profileHtml = `<img src="/${params.data.image}" style="height: 40px; width: 40px; border-radius: 50%;">`;
-                    } else {
-                        const initials = `${params.data.firstName?.[0] || ''}${params.data.lastName?.[0] || ''}`.toUpperCase();
-                        const color = colors[Math.floor(Math.random() * colors.length)];
-                        profileHtml = `<div class="flex-shrink-0 avatar-xs me-2">
+                    const initials = `${params.data.firstName?.[0] || ''}${params.data.lastName?.[0] || ''}`.toUpperCase();
+                    const color = colors[Math.floor(Math.random() * colors.length)];
+
+                    const fallbackInitialsHTML = `
+                        <div class="flex-shrink-0 avatar-xs me-2 fallback-initials" style="display: none;">
                             <div class="avatar-title ${color.bg} ${color.text} rounded-circle fs-13" style="height: 40px; width: 40px;">${initials}</div>
                         </div>`;
+
+                    let profileHtml = '';
+                    if (params.data.image?.trim()) {
+                        profileHtml = `
+                            <img src="/${params.data.image}"
+                                style="height: 40px; width: 40px; border-radius: 50%;"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+                                ${fallbackInitialsHTML}`;
+                    }
+                    else {
+                        profileHtml = fallbackInitialsHTML.replace('style="display: none;"', '');
                     }
 
-                    return `<div class="d-flex align-items-center">${profileHtml}
-                        <div class="flex-grow-1 tasks_name ml-2" style="color: #16989A !important; margin-left: 10px">${params.data.firstName} ${params.data.lastName}</div>
-                    </div>`;
+                    return `
+                        <div class="d-flex align-items-center">
+                            ${profileHtml}
+                            <div class="flex-grow-1 tasks_name ml-2" style="color: #16989A !important; margin-left: 10px;">
+                                ${params.data.firstName} ${params.data.lastName}
+                            </div>
+                        </div>`;
                 }
             },
             {
