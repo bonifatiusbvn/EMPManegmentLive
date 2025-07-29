@@ -1056,9 +1056,9 @@ function EditTaskDetails(Id) {
             $('#EditTaskTitle').val(response.taskTitle);
             $('#EditDescription').val(response.taskDetails);
             var startDateTime = response.taskDate;
-            $('#EditStartDate').val(formatDateTime(startDateTime));
+            $('#EditStartDate').val(startDateTime);
             var endDateTime = response.taskEndDate;
-            $('#EditEndDate').val(formatDateTime(endDateTime));
+            $('#EditEndDate').val(endDateTime);
             $('#EditTaskType').val(response.taskTypeName);
             $('#EditTaskTypeId').val(response.taskType);
             $('#EditStatus').val(response.taskStatus);

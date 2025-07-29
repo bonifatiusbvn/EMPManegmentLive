@@ -464,7 +464,6 @@ namespace EMPManegment.Repository.TaskRepository
                     gettask.UpdatedOn = DateTime.Now;
                     gettask.UpdatedBy = updatetask.UpdatedBy;
 
-
                     Context.TblTaskDetails.Update(gettask);
                     Context.SaveChanges();
                     model.Message = "Task status updated successfully!";
