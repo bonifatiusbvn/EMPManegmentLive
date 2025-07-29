@@ -56,7 +56,7 @@
                             </li>
                         </ul>
                     </div>
-                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "Expenses" && (a.Add == true)))
+                    @if (UserSession.FormPermisionData.Any(a => a.FormName == "All Expenses" && (a.Add == true)))
                     {
                         <div class="col-12 col-lg-2" style="text-align:end">
                             <button type="button" class="btn button-teal" id="Approve-actions" onclick="AllUserApproveExpense()" style="display:none;">

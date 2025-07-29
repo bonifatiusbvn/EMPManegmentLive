@@ -1562,7 +1562,7 @@ $(document).ready(function () {
         let canDelete = false;
 
         for (let i = 0; i < userFormPermissionArray.length; i++) {
-            if (userFormPermissionArray[i].formName === "Expenses") {
+            if (userFormPermissionArray[i].formName === "All Expenses") {
                 canEdit = userFormPermissionArray[i].edit;
                 canDelete = userFormPermissionArray[i].delete;
                 break;
@@ -2197,7 +2197,7 @@ function UserCreditExpenseList(UserId) {
     });
 }
 
-
+var Formdata = window.userFormPermissions || 0;
 
 let MyExpenseGridOptions = [];
 let startDate = null;
