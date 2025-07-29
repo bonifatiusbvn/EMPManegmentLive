@@ -64,7 +64,6 @@ $(document).ready(function () {
         width: '100%',
         dropdownAutoWidth: true,
         allowClear: true,
-        dropdownParent: $('#UpdateProductDetails'),
         ajax: {
             url: '/ProductMaster/GetProduct',
             dataType: 'json',

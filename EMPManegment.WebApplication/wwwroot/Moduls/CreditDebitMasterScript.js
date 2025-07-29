@@ -69,7 +69,6 @@ $(document).ready(function () {
         }
     });
 
-
     $('#ddlInvoicepaymenttype').select2({
         placeholder: 'Select Payment type',
         width: '100%',
@@ -116,9 +115,7 @@ $(document).ready(function () {
         }
     });
 
-    getVendorTransactionList();
-
-    $('#textTransactionCompanyName').on('change', SortCompanyName);
+    //$('#textTransactionCompanyName').on('change', SortCompanyName);
 
     var creditDebitDetails = JSON.parse(localStorage.getItem('creditDebitDetails'));
     var total = parseFloat(localStorage.getItem('totalCreditAmount'));

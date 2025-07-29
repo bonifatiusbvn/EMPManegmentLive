@@ -1432,6 +1432,8 @@ $(document).ready(function () {
         if (UserExpenseApproveGridOptions.api) {
             UserExpenseApproveGridOptions.api.onFilterChanged();
         }
+
+        $('#dateFilterContainer').hide();
     });
 
     $('#txtstartdatebox').datepicker({

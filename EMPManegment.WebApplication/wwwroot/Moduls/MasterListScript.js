@@ -6,7 +6,7 @@ $(document).ready(function () {
     GetVendorTypes();
     GetPaymentMethodList();
     GetPaymentTypeList();
-    GetCompanyNameList();
+    //GetCompanyNameList();
     GetVendorNameList();
     fn_GetAllCities();
     $('#ddlCountry').change(function () {
@@ -442,16 +442,16 @@ function GetPaymentTypeList() {
     });
 }
 
-function GetCompanyNameList() {
-    $.ajax({
-        url: '/ProductMaster/GetVendorsNameList',
-        success: function (result) {
-            $.each(result, function (i, data) {
-                $('#textTransactionCompanyName').append('<option value="' + data.id + '">' + data.vendorCompany + '</option>');
-            });
-        },
-    });
-}
+//function GetCompanyNameList() {
+//    $.ajax({
+//        url: '/ProductMaster/GetVendorsNameList',
+//        success: function (result) {
+//            $.each(result, function (i, data) {
+//                $('#textTransactionCompanyName').append('<option value="' + data.id + '">' + data.vendorCompany + '</option>');
+//            });
+//        },
+//    });
+//}
 
 function GetVendorNameList() {
     $.ajax({
