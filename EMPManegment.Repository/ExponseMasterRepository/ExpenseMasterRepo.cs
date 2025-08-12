@@ -541,7 +541,7 @@ namespace EMPManegment.Repository.ExponseMasterRepository
         public async Task<List<ExpenseDetailsView>> GetExpenseDetailByUserId(Guid UserId)
         {
             var ExpenseDetail = new List<ExpenseDetailsView>();
-            var data = await Context.TblExpenseMasters.Where(x => x.UserId == UserId && x.IsDeleted == false).ToListAsync();
+            var data = await Context.TblExpenseMasters.Where(x => x.UserId == UserId && x.IsDeleted == false).OrderByDescending(e=>e.CreatedOn).ToListAsync();
             if (data != null)
             {
                 foreach (var item in data)

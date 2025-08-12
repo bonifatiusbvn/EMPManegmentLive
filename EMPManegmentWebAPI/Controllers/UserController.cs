@@ -105,7 +105,7 @@ namespace EMPManagment.API.Controllers
 
                 if (forgetPassword.Code != (int)HttpStatusCode.NotFound && forgetPassword.Code != (int)HttpStatusCode.InternalServerError)
                 {
-                    string path = "F:/BonifatiusLive/EMPManegment.WebApplication/Views/Authentication/PasswordResetTemplate.cshtml";
+                    string path = "E:/BonifatiusLive/EMPManegment.WebApplication/Views/Authentication/PasswordResetTemplate.cshtml";
                     string htmlString = System.IO.File.ReadAllText(path);
                     htmlString = htmlString.Replace("{{title}}", "Reset Password");
                     htmlString = htmlString.Replace("{{UserName}}", forgetPassword.Data.UserName);

@@ -100,6 +100,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
                         AttendanceId = UserAttendance.Id,
                     };
                     response.Data = attendanceModel;
+                    response.Code = 200;
                 }
                 else
                 {

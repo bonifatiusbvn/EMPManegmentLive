@@ -183,10 +183,10 @@ namespace EMPManegment.Repository.UserListRepository
                         {
                             TblAttendance tblAttendance = new TblAttendance();
                             tblAttendance.UserId = userAttendance.UserId;
-                            tblAttendance.Intime = DateTime.Now;
-                            tblAttendance.Date = DateTime.Today;
+                            tblAttendance.Intime = userAttendance.Intime;
+                            tblAttendance.Date = userAttendance.Date;
                             tblAttendance.CreatedBy = userAttendance.CreatedBy;
-                            tblAttendance.CreatedOn = DateTime.Now;
+                            tblAttendance.CreatedOn = userAttendance.CreatedOn;
                             tblAttendance.OutTime = null;
                             Context.TblAttendances.Add(tblAttendance);
                             Context.SaveChanges();
@@ -202,9 +202,9 @@ namespace EMPManegment.Repository.UserListRepository
                 {
                     TblAttendance tblAttendance = new TblAttendance();
                     tblAttendance.UserId = userAttendance.UserId;
-                    tblAttendance.Intime = DateTime.Now;
-                    tblAttendance.Date = DateTime.Today;
-                    tblAttendance.CreatedOn = DateTime.Now;
+                    tblAttendance.Intime = userAttendance.Intime;
+                    tblAttendance.Date = userAttendance.Date;
+                    tblAttendance.CreatedOn = userAttendance.CreatedOn;
                     tblAttendance.CreatedBy = userAttendance.CreatedBy;
                     tblAttendance.OutTime = null;
                     Context.TblAttendances.Add(tblAttendance);
@@ -250,9 +250,9 @@ namespace EMPManegment.Repository.UserListRepository
                         if (Outtimedata.Date == DateTime.Today && Outtimedata.OutTime == null)
                         {
                             var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
-                            outtime.OutTime = DateTime.Now;
-                            outtime.CreatedOn = DateTime.Now;
-                            outtime.TotalHours = outtime.OutTime - outtime.Intime;
+                            outtime.OutTime = userAttendance.OutTime;
+                            outtime.CreatedOn = userAttendance.CreatedOn;
+                            outtime.TotalHours = userAttendance.OutTime - outtime.Intime;
                             Context.TblAttendances.Update(outtime);
                             Context.SaveChanges();
                             response.Message = "Out-time enter successfully";
