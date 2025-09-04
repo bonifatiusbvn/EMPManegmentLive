@@ -45,6 +45,10 @@ public partial class BonifatiusEmployeesContext : DbContext
 
     public virtual DbSet<TblInvoiceTypeMaster> TblInvoiceTypeMasters { get; set; }
 
+    public virtual DbSet<TblLeaveMaster> TblLeaveMasters { get; set; }
+
+    public virtual DbSet<TblLeaveReason> TblLeaveReasons { get; set; }
+
     public virtual DbSet<TblManualInvoice> TblManualInvoices { get; set; }
 
     public virtual DbSet<TblManualInvoiceDetail> TblManualInvoiceDetails { get; set; }
@@ -98,6 +102,7 @@ public partial class BonifatiusEmployeesContext : DbContext
     public virtual DbSet<TblVendorType> TblVendorTypes { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) { }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<TblAdress>(entity =>
@@ -362,6 +367,28 @@ public partial class BonifatiusEmployeesContext : DbContext
             entity.ToTable("tblInvoiceTypeMaster");
 
             entity.Property(e => e.InvoiceType).HasMaxLength(50);
+        });
+
+        modelBuilder.Entity<TblLeaveMaster>(entity =>
+        {
+            entity.ToTable("tblLeaveMaster");
+
+            entity.Property(e => e.Id).ValueGeneratedNever();
+            entity.Property(e => e.ApproveOn).HasColumnType("datetime");
+            entity.Property(e => e.Approvers).HasMaxLength(500);
+            entity.Property(e => e.Attachment).HasMaxLength(500);
+            entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+            entity.Property(e => e.FromDate).HasColumnType("datetime");
+            entity.Property(e => e.ToDate).HasColumnType("datetime");
+            entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+        });
+
+        modelBuilder.Entity<TblLeaveReason>(entity =>
+        {
+            entity.ToTable("tblLeaveReasons");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.LeaveReason).HasColumnName("leaveReason");
         });
 
         modelBuilder.Entity<TblManualInvoice>(entity =>

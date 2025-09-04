@@ -1,5 +1,6 @@
 ﻿using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
+using EMPManegment.EntityModels.ViewModels.Leave;
 using EMPManegment.EntityModels.ViewModels.Models;
 
 using System;
@@ -21,5 +22,10 @@ namespace EMPManegment.Inretface.Services.UserAttendanceServices
         Task<IEnumerable<UserAttendanceModel>> GetMySearchAttendanceList(SearchAttendanceModel GetSearchAttendanceList);
 
         Task<UserResponceModel> AddUserAttendance(UserAttendanceModel AddUser);
+        Task<UserResponceModel> AddUserLeaveApplication(LeaveMasterModel LeaveDetails);
+        Task<IEnumerable<LeaveReasonModel>> GetAllLeaveReasons();
+        Task<AGGridResponseModel<LeaveMasterModel>> GetUserLeaveApplicationDetails(AGGridRequestModel UserLeaveRequest);
+        Task<IEnumerable<LeaveMasterModel>> UserLeaveApproveRequest(Guid userId);
+        Task<UserResponceModel> ApproveUserLeaveApplication(ApproveLeaveModel LeaveDetails);
     }
 }

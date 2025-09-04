@@ -4,6 +4,7 @@ using EMPManegment.EntityModels.View_Model;
 using EMPManegment.EntityModels.ViewModels.AGGridModels;
 using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
+using EMPManegment.EntityModels.ViewModels.Leave;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.Inretface.Interface.UserAttendance;
 using Microsoft.EntityFrameworkCore;
@@ -83,7 +84,7 @@ namespace EMPManegment.Repository.UserAttendanceRepository
         public async Task<UserAttendanceResponseModel> GetUserAttendanceInTime(UserAttendanceRequestModel userAttendance)
         {
             UserAttendanceResponseModel response = new UserAttendanceResponseModel();
-            var UserAttendance = Context.TblAttendances.Where(e => e.UserId == userAttendance.UserId && e.Date == DateTime.Today).FirstOrDefault();
+            var UserAttendance = Context.TblAttendances.Where(e => e.UserId == userAttendance.UserId && e.Date == userAttendance.Date).FirstOrDefault();
             try
             {
                 if (UserAttendance != null)
@@ -414,7 +415,216 @@ namespace EMPManegment.Repository.UserAttendanceRepository
             }
             return response;
         }
+
+        public async Task<UserResponceModel> AddUserLeaveApplication(LeaveMasterModel LeaveDetails)
+        {
+            UserResponceModel response = new UserResponceModel();
+            try
+            {
+                var LeaveModel = new TblLeaveMaster()
+                {
+                    Id = Guid.NewGuid(),
+                    UserId = LeaveDetails.UserId,
+                    Reason = LeaveDetails.Reason,
+                    FromDate = LeaveDetails.FromDate,
+                    ToDate = LeaveDetails.ToDate,
+                    Days = LeaveDetails.Days,
+                    Description = LeaveDetails.Description,
+                    Approvers = LeaveDetails.Approvers,
+                    ApproveBy = LeaveDetails.ApproveBy,
+                    ApproveOn = LeaveDetails.ApproveOn,
+                    Attachment = LeaveDetails.Attachment,
+                    CreatedBy = LeaveDetails.CreatedBy,
+                    CreatedOn = DateTime.Now,
+                };
+                response.Message = "Leave applied successfully!";
+                Context.TblLeaveMasters.Add(LeaveModel);
+                Context.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                response.Code = (int)HttpStatusCode.InternalServerError;
+                response.Message = "Error in applying leave.";
+            }
+            return response;
+        }
+
+        public async Task<IEnumerable<LeaveReasonModel>> GetAllLeaveReasons()
+        {
+            try
+            {
+                var leaveReasons = await Context.TblLeaveReasons
+                    .OrderBy(e => e.LeaveReason)
+                    .Select(e => new LeaveReasonModel
+                    {
+                        Id = e.Id,
+                        LeaveReason = e.LeaveReason
+                    })
+                    .ToListAsync();
+
+                return leaveReasons;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public async Task<AGGridResponseModel<LeaveMasterModel>> GetUserLeaveApplicationDetails(AGGridRequestModel UserLeaveRequest)
+        {
+            try
+            {
+                var filterConditions = string.Join(" AND ", UserLeaveRequest.filters.Select(f =>
+                                    $"{f.ColId} LIKE '%{f.FilterValue}%'"));
+                string sortColumn = UserLeaveRequest.SortModel?.FirstOrDefault()?.ColId ?? "CreatedOn";
+                string sortDirection = UserLeaveRequest.SortModel?.FirstOrDefault()?.Sort ?? "desc";
+
+                var parameters = new List<SqlParameter>
+                {
+                new SqlParameter("@SearchValue", (object)UserLeaveRequest.SearchValue ?? DBNull.Value),
+                new SqlParameter("@SortColumn", sortColumn),
+                new SqlParameter("@SortDirection", sortDirection),
+                new SqlParameter("@PageSize", UserLeaveRequest.PageSize),
+                new SqlParameter("@Skip", UserLeaveRequest.StartRow),
+                new SqlParameter("@UserFilter", UserLeaveRequest.UserId),
+                new SqlParameter("@FilterConditions", (object)filterConditions ?? DBNull.Value),
+                new SqlParameter("@TotalRecords", SqlDbType.Int) { Direction = ParameterDirection.Output }
+                };
+
+                var dataSet = DbHelper.GetDataSet("spGetUserLeaveDetails", CommandType.StoredProcedure, parameters.ToArray(), Configuration.GetConnectionString("EMPDbconn"));
+
+                var leaveList = dataSet.Tables[0].AsEnumerable().Select(row => new LeaveMasterModel
+                {
+                    Id = Guid.Parse(row["Id"].ToString()),
+                    UserId = Guid.Parse(row["UserId"].ToString()),
+                    Reason = Convert.ToInt32(row["Reason"]),
+                    ReasonName = row["ReasonName"]?.ToString(),
+                    FromDate = Convert.ToDateTime(row["FromDate"]),
+                    ToDate = Convert.ToDateTime(row["ToDate"]),
+                    Days = row["Days"] == DBNull.Value ? 0.0 : Convert.ToDouble(row["Days"]),
+                    Description = row["Description"]?.ToString(),
+                    Approvers = row["Approvers"]?.ToString(),
+                    ApproverName = row["ApproverName"]?.ToString(),
+                    IsApproved = row["IsApproved"] != DBNull.Value ? (bool?)Convert.ToBoolean(row["IsApproved"]) : null,
+                    ApproveBy = row["ApproveBy"] != DBNull.Value && Guid.TryParse(row["ApproveBy"].ToString(), out var approveBy)
+                 ? approveBy
+                 : (Guid?)null,
+                    ApprovedByName = row["ApprovedByName"]?.ToString(),
+                    ApproveOn = row["ApproveOn"] != DBNull.Value
+                 ? Convert.ToDateTime(row["ApproveOn"])
+                 : (DateTime?)null,
+
+                    Attachment = row["Attachment"]?.ToString(),
+                    CreatedOn = Convert.ToDateTime(row["CreatedOn"]),
+
+                    CreatedBy = row["CreatedBy"] != DBNull.Value && Guid.TryParse(row["CreatedBy"].ToString(), out var createdBy)
+                 ? createdBy
+                 : (Guid?)null
+                }).ToList();
+
+
+                int totalRecords = (int)parameters.First(p => p.ParameterName == "@TotalRecords").Value;
+
+                return new AGGridResponseModel<LeaveMasterModel>
+                {
+                    Data = leaveList,
+                    RecordsTotal = totalRecords
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("An error occurred while retrieving the in word list.", ex);
+            }
+
+        }
+
+        public async Task<UserResponceModel> ApproveUserLeaveApplication(ApproveLeaveModel LeaveDetails)
+        {
+            var response = new UserResponceModel();
+            try
+            {
+                var LeaveData = Context.TblLeaveMasters.FirstOrDefault(e => e.Id == LeaveDetails.Id);
+                if (LeaveData != null)
+                {
+                    LeaveData.IsApproved = LeaveDetails.IsApproved;  
+                    LeaveData.ApproveBy = LeaveDetails.ApproveBy;
+                    LeaveData.ApproveOn = DateTime.Now;
+
+                    Context.TblLeaveMasters.Update(LeaveData);
+                    await Context.SaveChangesAsync();
+
+                    response.Code = 200;
+                    if (LeaveData.IsApproved == true)
+                    {
+                        response.Message = "User Leave Approved.";
+                    }
+                    else
+                    {
+                        response.Message = "User Leave Rejected.";
+                    }
+                }
+                else
+                {
+                    response.Code = 404;
+                    response.Message = "Leave application not found!";
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.Code = 500;
+                response.Message = "An error occurred: " + ex.Message;
+                return response;
+            }
+        }
+
+
+        public async Task<IEnumerable<LeaveMasterModel>> UserLeaveApproveRequest(Guid userId)
+        {
+            try
+            {
+                var leaveApproversList = (from a in Context.TblLeaveMasters
+                                          where ("," + a.Approvers + ",")
+                                                .Contains("," + userId.ToString() + ",")
+                                                && a.IsApproved == null
+                                          join b in Context.TblLeaveReasons on a.Reason equals b.Id
+                                          join c in Context.TblUsers on a.UserId equals c.Id
+                                          select new LeaveMasterModel
+                                          {
+                                              Id = a.Id,
+                                              UserId = a.UserId,
+                                              UserName = c.FirstName + " " + c.LastName,
+                                              Reason = a.Reason,
+                                              ReasonName = b.LeaveReason,
+                                              FromDate = a.FromDate,
+                                              ToDate = a.ToDate,
+                                              Days = a.Days,
+                                              Description = a.Description,
+                                              Approvers = a.Approvers,
+                                              Attachment = a.Attachment,
+                                              IsApproved = a.IsApproved,
+                                          }).ToList();
+
+                foreach (var leave in leaveApproversList)
+                {
+                    var approverIds = leave.Approvers.Split(',', StringSplitOptions.RemoveEmptyEntries);
+                    var approverGuids = approverIds.Select(Guid.Parse).ToList();
+
+                    var approverNames = Context.TblUsers
+                        .Where(u => approverGuids.Contains(u.Id))
+                        .Select(u => u.FirstName + " " + u.LastName)
+                        .ToList();
+
+                    leave.ApproverName = string.Join(", ", approverNames);
+                }
+
+                return leaveApproversList;
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
-
-

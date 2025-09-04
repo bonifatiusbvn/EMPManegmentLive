@@ -1,0 +1,157 @@
+﻿@{
+    ViewData["Title"] = "UserLeave";
+    Layout = "~/Views/Shared/_HomeLayout.cshtml";
+}
+
+<style>
+    @@media (max-width: 600px) {
+        .card-header .d-flex {
+            flex-direction: column;
+        }
+
+        .search-box {
+            width: 100%;
+        }
+    }
+</style>
+
+<!-- start page title -->
+<div class="row" style="margin-top:80px;">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between content-header">
+            <h4 class="fm-header mb-sm-0">My Leave Applications</h4>
+            <div class="page-title-right">
+                <ol class="breadcrumb m-0">
+                    <li class="breadcrumb-item"><a href="javascript: void(0);">User</a></li>
+                    <li class="breadcrumb-item active">User Leave</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end page title -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <div class="col-12 col-lg-4">
+                        <input class="form-control"
+                               id="txtUserLeaveSearch"
+                               placeholder="Search..." />
+                    </div>
+                    <div class="col-12 col-lg-8" style="text-align:end">
+                        <button class="btn button-teal" onclick="DisplayAddLeaveModel()"><i class="fa-solid fa-circle-plus"></i>Leave</button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div id="UserLeaveTable" class="ag-theme-teal" style="height: 400px; width: 100%;"></div>
+            </div>
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h5 class="fm-header mb-sm-0">Leave Requests to Approve</h5>
+                </div>
+                <div class="card-body">
+                    <table id="leaveTable" class="table table-bordered table-striped">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>User Name</th>
+                                <th>Reason</th>
+                                <th>From Date</th>
+                                <th>To Date</th>
+                                <th>Days</th>
+                                <th>Description</th>
+                                <th>Approvers</th>
+                                <th>Status</th>
+                                <th>Attachment</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody style="height: 400px; width: 100%;"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal fade" id="AddUserLeaveModel" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content fm-form">
+                        <div class="modal-header bg-teal p-3">
+                            <h5 class="modal-title" id="exampleModalLabel" style="color:white">Add Leave Attendance</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="LeaveApplicationForm">
+                                <div>
+                                    <label for="reason">Reason</label>
+                                    <select class="form-control select2-teal"
+                                            data-dropdown-css-class="select2-teal"
+                                            id="LeaveReason"
+                                            name="LeaveReason">
+                                    </select>
+                                </div>
+
+                                <div class="row mt-3">
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="fromDate">From Date</label>
+                                            <input type="date" class="form-control" id="LeaveFromDate" name="LeaveFromDate">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="days">Number of Days</label>
+                                            <input type="number" class="form-control" step="0.5" id="LeaveDays" name="LeaveDays">
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="form-group">
+                                            <label for="toDate">To Date</label>
+                                            <input type="date" class="form-control" id="LeaveToDate" name="LeaveToDate">
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="description">Description (optional)</label>
+                                    <textarea class="form-control" id="LeaveDescription" name="LeaveDescription" rows="3"></textarea>
+                                </div>
+
+                                <label for="approvers">Approvers</label>
+                                <select class="form-control multiple-select select2-teal"
+                                        data-dropdown-css-class="select2-teal"
+                                        multiple="multiple"
+                                        id="LeaveApproveMemberDropdown"
+                                        name="LeaveApproveMemberDropdown">
+                                </select>
+
+
+                                <div class="form-group mt-3">
+                                    <label for="attachment">Attachment (optional)</label>
+                                    <input type="file" class="form-control" id="LeaveAttachment" name="LeaveAttachment">
+                                </div>
+                            </form>
+
+                        </div>
+                        <div class="modal-footer">
+                            <div class="hstack gap-2 justify-content-end">
+                                <button type="button" class="btn btn-secondary btn-default m-1" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn button-teal" onclick="AddUserLeaveApplication();" value="Validate"><i class="ri-save-line me-1"></i> Apply Leave</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- jQuery (must come before your JS file) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Select2 -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
+
+
+<script src="~/moduls/userleave.js" asp-append-version="true"></script>

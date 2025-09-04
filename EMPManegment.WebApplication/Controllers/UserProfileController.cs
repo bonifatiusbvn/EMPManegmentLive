@@ -17,6 +17,7 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
 using EMPManegment.EntityModels.ViewModels.Invoice;
+using EMPManegment.EntityModels.ViewModels.Leave;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -27,6 +28,7 @@ using EMPManegment.Web.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Build.ObjectModelRemoting;
@@ -34,6 +36,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NuGet.Protocol.Plugins;
+using System;
 using System.Data;
 using System.IO;
 using System.Net;
@@ -1293,6 +1296,140 @@ namespace EMPManegment.Web.Controllers
             try
             {
                 ApiResponseModel postuser = await APIServices.PostAsync("", "UserProfile/ActiveDeactiveRole?roleId=" + roleId);
+                if (postuser.code == 200)
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+                else
+                {
+                    return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        public IActionResult UserLeave()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetUserLeaveList([FromBody] AGGridRequestModel UserLeaveRequest)
+        {
+            try
+            {
+                UserLeaveRequest.filters ??= new List<FilterModel>();
+                UserLeaveRequest.UserId = _userSession.UserId;
+
+                var UserLeaveDetails = await APIServices.AGPostAsync<LeaveMasterModel>(UserLeaveRequest, "UserProfile/GetUserLeaveApplicationDetails");
+
+                return new JsonResult(new
+                {
+                    rowsThisPage = UserLeaveDetails.Data,
+                    totalRowCount = UserLeaveDetails.RecordsTotal
+                });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "Error fetching data", error = ex.Message });
+            }
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> GetAllLeaveReasons()
+        {
+            try
+            {
+                List<LeaveReasonModel> LeaveReasonList = new List<LeaveReasonModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/GetAllLeaveReasons");
+                if (res.code == 200)
+                {
+                    LeaveReasonList = JsonConvert.DeserializeObject<List<LeaveReasonModel>>(res.data.ToString());
+                }
+                return new JsonResult(LeaveReasonList);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddUserLeaveApplication([FromForm] LeaveMasterModel LeaveDetails, [FromForm] IFormFile LeaveAttachment)
+        {
+            ApiResponseModel responseModel = new ApiResponseModel();
+            try
+            {
+                if (LeaveAttachment != null)
+                {
+                    string uniqueLeaveAttachmentName = Guid.NewGuid().ToString() + "_" + LeaveAttachment.FileName;
+                    string LeaveAttachmentPath = Environment.WebRootPath;
+                    var LeaveAttachmentfilepath = Path.Combine("Content", "LeaveDocuments", uniqueLeaveAttachmentName);
+                    var LeaveAttachmentfullpath = Path.Combine(LeaveAttachmentPath, LeaveAttachmentfilepath);
+
+                    using (FileStream stream = new FileStream(LeaveAttachmentfullpath, FileMode.Create))
+                    {
+                        await LeaveAttachment.CopyToAsync(stream);
+                    }
+
+                    LeaveDetails.Attachment = uniqueLeaveAttachmentName;
+                }
+
+                LeaveDetails.UserId = _userSession.UserId;
+
+                responseModel = await APIServices.PostAsync(LeaveDetails, "UserProfile/AddUserLeaveApplication");
+
+                return Ok(responseModel);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ApiResponseModel { code = 500, message = ex.Message });
+            }
+        }
+
+        public void UploadImage(IFormFile ImageFile, string ImagePath)
+        {
+            FileStream stream = new FileStream(ImagePath, FileMode.Create);
+            ImageFile.CopyTo(stream);
+        }
+
+        [HttpGet]
+        public async Task<JsonResult> UserLeaveApproveRequest()
+        {
+            try
+            {
+                var UserId = _userSession.UserId;
+                List<LeaveMasterModel> LeaveApproveRequest = new List<LeaveMasterModel>();
+                ApiResponseModel res = await APIServices.GetAsync("", "UserProfile/UserLeaveApproveRequest?UserId=" + UserId);
+                if (res.code == 200)
+                {
+                    LeaveApproveRequest = JsonConvert.DeserializeObject<List<LeaveMasterModel>>(res.data.ToString());
+                }
+                return new JsonResult(LeaveApproveRequest);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ApproveUserLeaveApplication(Guid Id, bool isApproved)
+        {
+            try
+            {
+                var LeaveDetails = new ApproveLeaveModel
+                {
+                    Id = Id,
+                    IsApproved = isApproved,
+                    ApproveBy = _userSession.UserId,
+                };
+
+                ApiResponseModel postuser = await APIServices.PostAsync(LeaveDetails, "UserProfile/ApproveUserLeaveApplication");
                 if (postuser.code == 200)
                 {
                     return Ok(new { Message = string.Format(postuser.message), Code = postuser.code });

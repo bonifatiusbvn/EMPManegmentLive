@@ -224,6 +224,7 @@ namespace EMPManegment.Repository.UserListRepository
 
         public async Task<UserResponceModel> EnterOutTime(UserAttendanceModel userAttendance)
         {
+
             UserResponceModel response = new UserResponceModel();
             try
             {
@@ -249,7 +250,7 @@ namespace EMPManegment.Repository.UserListRepository
 
                         if (Outtimedata.Date == DateTime.Today && Outtimedata.OutTime == null)
                         {
-                            var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == DateTime.Today).FirstOrDefault();
+                            var outtime = Context.TblAttendances.Where(a => a.UserId == userAttendance.UserId && a.Date == userAttendance.Date).FirstOrDefault();
                             outtime.OutTime = userAttendance.OutTime;
                             outtime.CreatedOn = userAttendance.CreatedOn;
                             outtime.TotalHours = userAttendance.OutTime - outtime.Intime;

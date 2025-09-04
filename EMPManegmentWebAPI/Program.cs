@@ -84,14 +84,14 @@ builder.Services.AddControllers();
 builder.Services.AddDbContext<BonifatiusEmployeesContext>(option =>
 option.UseSqlServer(builder.Configuration.GetConnectionString("EMPDbconn")));
 
-builder.WebHost.ConfigureKestrel(serverOptions =>
-{
-    serverOptions.ListenAnyIP(5000);
-    serverOptions.ListenAnyIP(5001, listenOptions =>
-    {
-        listenOptions.UseHttps();
-    });
-});
+//builder.WebHost.ConfigureKestrel(serverOptions =>
+//{
+//    serverOptions.ListenAnyIP(5000);
+//    serverOptions.ListenAnyIP(5001, listenOptions =>
+//    {
+//        listenOptions.UseHttps();
+//    });
+//});
 
 
 builder.Services.AddScoped<IUserLogin, UserLoginRepo>();

@@ -148,7 +148,6 @@ namespace EMPManegment.Repository.OrderRepository
 
                 int startIndex = projectname.IndexOf('(');
                 int endIndex = projectname.IndexOf(')');
-
                 if (startIndex < 0 || endIndex <= startIndex)
                     throw new Exception("Invalid project name format. Expected text within parentheses.");
 

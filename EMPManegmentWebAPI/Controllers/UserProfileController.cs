@@ -9,6 +9,7 @@ using EMPManegment.EntityModels.ViewModels.DataTableParameters;
 using EMPManegment.EntityModels.ViewModels.ExpenseMaster;
 using EMPManegment.EntityModels.ViewModels.FormMaster;
 using EMPManegment.EntityModels.ViewModels.FormPermissionMaster;
+using EMPManegment.EntityModels.ViewModels.Leave;
 using EMPManegment.EntityModels.ViewModels.Models;
 using EMPManegment.EntityModels.ViewModels.ProjectModels;
 using EMPManegment.EntityModels.ViewModels.TaskModels;
@@ -471,6 +472,88 @@ namespace EMPManagment.API.Controllers
                 responseModel.Code = (int)HttpStatusCode.InternalServerError;
             }
             return StatusCode(responseModel.Code, responseModel);
+        }
+
+        [HttpPost]
+        [Route("AddUserLeaveApplication")]
+        public async Task<IActionResult> AddUserLeaveApplication(LeaveMasterModel LeaveDetails)
+        {
+            UserResponceModel userresponsemodel = new UserResponceModel();
+            try
+            {
+                var LeaveData = UserAttendance.AddUserLeaveApplication(LeaveDetails);
+                if (LeaveData.Result.Code != (int)HttpStatusCode.InternalServerError)
+                {
+                    userresponsemodel.Code = (int)HttpStatusCode.OK;
+                    userresponsemodel.Message = LeaveData.Result.Message;
+                }
+                else
+                {
+                    userresponsemodel.Message = LeaveData.Result.Message;
+                    userresponsemodel.Code = LeaveData.Result.Code;
+                }
+            }
+            catch (Exception ex)
+            {
+                userresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponsemodel.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(userresponsemodel.Code, userresponsemodel);
+        }
+
+        [HttpGet]
+        [Route("GetAllLeaveReasons")]
+        public async Task<IActionResult> GetAllLeaveReasons()
+        {
+            var LeaveReasonList = await UserAttendance.GetAllLeaveReasons();
+            return Ok(new { code = (int)HttpStatusCode.OK, data = LeaveReasonList });
+        }
+
+        [HttpPost]
+        [Route("GetUserLeaveApplicationDetails")]
+        public async Task<AGGridResponseModel<LeaveMasterModel>> GetUserLeaveApplicationDetails(AGGridRequestModel UserLeaveRequest)
+        {
+            var userLeaveList = await UserAttendance.GetUserLeaveApplicationDetails(UserLeaveRequest);
+            return new AGGridResponseModel<LeaveMasterModel>
+            {
+                Data = userLeaveList.Data,
+                RecordsTotal = userLeaveList.RecordsTotal
+            };
+        }
+
+        [HttpPost]
+        [Route("ApproveUserLeaveApplication")]
+        public async Task<IActionResult> ApproveUserLeaveApplication(ApproveLeaveModel LeaveDetails)
+        {
+            UserResponceModel userresponsemodel = new UserResponceModel();
+            try
+            {
+                var LeaveData = UserAttendance.ApproveUserLeaveApplication(LeaveDetails);
+                if (LeaveData.Result.Code != (int)HttpStatusCode.InternalServerError)
+                {
+                    userresponsemodel.Code = (int)HttpStatusCode.OK;
+                    userresponsemodel.Message = LeaveData.Result.Message;
+                }
+                else
+                {
+                    userresponsemodel.Message = LeaveData.Result.Message;
+                    userresponsemodel.Code = LeaveData.Result.Code;
+                }
+            }
+            catch (Exception ex)
+            {
+                userresponsemodel.Code = (int)HttpStatusCode.InternalServerError;
+                userresponsemodel.Message = "An error occurred while processing the request.";
+            }
+            return StatusCode(userresponsemodel.Code, userresponsemodel);
+        }
+
+        [HttpGet]
+        [Route("UserLeaveApproveRequest")]
+        public async Task<IActionResult> UserLeaveApproveRequest(Guid UserID)
+        {
+            var LeaveApproveRequest = await UserAttendance.UserLeaveApproveRequest(UserID);
+            return Ok(new { code = (int)HttpStatusCode.OK, data = LeaveApproveRequest });
         }
     }
 }
